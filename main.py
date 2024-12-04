@@ -1,5 +1,5 @@
 import os
-from rules import lexer
+from rules import lexer, reservadas
 
 def main():
     arquivo_entrada = "entrada.txt"
@@ -41,6 +41,8 @@ def main():
             "IDENTIFICADOR_PROPRIEDADE",
             "IDENTIFICADOR_INDIVIDUO",
             "CARDINALIDADE",
+            "TIPO_DADO",
+            "RESERVADA",
         ]
         
         for atributo in atributos_interessantes:
@@ -51,6 +53,14 @@ def main():
                 f.write(f"\n=== {atributo} ===\n")
                 f.write(f"Quantidade: {contador_tokens[atributo]}\n")
                 f.write(f"Valores: {', '.join(valores_identificados)}\n")
+
+        palavras_reservadas = [
+            token.value for token in tokens_identificados if token.type in reservadas.values()
+        ]
+        if palavras_reservadas:
+            f.write("\n=== Palavras Reservadas ===\n")
+            f.write(f"Quantidade: {len(palavras_reservadas)}\n")
+            f.write(f"Palavras: {', '.join(palavras_reservadas)}\n")
 
 
 if __name__ == "__main__":
