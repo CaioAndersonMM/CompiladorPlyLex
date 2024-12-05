@@ -1,26 +1,29 @@
 === Resumo dos Tokens ===
 Token               Quantidade
 ------------------------------
-CLASS               17        
-DOIS_PONTOS         52        
+PALAVRA_RESERVADA   47        
 IDENTIFICADOR_CLASSE111       
-EQUIVALENTTO        8         
-IDENTIFICADOR_PROPRIEDADE78        
-SIMBOLO_ESPECIAL    88        
-INDIVIDUALS         8         
-SUBCLASSOF          7         
+IDENTIFICADOR_PROPRIEDADE71        
+SIMBOLO_ESPECIAL    90        
+TIPO_DADO           2         
 CARDINALIDADE       4         
-DISJOINTCLASSES     7         
-MAIOR_IGUAL         1         
 
 === IDENTIFICADOR_CLASSE ===
 Quantidade: 111
 Valores: Customer, Person, Pizza, Customer1, Customer10, Customer2, Customer3, Customer4, Customer5, Customer6, Customer7, Customer8, Customer9, Employee, Person, Chef1, Manager1, Waiter1, Waiter2, Pizza, PizzaBase, Pizza, PizzaBase, PizzaTopping, CustomPizza1, CustomPizza2, CheesyPizza, Pizza, CheeseTopping, CheesyPizza1, HighCaloriePizza, Pizza, InterestingPizza, Pizza, PizzaTopping, LowCaloriePizza, Pizza, NamedPizza, Pizza, AmericanaHotPizza, NamedPizza, JalapenoPepperTopping, MozzarellaTopping, PepperoniTopping, TomatoTopping, AmericanaHotPizza, AmericanaPizza, MargheritaPizza, SohoPizza, AmericanaHotPizza1, AmericanaHotPizza2, AmericanaHotPizza3, ChicagoAmericanaHotPizza1, AmericanaPizza, NamedPizza, MozzarellaTopping, PepperoniTopping, TomatoTopping, AmericanaHotPizza, AmericanaPizza, MargheritaPizza, SohoPizza, AmericanaPizza1, AmericanaPizza2, MargheritaPizza, NamedPizza, MozzarellaTopping, TomatoTopping, MozzarellaTopping, TomatoTopping, AmericanaHotPizza, AmericanaPizza, MargheritaPizza, SohoPizza, MargheritaPizza1, MargheritaPizza2, SohoPizza, NamedPizza, MozzarellaTopping, OliveTopping, ParmesanTopping, TomatoTopping, MozzarellaTopping, OliveTopping, ParmesanTopping, TomatoTopping, AmericanaHotPizza, AmericanaPizza, MargheritaPizza, SohoPizza, SohoPizza1, SohoPizza2, SpicyPizza, Pizza, Hot, VegetarianPizza, Pizza, CheeseTopping, VegetableTopping, PizzaBase, Pizza, PizzaBase, PizzaTopping, PizzaTopping, Pizza, PizzaBase, PizzaTopping, Spiciness, Hot, Medium, Mild
 
 === IDENTIFICADOR_PROPRIEDADE ===
-Quantidade: 78
-Valores: and, purchasedPizza, some, and, hasPhone, some, xsd, string, and, ssn, min, xsd, string, hasBase, some, hasCaloricContent, some, xsd, integer, and, hasTopping, some, and, hasCaloricContent, some, xsd, integer, and, hasTopping, min, and, hasCaloricContent, some, xsd, integer, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, only, or, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, only, or, or, or, and, hasTopping, some, hasSpiciness, value, and, hasTopping, only, or
+Quantidade: 71
+Valores: and, purchasedPizza, some, and, hasPhone, some, and, ssn, min, hasBase, some, hasCaloricContent, some, integer, and, hasTopping, some, and, hasCaloricContent, some, integer, and, hasTopping, min, and, hasCaloricContent, some, integer, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, only, or, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, some, hasTopping, only, or, or, or, and, hasTopping, some, hasSpiciness, value, and, hasTopping, only, or
 
 === CARDINALIDADE ===
 Quantidade: 4
 Valores: 1, 400, 3, 400
+
+=== TIPO_DADO ===
+Quantidade: 2
+Valores: xsd:string, xsd:string
+
+=== Palavras Reservadas ===
+Quantidade: 47
+Palavras: Class:, EquivalentTo:, Individuals:, Class:, SubClassOf:, Individuals:, Class:, SubClassOf:, DisjointClasses:, Individuals:, Class:, EquivalentTo:, Individuals:, Class:, EquivalentTo:, Class:, EquivalentTo:, Class:, EquivalentTo:, Class:, SubClassOf:, Class:, SubClassOf:, DisjointClasses:, Individuals:, Class:, SubClassOf:, DisjointClasses:, Individuals:, Class:, SubClassOf:, DisjointClasses:, Individuals:, Class:, SubClassOf:, DisjointClasses:, Individuals:, Class:, EquivalentTo:, Class:, EquivalentTo:, Class:, DisjointClasses:, Class:, DisjointClasses:, Class:, EquivalentTo:
