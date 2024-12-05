@@ -1,14 +1,18 @@
 import os
+from Symb import TabelaSimbolos
 from rules import lexer, reservadas
 
 def main():
     arquivo_entrada = "entrada.txt"
     arquivo_saida_tokens = "saida.txt"
     arquivo_saida_resumo = "saida2.txt"
+    arquivo_saida_tabela = "tabela.txt"
     
     if not os.path.exists(arquivo_entrada):
         print(f"Erro: Arquivo '{arquivo_entrada}' não encontrado!")
         return
+    
+    tabela_simbolos = TabelaSimbolos()
     
     with open(arquivo_entrada, "r", encoding="utf-8") as f:
         conteudo = f.read()
@@ -20,9 +24,13 @@ def main():
 
     for token in lexer:
         tokens_identificados.append(token)
+        tabela_simbolos.adicionar(token.value, token.type, token.lineno)
+        
         if token.type not in contador_tokens:
             contador_tokens[token.type] = 0
         contador_tokens[token.type] += 1
+
+    tabela_simbolos.salvar_em_arquivo(arquivo_saida_tabela)
 
     with open(arquivo_saida_tokens, "w", encoding="utf-8") as f:
         f.write("=== Tokens Identificados ===\n")
