@@ -24,11 +24,6 @@ def main():
             contador_tokens[token.type] = 0
         contador_tokens[token.type] += 1
 
-        if token.type in reservadas.values():
-            if "RESERVADA" not in contador_tokens:
-                contador_tokens["RESERVADA"] = 0
-            contador_tokens["RESERVADA"] += 1
-
     with open(arquivo_saida_tokens, "w", encoding="utf-8") as f:
         f.write("=== Tokens Identificados ===\n")
         for token in tokens_identificados:
@@ -46,8 +41,7 @@ def main():
             "IDENTIFICADOR_PROPRIEDADE",
             "IDENTIFICADOR_INDIVIDUO",
             "CARDINALIDADE",
-            "TIPO_DADO",
-            "RESERVADA",
+            "TIPO_DADO"
         ]
         
         for atributo in atributos_interessantes:
@@ -64,9 +58,8 @@ def main():
         ]
         if palavras_reservadas:
             f.write("\n=== Palavras Reservadas ===\n")
-            f.write(f"Quantidade: {contador_tokens['RESERVADA']}\n")
+            f.write(f"Quantidade: {len(palavras_reservadas)}\n")
             f.write(f"Palavras: {', '.join(palavras_reservadas)}\n")
-
 
 if __name__ == "__main__":
     main()
