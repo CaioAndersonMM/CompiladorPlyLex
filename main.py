@@ -1,6 +1,6 @@
 import os
 from Symb import TabelaSimbolos
-from rules import lexer, reservadas
+from rules import lexer, reservadas, tabela_simbolos
 
 def main():
     arquivo_entrada = "entrada.txt"
@@ -11,9 +11,7 @@ def main():
     if not os.path.exists(arquivo_entrada):
         print(f"Erro: Arquivo '{arquivo_entrada}' não encontrado!")
         return
-    
-    tabela_simbolos = TabelaSimbolos()
-    
+        
     with open(arquivo_entrada, "r", encoding="utf-8") as f:
         conteudo = f.read()
     
@@ -24,13 +22,9 @@ def main():
 
     for token in lexer:
         tokens_identificados.append(token)
-        tabela_simbolos.adicionar(token.value, token.type, token.lineno)
-        
         if token.type not in contador_tokens:
             contador_tokens[token.type] = 0
         contador_tokens[token.type] += 1
-
-    tabela_simbolos.salvar_em_arquivo(arquivo_saida_tabela)
 
     with open(arquivo_saida_tokens, "w", encoding="utf-8") as f:
         f.write("=== Tokens Identificados ===\n")
@@ -69,5 +63,6 @@ def main():
             f.write(f"Quantidade: {len(palavras_reservadas)}\n")
             f.write(f"Palavras: {', '.join(palavras_reservadas)}\n")
 
+    tabela_simbolos.salvar_em_arquivo(arquivo_saida_tabela)
 if __name__ == "__main__":
     main()
