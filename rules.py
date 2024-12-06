@@ -3,21 +3,21 @@ import ply.lex as lex
 from Symb import TabelaSimbolos
 
 reservadas = {
-    'SOME': 'PALAVRA_RESERVADA',
-    'ALL': 'PALAVRA_RESERVADA',
-    'VALUE': 'PALAVRA_RESERVADA',
-    'MIN': 'PALAVRA_RESERVADA',
-    'MAX': 'PALAVRA_RESERVADA',
-    'EXACTLY': 'PALAVRA_RESERVADA',
-    'THAT': 'PALAVRA_RESERVADA',
-    'NOT': 'PALAVRA_RESERVADA',
-    'AND': 'PALAVRA_RESERVADA',
-    'OR': 'PALAVRA_RESERVADA',
-    'Class': 'PALAVRA_RESERVADA',
-    'EquivalentTo': 'PALAVRA_RESERVADA',
-    'Individuals': 'PALAVRA_RESERVADA',
-    'SubClassOf': 'PALAVRA_RESERVADA',
-    'DisjointClasses': 'PALAVRA_RESERVADA',
+    'some': 'PALAVRA_RESERVADA',
+    'all': 'PALAVRA_RESERVADA',
+    'value': 'PALAVRA_RESERVADA',
+    'min': 'PALAVRA_RESERVADA',
+    'max': 'PALAVRA_RESERVADA',
+    'exactly': 'PALAVRA_RESERVADA',
+    'that': 'PALAVRA_RESERVADA',
+    'not': 'PALAVRA_RESERVADA',
+    'and': 'PALAVRA_RESERVADA',
+    'or': 'PALAVRA_RESERVADA',
+    'class': 'PALAVRA_RESERVADA',
+    'equivalentto': 'PALAVRA_RESERVADA',
+    'individuals': 'PALAVRA_RESERVADA',
+    'subclassof': 'PALAVRA_RESERVADA',
+    'disjointclasses': 'PALAVRA_RESERVADA',
 }
 
 type_dado = [
@@ -56,27 +56,39 @@ def t_TIPO_DADO(t):
 def t_PALAVRA_RESERVADA(t):
     r'[A-Za-z]+:'
     
-    palavra = t.value[:-1]
+    palavra = t.value[:-1].lower()
 
     if palavra in reservadas:
         t.type = reservadas[palavra]
         t.value = palavra
         adicionar_tabela_simbolos(t)
         return t
+    
+def t_IDENTIFICADOR_INDIVIDUO(t):
+    r'[A-Z][a-z0-9]*[0-9]+'
+    adicionar_tabela_simbolos(t)
+    return t
 
 def t_IDENTIFICADOR_CLASSE(t):
     r'[A-Z][A-Za-z0-9_]*'
-    t.type = reservadas.get(t.value, 'IDENTIFICADOR_CLASSE')
+    
+    if t.value.lower() in reservadas:
+        t.type = reservadas[t.value.lower()]
+    else:
+        t.type = 'IDENTIFICADOR_CLASSE'
+    
     adicionar_tabela_simbolos(t)
     return t
+
 
 def t_IDENTIFICADOR_PROPRIEDADE(t):
     r'(has[A-Za-z0-9]+|is[A-Za-z0-9]+Of|[a-z][A-Za-z0-9]*)'
-    adicionar_tabela_simbolos(t)
-    return t
-
-def t_IDENTIFICADOR_INDIVIDUO(t):
-    r'[A-Z][a-z0-9]*[0-9]+'
+    
+    if t.value.lower() in reservadas:
+        t.type = reservadas[t.value.lower()]
+    else:
+        t.type = 'IDENTIFICADOR_PROPRIEDADE'
+    
     adicionar_tabela_simbolos(t)
     return t
 
