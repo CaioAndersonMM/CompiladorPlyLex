@@ -20,9 +20,14 @@ reservadas = {
     'DisjointClasses': 'PALAVRA_RESERVADA',
 }
 
+namespaces = [
+    'integer', 'real', 'string', 'boolean', 'date', 'time',
+    'long', 'language', 'short', 'token', 'byte', 'Name', 'NCName',
+]
+
 tokens = [
     'IDENTIFICADOR_CLASSE', 'IDENTIFICADOR_PROPRIEDADE', 'IDENTIFICADOR_INDIVIDUO',
-    'CARDINALIDADE', 'TIPO_DADO', 'SIMBOLO_ESPECIAL',
+    'CARDINALIDADE', 'TIPO_DADO', 'SIMBOLO_ESPECIAL', 'NAMESPACE',
 ] + list(set(reservadas.values()))
 
 tabela_simbolos = TabelaSimbolos()
@@ -33,7 +38,18 @@ def adicionar_tabela_simbolos(t):
 
 # Funções de regras de token
 def t_TIPO_DADO(t):
-    r'owl:real|rdfs:domain|xsd:string'
+    r'owl:|rdfs:|xsd:'
+    adicionar_tabela_simbolos(t)
+    return t
+
+def t_NAMESPACE(t):
+    r'(integer|real|string|boolean|date|time|long|language|short|token|byte|Name|NCName)'
+
+    if t.value in namespaces:
+        adicionar_tabela_simbolos(t)
+        return t
+
+
     adicionar_tabela_simbolos(t)
     return t
 
@@ -70,7 +86,7 @@ def t_CARDINALIDADE(t):
     return t
 
 def t_SIMBOLO_ESPECIAL(t):
-    r'[\{\},<>=>=<\[\]\(\)]'
+    r'(>=|<=|[\{\},<>=\[\]\(\)])'
     adicionar_tabela_simbolos(t)
     return t
 
