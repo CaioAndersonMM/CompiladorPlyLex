@@ -1,7 +1,7 @@
 import ply.lex as lex
 
+from Symb import TabelaSimbolos
 
-#Fazer regex pois elas terminam em dois pontos no final, precisa de regra!
 reservadas = {
     'SOME': 'PALAVRA_RESERVADA',
     'ALL': 'PALAVRA_RESERVADA',
@@ -20,24 +20,21 @@ reservadas = {
     'DisjointClasses': 'PALAVRA_RESERVADA',
 }
 
-# Todas as funções que começam com 't_' são chamadas de regras e são responsáveis por identificar esses tokens
 tokens = [
     'IDENTIFICADOR_CLASSE', 'IDENTIFICADOR_PROPRIEDADE', 'IDENTIFICADOR_INDIVIDUO',
     'CARDINALIDADE', 'TIPO_DADO', 'SIMBOLO_ESPECIAL',
-    'DOIS_PONTOS', 'PARA_ABRIR', 'PARA_FECHAR', 'PARENTESES_ABERTO', 'PARENTESES_FECHADO', 'MAIOR_IGUAL', 'MENOR_IGUAL', 'IGUAL'
 ] + list(set(reservadas.values()))
 
-t_DOIS_PONTOS = r':'
-t_PARA_ABRIR = r'\['
-t_PARA_FECHAR = r'\]'
-t_PARENTESES_ABERTO = r'\('
-t_PARENTESES_FECHADO = r'\)'
+tabela_simbolos = TabelaSimbolos()
 
-# Operadores >= e <= e =
+def adicionar_tabela_simbolos(t):
+    tabela_simbolos.adicionar(simbolo=t.value, tipo=t.type, linha=t.lineno)
 
-# Tipos de dados precisou vim primeiro que as palavras reservadas, pois a regex das palavras reservadas é mais genérica
+
+# Funções de regras de token
 def t_TIPO_DADO(t):
     r'owl:real|rdfs:domain|xsd:string'
+    adicionar_tabela_simbolos(t)
     return t
 
 def t_PALAVRA_RESERVADA(t):
@@ -47,27 +44,34 @@ def t_PALAVRA_RESERVADA(t):
 
     if palavra in reservadas:
         t.type = reservadas[palavra]
+        t.value = palavra
+        adicionar_tabela_simbolos(t)
         return t
 
 def t_IDENTIFICADOR_CLASSE(t):
-    r'[A-Z][A-Za-z0-9_]*'   #(começam com letra maiúscula, podem ser compostos e pode terminar com underline)
+    r'[A-Z][A-Za-z0-9_]*'
     t.type = reservadas.get(t.value, 'IDENTIFICADOR_CLASSE')
+    adicionar_tabela_simbolos(t)
     return t
 
 def t_IDENTIFICADOR_PROPRIEDADE(t):
-    r'(has[A-Za-z0-9]+|is[A-Za-z0-9]+Of|[a-z][A-Za-z0-9]*)' #(começam com 'has' ou 'is', seguidos de letras)
+    r'(has[A-Za-z0-9]+|is[A-Za-z0-9]+Of|[a-z][A-Za-z0-9]*)'
+    adicionar_tabela_simbolos(t)
     return t
 
 def t_IDENTIFICADOR_INDIVIDUO(t):
-    r'[A-Z][a-z0-9]*[0-9]+' #(começam com letra maiúscula e terminam com número)
+    r'[A-Z][a-z0-9]*[0-9]+'
+    adicionar_tabela_simbolos(t)
     return t
 
 def t_CARDINALIDADE(t):
-    r'\d+' #(números inteiros)
+    r'\d+'
+    adicionar_tabela_simbolos(t)
     return t
 
 def t_SIMBOLO_ESPECIAL(t):
-    r'[\[\]\(\)\{\},<>=>=<]'
+    r'[\{\},<>=>=<\[\]\(\)]'
+    adicionar_tabela_simbolos(t)
     return t
 
 # Ignorar espaços e tabulações
