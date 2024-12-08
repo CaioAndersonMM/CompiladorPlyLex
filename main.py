@@ -4,9 +4,9 @@ from src.lexer import lexer, reservadas, tabela_simbolos
 
 def main():
     arquivo_entrada = "data/entrada.txt"
-    arquivo_saida_tokens = "data/saida.txt"
-    arquivo_saida_resumo = "data/saida2.txt"
-    arquivo_saida_tabela = "data/tabela.txt"
+    arquivo_saida_tokens = "data/saida_tokens.txt"
+    arquivo_saida_resumo = "data/saida_sumario.txt"
+    arquivo_saida_tabela = "data/saida_tabela_simbolos.txt"
     
     if not os.path.exists(arquivo_entrada):
         print(f"Erro: Arquivo '{arquivo_entrada}' não encontrado!")
