@@ -1,0 +1,35 @@
+=== Resumo dos Tokens ===
+Token               Quantidade
+------------------------------
+PALAVRA_RESERVADA   85        
+IDENTIFICADOR_CLASSE92        
+SIMBOLO_ESPECIAL    91        
+IDENTIFICADOR_PROPRIEDADE35        
+NAMESPACE           5         
+TIPO_DADO           10        
+IDENTIFICADOR_INDIVIDUO14        
+CARDINALIDADE       4         
+
+=== IDENTIFICADOR_CLASSE ===
+Quantidade: 92
+Valores: Customer, Person, Pizza, Employee, Person, Pizza, PizzaBase, Pizza, PizzaBase, PizzaTopping, CustomPizza1, CustomPizza2, CheesyPizza, Pizza, CheeseTopping, CheesyPizza1, HighCaloriePizza, Pizza, InterestingPizza, Pizza, PizzaTopping, LowCaloriePizza, Pizza, Pizza, AmericanaHotPizza, JalapenoPepperTopping, MozzarellaTopping, PepperoniTopping, TomatoTopping, AmericanaHotPizza, AmericanaPizza, MargheritaPizza, SohoPizza, AmericanaHotPizza1, AmericanaHotPizza2, AmericanaHotPizza3, ChicagoAmericanaHotPizza1, AmericanaPizza, MozzarellaTopping, PepperoniTopping, TomatoTopping, AmericanaHotPizza, AmericanaPizza, MargheritaPizza, SohoPizza, AmericanaPizza1, AmericanaPizza2, MargheritaPizza, MozzarellaTopping, TomatoTopping, MozzarellaTopping, TomatoTopping, AmericanaHotPizza, AmericanaPizza, MargheritaPizza, SohoPizza, MargheritaPizza1, MargheritaPizza2, SohoPizza, MozzarellaTopping, OliveTopping, ParmesanTopping, TomatoTopping, MozzarellaTopping, OliveTopping, ParmesanTopping, TomatoTopping, AmericanaHotPizza, AmericanaPizza, MargheritaPizza, SohoPizza, SohoPizza1, SohoPizza2, SpicyPizza, Pizza, Hot, VegetarianPizza, Pizza, CheeseTopping, VegetableTopping, PizzaBase, Pizza, PizzaBase, PizzaTopping, PizzaTopping, Pizza, PizzaBase, PizzaTopping, Spiciness, Hot, Medium, Mild
+
+=== IDENTIFICADOR_PROPRIEDADE ===
+Quantidade: 35
+Valores: purchasedPizza, numberOfPhone, ssn, hasBase, hasCaloricContent, hasTopping, hasCaloricContent, hasTopping, hasCaloricContent, dPizza, dPizza, hasTopping, hasTopping, hasTopping, hasTopping, dPizza, hasTopping, hasTopping, hasTopping, dPizza, hasTopping, hasTopping, hasTopping, only, dPizza, hasTopping, hasTopping, hasTopping, hasTopping, hasTopping, only, hasTopping, hasSpiciness, hasTopping, only
+
+=== IDENTIFICADOR_INDIVIDUO ===
+Quantidade: 14
+Valores: Customer1, Customer10, Customer2, Customer3, Customer4, Customer5, Customer6, Customer7, Customer8, Customer9, Chef1, Manager1, Waiter1, Waiter2
+
+=== CARDINALIDADE ===
+Quantidade: 4
+Valores: 1, 400, 3, 400
+
+=== TIPO_DADO ===
+Quantidade: 10
+Valores: string, string, integer, integer, integer, Name, Name, Name, Name, Name
+
+=== Palavras Reservadas ===
+Quantidade: 85
+Palavras: class, equivalentto, and, some, and, some, individuals, class, subclassof, and, min, individuals, class, subclassof, some, some, disjointclasses, individuals, class, equivalentto, and, some, individuals, class, equivalentto, and, some, class, equivalentto, and, min, class, equivalentto, and, some, class, subclassof, class, subclassof, some, some, some, some, disjointclasses, individuals, class, subclassof, some, some, some, disjointclasses, individuals, class, subclassof, some, some, or, disjointclasses, individuals, class, subclassof, some, some, some, some, or, or, or, disjointclasses, individuals, class, equivalentto, and, some, value, class, equivalentto, and, or, class, disjointclasses, class, disjointclasses, class, equivalentto

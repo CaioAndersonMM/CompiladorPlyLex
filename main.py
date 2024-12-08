@@ -1,12 +1,12 @@
 import os
-from Symb import TabelaSimbolos
-from rules import lexer, reservadas, tabela_simbolos
+from src.symbol_table import TabelaSimbolos
+from src.lexer import lexer, reservadas, tabela_simbolos
 
 def main():
-    arquivo_entrada = "entrada.txt"
-    arquivo_saida_tokens = "saida.txt"
-    arquivo_saida_resumo = "saida2.txt"
-    arquivo_saida_tabela = "tabela.txt"
+    arquivo_entrada = "data/entrada.txt"
+    arquivo_saida_tokens = "data/saida.txt"
+    arquivo_saida_resumo = "data/saida2.txt"
+    arquivo_saida_tabela = "data/tabela.txt"
     
     if not os.path.exists(arquivo_entrada):
         print(f"Erro: Arquivo '{arquivo_entrada}' não encontrado!")
@@ -63,6 +63,6 @@ def main():
             f.write(f"Quantidade: {len(palavras_reservadas)}\n")
             f.write(f"Palavras: {', '.join(palavras_reservadas)}\n")
 
-    tabela_simbolos.salvar_em_arquivo(arquivo_saida_tabela)
+    tabela_simbolos.save_in_file(arquivo_saida_tabela)
 if __name__ == "__main__":
     main()

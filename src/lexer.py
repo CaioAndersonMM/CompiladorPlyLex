@@ -1,6 +1,6 @@
 import ply.lex as lex
 
-from Symb import TabelaSimbolos
+from src.symbol_table import TabelaSimbolos
 
 reservadas = {
     'some': 'PALAVRA_RESERVADA',
@@ -33,7 +33,7 @@ tokens = [
 tabela_simbolos = TabelaSimbolos()
 
 def adicionar_tabela_simbolos(t):
-    tabela_simbolos.adicionar(simbolo=t.value, tipo=t.type, linha=t.lineno)
+    tabela_simbolos.add(simbolo=t.value, tipo=t.type, linha=t.lineno)
 
 
 # Funções de regras de token
