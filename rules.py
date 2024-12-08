@@ -65,12 +65,12 @@ def t_PALAVRA_RESERVADA(t):
         return t
     
 def t_IDENTIFICADOR_INDIVIDUO(t):
-    r'[A-Z][a-z0-9]*[0-9]+'
+    r'[A-Z][a-zA-Z0-9]*[0-9]+'
     adicionar_tabela_simbolos(t)
     return t
 
 def t_IDENTIFICADOR_CLASSE(t):
-    r'[A-Z][A-Za-z0-9_]*'
+    r'[A-Z][A-Za-z_]*(?:_[A-Z][A-Za-z_]*)*'
     
     if t.value.lower() in reservadas:
         t.type = reservadas[t.value.lower()]
