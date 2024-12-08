@@ -2,7 +2,7 @@ class TabelaSimbolos:
     def __init__(self):
         self.tabela = {}
 
-    def adicionar(self, simbolo, tipo, linha):
+    def add(self, simbolo, tipo, linha):
         if simbolo not in self.tabela:
             self.tabela[simbolo] = {'tipo': tipo, 'linha': linha}
         else:
@@ -20,11 +20,11 @@ class TabelaSimbolos:
         else:
             print(f"Warning: Símbolo '{simbolo}' não encontrado na tabela.")
 
-    def imprimir(self):
+    def show(self):
         for simbolo, info in self.tabela.items():
             print(f"{simbolo}: Tipo = {info['tipo']}, Linha = {info['linha']}")
 
-    def salvar_em_arquivo(self, arquivo_saida):
+    def save_in_file(self, arquivo_saida):
         with open(arquivo_saida, "w", encoding="utf-8") as f:
             f.write("=== Tabela de Símbolos ===\n")
             for simbolo, info in self.tabela.items():
