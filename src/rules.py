@@ -1,6 +1,6 @@
 import ply.lex as lex
 
-from Symb import TabelaSimbolos
+from src.Symb import TabelaSimbolos
 
 reservadas = {
     'some': 'PALAVRA_RESERVADA',

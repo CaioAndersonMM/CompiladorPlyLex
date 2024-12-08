@@ -1,12 +1,12 @@
 import os
-from Symb import TabelaSimbolos
-from rules import lexer, reservadas, tabela_simbolos
+from src.Symb import TabelaSimbolos
+from src.rules import lexer, reservadas, tabela_simbolos
 
 def main():
-    arquivo_entrada = "entrada.txt"
-    arquivo_saida_tokens = "saida.txt"
-    arquivo_saida_resumo = "saida2.txt"
-    arquivo_saida_tabela = "tabela.txt"
+    arquivo_entrada = "data/entrada.txt"
+    arquivo_saida_tokens = "data/saida.txt"
+    arquivo_saida_resumo = "data/saida2.txt"
+    arquivo_saida_tabela = "data/tabela.txt"
     
     if not os.path.exists(arquivo_entrada):
         print(f"Erro: Arquivo '{arquivo_entrada}' não encontrado!")
