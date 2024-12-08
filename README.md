@@ -106,8 +106,10 @@ Class: Customer
         and (purchasedPizza some Pizza)
         and (numberOfPhone some xsd:string)
 ````
-Ao executar o script lexer.py, o analisador identificará os seguintes tokens:
+Ao executar o script main.py, o analisador identificará os seguintes tokens e preencherá todos os arquivos de saída:
 ```plaintext
+#saida_tokens.txt
+
 Token(PALAVRA_RESERVADA, 'class')
 Token(IDENTIFICADOR_CLASSE, 'Customer')
 Token(PALAVRA_RESERVADA, 'equivalentto')
