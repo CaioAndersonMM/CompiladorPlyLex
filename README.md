@@ -6,14 +6,11 @@ Este repositório contém um analisador léxico desenvolvido com **PLY (Python L
 
 ## **Sumário**
 - [Funcionalidades](#funcionalidades)
+- [Instruções de Execução](#intruções-de-execução)
 - [Estrutura do Repositório](#estrutura-do-repositório)
 - [Tokens Reconhecidos](#tokens-reconhecidos)
-- [Como Usar](#como-usar)
-  - [Arquivo de Entrada](#arquivo-de-entrada)
-  - [Executando o Analisador](#executando-o-analisador)
 - [Exemplo de Uso](#exemplo-de-uso)
 - [Tabela de Símbolos](#tabela-de-símbolos)
-- [Como Baixar e Instalar o PLY](#como-baixar-e-instalar-o-ply)
 
 ---
 
@@ -21,6 +18,13 @@ Este repositório contém um analisador léxico desenvolvido com **PLY (Python L
 - Identificação de **palavras reservadas**, **identificadores de classe**, **propriedades**, **cardinalidades**, e **tipos de dados**.
 - Validação e classificação de tokens conforme regras sintáticas.
 - Registro de tokens identificados na tabela de símbolos com informações de tipo e linha.
+
+---
+
+## **Instruções de Execução**
+-  O projeto contém um arquivo chamado **`entrada.txt`** localizado na pasta `/data`. Ele pode ser modificado para utilizar outros códigos de entrada.
+- Certifique-se de que sua máquina possui o **Python** instalado. Caso não tenha, faça o download em: [https://www.python.org/downloads/](https://www.python.org/downloads/).
+- No terminal, instale a dependência **PLY** com o comando: **`pip install ply`**
 
 ---
 
@@ -34,7 +38,7 @@ data/
 src/
 ├── symbol_table.py         # Implementação da Tabela de Símbolos
 ├── lexer.py                # Analisador léxico principal, contendo as regras e definições do lex
-main.py                     # Arquivo principal que deverá ser executado (main)
+main.py                     # Arquivo principal que deverá ser executado
 ```
 ---
 
@@ -76,25 +80,9 @@ Exemplos: owl:, rdfs:, xsd:
 -  Símbolos Especiais: Incluem caracteres como:
 ```plaintext
 Exemplos: {, }, >=, <=, etc.
-````
+```
 
 ---
-## **Como Usar**
-No arquivo chamado entrada.txt dentro da pasta data é onde deve está o código a ser analisado. Exemplo:
-```plaintext
-Class: InterestingPizza
-    EquivalentTo:
-        Pizza
-        and (hasTopping min 3 PizzaTopping)
-```
----
-## **Como Baixar e Instalar o PLY**
-O PLY (Python Lex-Yacc) é uma biblioteca que facilita a criação de analisadores léxicos e sintáticos em Python. Para utilizar o projeto, você precisará instalar o PLY. Siga os passos abaixo:
-- Instalar o PLY com pip
-O método mais simples de instalar o PLY é através do pip, o gerenciador de pacotes do Python. Se você não tiver o pip instalado, consulte a documentação oficial do pip para mais informações.
-```plaintext
-pip install ply
-````
 
 ## **Exemplos de Uso**
 Suponha que o arquivo entrada.txt contenha o seguinte código:
