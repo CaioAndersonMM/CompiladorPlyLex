@@ -22,10 +22,11 @@ Este repositório contém um analisador léxico desenvolvido com **PLY (Python L
 ---
 
 ## **Instruções de Execução**
--  O projeto contém um arquivo chamado **`entrada.txt`** localizado na pasta `/data`. Ele pode ser modificado para utilizar outros códigos de entrada.
-- Certifique-se de que sua máquina possui o **Python** instalado. Caso não tenha, faça o download em: [https://www.python.org/downloads/](https://www.python.org/downloads/).
-- No terminal, instale a dependência **PLY** com o comando: **`pip install ply`**
-
+- O projeto inclui um arquivo denominado entrada.txt, localizado na pasta /data. Este arquivo pode ser editado para testar diferentes entradas de código.
+- Certifique-se de que o Python esteja corretamente instalado em sua máquina. Caso não tenha o Python, você pode baixá-lo através do seguinte link: https://www.python.org/downloads/.
+- No terminal, instale a dependência PLY utilizando o comando: `pip install ply`
+- Em seguida, execute o arquivo main.py, localizado na raiz do projeto.
+- Para visualizar os resultados, consulte os arquivos gerados na pasta /data, os quais têm nomes iniciados por "saida". Esses arquivos contêm o sumário da execução, a tabela de símbolos e os tokens gerados.
 ---
 
 ## **Estrutura do Repositório**
