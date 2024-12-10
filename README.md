@@ -6,7 +6,7 @@ Este repositório contém um analisador léxico desenvolvido com **PLY (Python L
 
 ## **Sumário**
 - [Funcionalidades](#funcionalidades)
-- [Instruções de Execução](#intruções-de-execução)
+- [Instruções de Execução](#instruções-de-execução)
 - [Estrutura do Repositório](#estrutura-do-repositório)
 - [Tokens Reconhecidos](#tokens-reconhecidos)
 - [Exemplo de Uso](#exemplo-de-uso)
