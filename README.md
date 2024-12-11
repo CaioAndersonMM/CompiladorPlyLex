@@ -120,4 +120,13 @@ Token(SIMBOLO_ESPECIAL, ')')
 
 ## **Tabela de Símbolos**
 A Tabela de Símbolos mantém o controle dos tokens identificados durante o processo de análise léxica. Cada entrada contém informações sobre o símbolo, seu tipo e a linha em que foi encontrado. O objetivo da tabela de símbolos é fornecer um mapeamento detalhado e organizado dos tokens analisados, o que facilita o processo de análise sintática e semântica subsequente.
+- A tabela é implementada como um dicionário Python (self.tabela = {}), onde cada símbolo é a chave, e o valor associado é outro dicionário contendo outras informações.
+- Adição de símbolos: add(simbolo, tipo, linha) insere um símbolo na tabela com suas informações, se o símbolo já existir, exibe um aviso para evitar duplicatas.
+- Get e Set: get(simbolo) permite buscar informações sobre um símbolo específico e set(simbolo, tipo=None, linha=None) atualiza o tipo ou a linha de um símbolo existente.
+- A função show() exibe todos os símbolos armazenados, junto com suas informações.
+```plaintext
+class: Tipo = PALAVRA_RESERVADA, Linha = 1
+Activity: Tipo = IDENTIFICADOR_CLASSE, Linha = 1
+subclassof: Tipo = PALAVRA_RESERVADA, Linha = 3
+````
 
