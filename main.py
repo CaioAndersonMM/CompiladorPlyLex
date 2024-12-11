@@ -1,6 +1,5 @@
 import os
-from src.symbol_table import TabelaSimbolos
-from src.lexer import lexer, reservadas, tabela_simbolos
+from src.lexer import lexer, tabela_simbolos
 
 def main():
     arquivo_entrada = "data/entrada.txt"
@@ -43,7 +42,8 @@ def main():
             "IDENTIFICADOR_PROPRIEDADE",
             "IDENTIFICADOR_INDIVIDUO",
             "CARDINALIDADE",
-            "TIPO_DADO"
+            "TIPO_DADO",
+            "PALAVRA_RESERVADA",
         ]
         
         for atributo in atributos_interessantes:
@@ -54,14 +54,6 @@ def main():
                 f.write(f"\n=== {atributo} ===\n")
                 f.write(f"Quantidade: {contador_tokens[atributo]}\n")
                 f.write(f"Valores: {', '.join(valores_identificados)}\n")
-
-        palavras_reservadas = [
-            token.value for token in tokens_identificados if token.type in reservadas.values()
-        ]
-        if palavras_reservadas:
-            f.write("\n=== Palavras Reservadas ===\n")
-            f.write(f"Quantidade: {len(palavras_reservadas)}\n")
-            f.write(f"Palavras: {', '.join(palavras_reservadas)}\n")
 
     tabela_simbolos.save_in_file(arquivo_saida_tabela)
 if __name__ == "__main__":
