@@ -35,7 +35,6 @@ tabela_simbolos = TabelaSimbolos()
 def adicionar_tabela_simbolos(t):
     tabela_simbolos.add(simbolo=t.value, tipo=t.type, linha=t.lineno)
 
-
 # Funções de regras de token
 def t_NAMESPACE(t):
     r'owl:|rdfs:|xsd:'
@@ -48,10 +47,8 @@ def t_TIPO_DADO(t):
     if t.value in type_dado:
         adicionar_tabela_simbolos(t)
         return t
-
-
-    adicionar_tabela_simbolos(t)
-    return t
+    print(f"Erro léxico: {t.value}")
+    t.lexer.skip(1)
 
 def t_PALAVRA_RESERVADA(t):
     r'[A-Za-z]+:'
@@ -63,6 +60,8 @@ def t_PALAVRA_RESERVADA(t):
         t.value = palavra
         adicionar_tabela_simbolos(t)
         return t
+    print(f"Erro léxico: {t.value}")
+    t.lexer.skip(1)
     
 def t_IDENTIFICADOR_INDIVIDUO(t):
     r'[A-Z][a-zA-Z0-9]*[0-9]+'
@@ -109,8 +108,12 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
+def t_comment(t):
+    r'\#.*'
+    pass
+
 def t_error(t):
-    print(f"Erro léxico: {t.value[0]}")
+    print(f"Erro léxico: {t.value}")
     t.lexer.skip(1)
 
 lexer = lex.lex()
