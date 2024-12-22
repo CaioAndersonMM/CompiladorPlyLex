@@ -1,5 +1,5 @@
 import os
-from src.lexer import lexer, tabela_simbolos
+from src.lexer import lexer, parser, tabela_simbolos
 
 def main():
     arquivo_entrada = "data/entrada.txt"
@@ -15,6 +15,11 @@ def main():
         conteudo = f.read()
     
     lexer.input(conteudo)
+    analiseSintatica = parser.parse(conteudo, lexer=lexer)
+    if analiseSintatica is None:
+        print("Análise sintática concluída com sucesso.")
+    else:
+        print("Erros encontrados na análise sintática.")
 
     contador_tokens = {}
     tokens_identificados = []
