@@ -249,7 +249,9 @@ def main():
     Pizza and (hasCaloricContent some xsd:integer[>= 400])
     """
     resultado = parser.parse(entrada, lexer=lexer)
-    print("Árvore Sintática:", resultado)
+    print("Árvore Sintática:")
+    for i in resultado:
+        print(i)
 
 if __name__ == "__main__":
     main()
