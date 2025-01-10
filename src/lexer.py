@@ -63,6 +63,14 @@ def t_DISJOINTCLASSES(t):
     r'DisjointClasses:'
     return t
 
+def t_EQUIVALENTTO(t):
+    r'EquivalentTo:'
+    return t
+
+def t_AND(t):
+    r'and'
+    return t
+
 def t_INDIVIDUALS(t):
     r'Individuals:'
     return t
@@ -118,18 +126,23 @@ precedence = (
 
 def p_ontologia(p):
     """ontologia : declaracao_classe corpo_classe
+                 | declaracao_classe_definida corpo_classe
                  | declaracao_classe"""
     if len(p) == 3:
         p[0] = (p[1], p[2])
     else:
         p[0] = p[1]
 
+def p_declaracao_classe_definida(p):
+    """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO lista_restricoes_definidas"""
+    print('entrou')
+    p[0] = ("ClasseDefinida", p[2], p[4])
+
 def p_declaracao_classe_primitiva(p):
-    """declaracao_classe : CLASS IDENTIFICADOR_CLASSE"""
-    p[0] = ("ClassePrimitiva", p[2])
+    """declaracao_classe : CLASS IDENTIFICADOR_CLASSE SUBCLASSOF lista_restricoes"""
+    p[0] = ("ClassePrimitiva", p[2], p[4])  # Agora o SubClassOf inclui lista_restricoes
 
-
-def p_corpo_classe(p):
+def p_corpo_classe_primitiva(p):
     """corpo_classe : restricoes disjunto individuos
                     | restricoes disjunto
                     | restricoes individuos
@@ -151,10 +164,27 @@ def p_lista_restricoes(p):
     else:
         p[0] = p[1] + [p[3]]
 
+def p_lista_restricoes_definidas(p):
+    """lista_restricoes_definidas : restricao_definidas
+                        | lista_restricoes_definidas SIMBOLO_ESPECIAL restricao_definidas"""
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[3]]
+
 def p_restricao(p):
     """restricao : IDENTIFICADOR_PROPRIEDADE SOME IDENTIFICADOR_CLASSE
                  | IDENTIFICADOR_PROPRIEDADE SOME NAMESPACE TIPO_DADO"""
     p[0] = ("Restricao", p[1], p[3])
+
+def p_restricao_definidas(p):
+    """restricao_definidas : IDENTIFICADOR_CLASSE AND LPAREN lista_restricoes RPAREN
+                           | IDENTIFICADOR_PROPRIEDADE SOME IDENTIFICADOR_CLASSE
+                           | IDENTIFICADOR_PROPRIEDADE SOME NAMESPACE TIPO_DADO"""
+    if len(p) == 5:  # Caso com parênteses
+        p[0] = ("Restricao", p[1], p[4])
+    else:  # Sem parênteses
+        p[0] = ("Restricao", p[1], p[3])
 
 def p_disjunto(p):
     """disjunto : DISJOINTCLASSES lista_classes"""
@@ -180,19 +210,6 @@ def p_lista_individuos(p):
     else:
         p[0] = p[1] + [p[3]]
 
-def p_classes_definidas(p):
-    """classes_definidas : classe_definida
-                        | classes_definidas classe_definida"""
-    if len(p) == 2:
-        p[0] = [p[1]]
-    else:
-        p[0] = p[1] + [p[2]]
-
-def p_classe_definida(p):
-    """classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO lista_restricoes"""
-    p[0] = ("ClasseDefinida", p[2], p[4])
-
-
 def p_error(p):
     if p:
         print(f"Erro sintático no token: {p.type}, valor: '{p.value}', linha: {p.lineno}")
@@ -207,14 +224,12 @@ parser = yacc.yacc()
 
 def main():
     entrada = """
-    Class: Pizza
-        SubClassOf:
-            hasBase some PizzaBase,
-            hasCaloricContent some xsd:integer
-        DisjointClasses:
-            Pizza, PizzaBase, PizzaTopping
-        Individuals:
-            CustomPizza1, CustomPizza2
+    Class: CheesyPizza
+    EquivalentTo:
+    Pizza and (hasTopping some CheeseTopping)
+    Individuals:
+    CheesyPizza1
+    
     """
     resultado = parser.parse(entrada, lexer=lexer)
     print("Árvore Sintática:", resultado)
