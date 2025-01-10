@@ -33,7 +33,7 @@ type_dado = [
 
 # Tokens
 tokens = [
-    'IDENTIFICADOR_CLASSE', 'IDENTIFICADOR_PROPRIEDADE', 'IDENTIFICADOR_INDIVIDUO',
+    'MAIORIGUAL', 'IDENTIFICADOR_CLASSE', 'IDENTIFICADOR_PROPRIEDADE', 'IDENTIFICADOR_INDIVIDUO',
     'CARDINALIDADE', 'SIMBOLO_ESPECIAL', 'TIPO_DADO', 'NAMESPACE', 'LPAREN', 'RPAREN',
 ] + list(set(reservadas.values()))
 
@@ -41,6 +41,7 @@ tokens = [
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_ignore = ' \t'  # Ignorar espaços e tabulações
+t_MAIORIGUAL = r'>='
 
 def t_NEWLINE(t):
     r'\n+'
@@ -50,29 +51,28 @@ def t_NEWLINE(t):
 def t_SOME(t):
     r'some'
     return t
-
 def t_CLASS(t):
-    r'Class:'
+    r'[Cc]lass\s*:'  # Permite "Class:" ou "class :" (com espaços opcionais)
     return t
 
 def t_SUBCLASSOF(t):
-    r'SubClassOf:'
-    return t
-
-def t_DISJOINTCLASSES(t):
-    r'DisjointClasses:'
+    r'[Ss]ub[Cc]lass[Oo]f\s*:'  # Permite variações de maiúsculas/minúsculas e espaços opcionais
     return t
 
 def t_EQUIVALENTTO(t):
-    r'EquivalentTo:'
+    r'[Ee]quivalent[Tt]o\s*:'  # Permite variações e espaços opcionais
     return t
 
 def t_AND(t):
     r'and'
     return t
 
+def t_DISJOINTCLASSES(t):
+    r'[Dd]isjoint[Cc]lasses\s*:'  # Permite variações e espaços opcionais
+    return t
+
 def t_INDIVIDUALS(t):
-    r'Individuals:'
+    r'[Ii]ndividuals\s*:'  # Permite variações e espaços opcionais
     return t
 
 def t_NAMESPACE(t):
@@ -102,7 +102,7 @@ def t_CARDINALIDADE(t):
     return t
 
 def t_SIMBOLO_ESPECIAL(t):
-    r'(>=|<=|[\{\},<>=\[\]\'"])'
+    r'([\{\},\[\]\'"])'
     return t
 
 def t_comment(t):
@@ -119,28 +119,33 @@ lexer = lex.lex()
 # PARSER
 # ============================
 
-precedence = (
-    ('left', 'SIMBOLO_ESPECIAL'),
-    ('left', 'CLASS'),
-)
 
 def p_ontologia(p):
-    """ontologia : declaracao_classe corpo_classe
-                 | declaracao_classe_definida corpo_classe
-                 | declaracao_classe"""
-    if len(p) == 3:
-        p[0] = (p[1], p[2])
+    """ontologia : declaracao_classe
+                 | declaracao_classe_definida
+                 | ontologia declaracao_classe
+                 | ontologia declaracao_classe_definida"""
+    if len(p) == 2:
+        p[0] = [p[1]]
     else:
-        p[0] = p[1]
+        p[0] = p[1] + [p[2]]
+
 
 def p_declaracao_classe_definida(p):
-    """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO lista_restricoes_definidas"""
-    print('entrou')
-    p[0] = ("ClasseDefinida", p[2], p[4])
+    """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO lista_restricoes_definidas corpo_classe
+                                  | CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO lista_restricoes_definidas"""
+    if len(p) == 6:
+        p[0] = ("ClasseDefinida", p[2], p[4], p[5])
+    else:
+        p[0] = ("ClasseDefinida", p[2], p[4])
 
-def p_declaracao_classe_primitiva(p):
-    """declaracao_classe : CLASS IDENTIFICADOR_CLASSE SUBCLASSOF lista_restricoes"""
-    p[0] = ("ClassePrimitiva", p[2], p[4])  # Agora o SubClassOf inclui lista_restricoes
+def p_declaracao_classe(p):
+    """declaracao_classe : CLASS IDENTIFICADOR_CLASSE SUBCLASSOF lista_restricoes corpo_classe
+                         | CLASS IDENTIFICADOR_CLASSE SUBCLASSOF lista_restricoes"""
+    if len(p) == 6:
+        p[0] = ("ClassePrimitiva", p[2], p[4], p[5])
+    else:
+        p[0] = ("ClassePrimitiva", p[2], p[4])
 
 def p_corpo_classe_primitiva(p):
     """corpo_classe : restricoes disjunto individuos
@@ -180,11 +185,20 @@ def p_restricao(p):
 def p_restricao_definidas(p):
     """restricao_definidas : IDENTIFICADOR_CLASSE AND LPAREN lista_restricoes RPAREN
                            | IDENTIFICADOR_PROPRIEDADE SOME IDENTIFICADOR_CLASSE
-                           | IDENTIFICADOR_PROPRIEDADE SOME NAMESPACE TIPO_DADO"""
+                           | IDENTIFICADOR_PROPRIEDADE SOME NAMESPACE TIPO_DADO '[' CARDINALIDADE ']'
+                           | IDENTIFICADOR_PROPRIEDADE SOME NAMESPACE TIPO_DADO '[' MAIORIGUAL CARDINALIDADE ']'
+                           | IDENTIFICADOR_PROPRIEDADE AND LPAREN lista_restricoes_definidas RPAREN
+                           | IDENTIFICADOR_PROPRIEDADE AND NAMESPACE TIPO_DADO '[' MAIORIGUAL CARDINALIDADE ']'
+                           | IDENTIFICADOR_PROPRIEDADE AND LPAREN IDENTIFICADOR_PROPRIEDADE SOME IDENTIFICADOR_CLASSE RPAREN
+                           | IDENTIFICADOR_CLASSE AND LPAREN IDENTIFICADOR_PROPRIEDADE SOME NAMESPACE TIPO_DADO '[' MAIORIGUAL CARDINALIDADE ']' RPAREN
+                           | IDENTIFICADOR_CLASSE AND LPAREN IDENTIFICADOR_PROPRIEDADE SOME NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL MAIORIGUAL CARDINALIDADE SIMBOLO_ESPECIAL RPAREN""" # essa ultima regra cubriu a ultima da classe definida
     if len(p) == 5:  # Caso com parênteses
         p[0] = ("Restricao", p[1], p[4])
-    else:  # Sem parênteses
+    elif len(p) == 8 and p[5] == "MAIORIGUAL":  # Com >=
+        p[0] = ("Restricao", p[1], p[3], p[5], p[6])
+    else:
         p[0] = ("Restricao", p[1], p[3])
+
 
 def p_disjunto(p):
     """disjunto : DISJOINTCLASSES lista_classes"""
@@ -229,7 +243,10 @@ def main():
     Pizza and (hasTopping some CheeseTopping)
     Individuals:
     CheesyPizza1
-    
+
+    Class: HighCaloriePizza
+    EquivalentTo:
+    Pizza and (hasCaloricContent some xsd:integer[>= 400])
     """
     resultado = parser.parse(entrada, lexer=lexer)
     print("Árvore Sintática:", resultado)
