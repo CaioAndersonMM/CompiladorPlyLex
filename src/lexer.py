@@ -177,16 +177,20 @@ def p_tipo_classe_definida(p):
 
 
 def p_classe_primitiva_subclass_opcional(p):
-    """classe_primitiva_subclass_opcional : SUBCLASSOF tipo_classe_primitiva
+    """classe_primitiva_subclass_opcional : SUBCLASSOF sequencia_subclassof
                              | """
     if len(p) == 3:
         p[0] = p[2]
     else:
         p[0] = None
 
-def p_tipo_classe_primitiva(p):
-    """tipo_classe_primitiva : classe_aninhada"""
-    p[0] = p[1]
+def p_sequencia_subclassof(p):
+    """sequencia_subclassof : sequencia_subclassof SIMBOLO_ESPECIAL conteudo_aninhamento
+                   | conteudo_aninhamento """
+    if len(p) == 4:
+        p[0] = p[1] + [p[3]]
+    else:
+        p[0] = [p[1]]
 
 def p_classe_enumerada(p):
     """classe_enumerada : SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL"""
@@ -207,10 +211,10 @@ def p_classe_aninhada(p):
 
 
 def p_aninhamento(p):
-    """aninhamento : conteudo_aninhamento
-                   | LPAREN conteudo_aninhamento OR conteudo_aninhamento RPAREN
+    """aninhamento : conteudo_aninhamento_com_parenteses
+                   | LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN
                    | LPAREN aninhamento RPAREN
-                   | conteudo_aninhamento AND aninhamento"""
+                   | conteudo_aninhamento_com_parenteses AND aninhamento"""
     if len(p) == 2:
         p[0] = [p[1]]
     elif len(p) == 6:
@@ -220,15 +224,19 @@ def p_aninhamento(p):
     else:
         p[0] = [[p[1]] + p[3]]
 
+def p_conteudo_aninhamento_com_parenteses(p):
+    """conteudo_aninhamento_com_parenteses : LPAREN conteudo_aninhamento RPAREN"""
+    p[0] = p[2]
+
 def p_conteudo_aninhamento(p):
-    """conteudo_aninhamento : LPAREN IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos RPAREN
-                             | LPAREN IDENTIFICADOR_PROPRIEDADE MIN CARDINALIDADE conteudo_aninhamento_pos RPAREN
-                             | LPAREN IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento RPAREN"""
+    """conteudo_aninhamento :  IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+                             | IDENTIFICADOR_PROPRIEDADE MIN CARDINALIDADE conteudo_aninhamento_pos
+                             | IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses"""
     
-    if len(p) == 6:
-        p[0] = [p[2]] + [p[3]] + [p[4]]
+    if len(p) == 4:
+        p[0] = [p[1]] + [p[2]] + [p[3]]
     else:
-        p[0] = [p[2]] + [p[3]] + [p[4]] + [p[5]]
+        p[0] = [p[1]] + [p[2]] + [p[3]] + [p[4]]
 
 def p_conteudo_aninhamento_pos(p):
     """conteudo_aninhamento_pos : IDENTIFICADOR_CLASSE
