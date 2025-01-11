@@ -56,6 +56,18 @@ def t_SOME(t):
     r'some'
     return t
 
+def t_ONLY(t):
+    r'only'
+    return t
+
+def t_VALUE(t):
+    r'value'
+    return t
+
+def t_OR(t):
+    r'or'
+    return t
+
 def t_MIN(t):
     r'min'
     return t
@@ -162,18 +174,24 @@ def p_classe_aninhada(p):
 
 def p_aninhamento(p):
     """aninhamento : conteudo_aninhamento
+                   | LPAREN conteudo_aninhamento OR conteudo_aninhamento RPAREN
+                   | LPAREN aninhamento RPAREN
                    | conteudo_aninhamento AND aninhamento"""
     if len(p) == 2:
         p[0] = [p[1]]
+    elif len(p) == 6:
+        p[0] = ["or", p[2]] + [p[4]]
+    elif len(p) == 4 and p[1] == "(":
+        p[0] = p[2]
     else:
-        p[0] = [p[1]] + p[3]
+        p[0] = [[p[1]] + p[3]]
 
 def p_conteudo_aninhamento(p):
-    """conteudo_aninhamento : LPAREN IDENTIFICADOR_PROPRIEDADE SOME conteudo_aninhamento_pos RPAREN
-                             | LPAREN IDENTIFICADOR_PROPRIEDADE ONLY conteudo_aninhamento_pos RPAREN
-                             | LPAREN IDENTIFICADOR_PROPRIEDADE MIN CARDINALIDADE conteudo_aninhamento_pos RPAREN"""
+    """conteudo_aninhamento : LPAREN IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos RPAREN
+                             | LPAREN IDENTIFICADOR_PROPRIEDADE MIN CARDINALIDADE conteudo_aninhamento_pos RPAREN
+                             | LPAREN IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento RPAREN"""
     
-    if len(p) == 5:
+    if len(p) == 6:
         p[0] = [p[2]] + [p[3]] + [p[4]]
     else:
         p[0] = [p[2]] + [p[3]] + [p[4]] + [p[5]]
@@ -181,11 +199,14 @@ def p_conteudo_aninhamento(p):
 def p_conteudo_aninhamento_pos(p):
     """conteudo_aninhamento_pos : IDENTIFICADOR_CLASSE
                                 | NAMESPACE TIPO_DADO
+                                | LPAREN identificadores_classe_or RPAREN
                                 | NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL"""
     if len(p) == 7:
-        p[0] = [p[1]] + [p[2]] + [[[p[4]] + [p[5]]]]
+        p[0] = [p[1]] + [p[2]] + [[p[4]] + [p[5]]]
     elif len(p) == 3:
         p[0] = [p[1]] + [p[2]]
+    elif len(p) == 4:
+        p[0] = ["or"] + [p[2]]
     else:
         p[0] = p[1]
 
@@ -214,6 +235,21 @@ def p_identificadores_classe_sequencia(p):
     else:
         p[0] = p[1] + [p[3]]
 
+def p_identificadores_classe_or(p):
+    """identificadores_classe_or : IDENTIFICADOR_CLASSE
+                                | identificadores_classe_or OR IDENTIFICADOR_CLASSE"""
+    
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[3]]
+
+def p_restricao_propriedade(p):
+    """restricao_propriedade : ONLY
+                            | SOME
+                            | VALUE"""
+    p[0] = p[1]
+
 def p_error(p):
     if p:
         print(f"Erro sintático no token: {p.type}, valor: '{p.value}', linha: {p.lineno}")
@@ -229,25 +265,10 @@ parser = yacc.yacc()
 
 def main():
     entrada = """
-    Class: Spiciness
-
-        EquivalentTo:  {Hot , Medium , Mild}
-    Class: Spicinesss
-        EquivalentTo:  Hot , Medium , Mild
-
     Class: CheesyPizza
     EquivalentTo:
         Pizza
-        and (purchasedPizza some Pizza)
-        and (numberOfPhone some xsd:string)
-        and (hasTopping some CheeseTopping)
-        and (hasCaloriContent some xsd:integer[>= '400'])
-        and (hasTopping min 3 PizzaTopping)
-        and (ssn min 1 xsd:string)
-        and (hasCaloricContent some xsd:integer[< 400])
-
-    Class: Spicinessss
-        EquivalentTo:  Hot , Medium , Mild
+        and (hasTopping some (hasSpiciness value Hot))
     """
     resultado = parser.parse(entrada, lexer=lexer)
     print("Árvore Sintática:")

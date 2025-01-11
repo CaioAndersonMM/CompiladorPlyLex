@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ALL AND CARDINALIDADE CLASS DISJOINTCLASSES DISJOINTWITH EQUIVALENTTO EXACTLY IDENTIFICADOR_CLASSE IDENTIFICADOR_INDIVIDUO IDENTIFICADOR_PROPRIEDADE INDIVIDUALS LPAREN MAIOR MAIORIGUAL MAX MENOR MENORIGUAL MIN NAMESPACE NOT ONLY OR RPAREN SIMBOLO_ESPECIAL SOME SUBCLASSOF THAT TIPO_DADO VALUEontologia : declaracao_classe_definida\n                 | ontologia declaracao_classe_definidadeclaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definidatipo_classe_definida : classe_enumerada\n                             | classe_coberta\n                             | classe_aninhadaclasse_enumerada : SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIALclasse_coberta : identificadores_classe_sequenciaclasse_aninhada : IDENTIFICADOR_CLASSE AND aninhamentoaninhamento : conteudo_aninhamento\n                   | conteudo_aninhamento AND aninhamentoconteudo_aninhamento : LPAREN IDENTIFICADOR_PROPRIEDADE SOME conteudo_aninhamento_pos RPAREN\n                             | LPAREN IDENTIFICADOR_PROPRIEDADE ONLY conteudo_aninhamento_pos RPAREN\n                             | LPAREN IDENTIFICADOR_PROPRIEDADE MIN CARDINALIDADE conteudo_aninhamento_pos RPARENconteudo_aninhamento_pos : IDENTIFICADOR_CLASSE\n                                | NAMESPACE TIPO_DADO\n                                | NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIALoperador_relacional : MAIOR\n                            | MENOR\n                            | MAIORIGUAL\n                            | MENORIGUALcardinalidade_com_sem_aspas_simples : CARDINALIDADE\n                                | SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIALidentificadores_classe_sequencia : IDENTIFICADOR_CLASSE\n                                         | identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE'
+_lr_signature = 'ALL AND CARDINALIDADE CLASS DISJOINTCLASSES DISJOINTWITH EQUIVALENTTO EXACTLY IDENTIFICADOR_CLASSE IDENTIFICADOR_INDIVIDUO IDENTIFICADOR_PROPRIEDADE INDIVIDUALS LPAREN MAIOR MAIORIGUAL MAX MENOR MENORIGUAL MIN NAMESPACE NOT ONLY OR RPAREN SIMBOLO_ESPECIAL SOME SUBCLASSOF THAT TIPO_DADO VALUEontologia : declaracao_classe_definida\n                 | ontologia declaracao_classe_definidadeclaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definidatipo_classe_definida : classe_enumerada\n                             | classe_coberta\n                             | classe_aninhadaclasse_enumerada : SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIALclasse_coberta : identificadores_classe_sequenciaclasse_aninhada : IDENTIFICADOR_CLASSE AND aninhamentoaninhamento : conteudo_aninhamento\n                   | LPAREN conteudo_aninhamento OR conteudo_aninhamento RPAREN\n                   | LPAREN aninhamento RPAREN\n                   | conteudo_aninhamento AND aninhamentoconteudo_aninhamento : LPAREN IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos RPAREN\n                             | LPAREN IDENTIFICADOR_PROPRIEDADE MIN CARDINALIDADE conteudo_aninhamento_pos RPAREN\n                             | LPAREN IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento RPARENconteudo_aninhamento_pos : IDENTIFICADOR_CLASSE\n                                | NAMESPACE TIPO_DADO\n                                | LPAREN identificadores_classe_or RPAREN\n                                | NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIALoperador_relacional : MAIOR\n                            | MENOR\n                            | MAIORIGUAL\n                            | MENORIGUALcardinalidade_com_sem_aspas_simples : CARDINALIDADE\n                                | SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIALidentificadores_classe_sequencia : IDENTIFICADOR_CLASSE\n                                         | identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSEidentificadores_classe_or : IDENTIFICADOR_CLASSE\n                                | identificadores_classe_or OR IDENTIFICADOR_CLASSErestricao_propriedade : ONLY\n                            | SOME\n                            | VALUE'
     
-_lr_action_items = {'CLASS':([0,1,2,4,7,8,9,10,11,13,18,19,21,22,25,34,36,39,],[3,3,-1,-2,-24,-3,-4,-5,-6,-8,-9,-10,-7,-25,-11,-12,-13,-14,]),'$end':([1,2,4,7,8,9,10,11,13,18,19,21,22,25,34,36,39,],[0,-1,-2,-24,-3,-4,-5,-6,-8,-9,-10,-7,-25,-11,-12,-13,-14,]),'IDENTIFICADOR_CLASSE':([3,6,12,17,21,26,27,33,],[5,7,16,22,22,30,30,30,]),'EQUIVALENTTO':([5,],[6,]),'SIMBOLO_ESPECIAL':([6,7,13,15,16,22,35,40,41,42,43,44,46,47,48,50,],[12,-24,17,21,-24,-25,38,45,-18,-19,-20,-21,49,-22,50,-23,]),'AND':([7,19,34,36,39,],[14,23,-12,-13,-14,]),'LPAREN':([14,23,],[20,20,]),'IDENTIFICADOR_PROPRIEDADE':([20,],[24,]),'SOME':([24,],[26,]),'ONLY':([24,],[27,]),'MIN':([24,],[28,]),'NAMESPACE':([26,27,33,],[31,31,31,]),'CARDINALIDADE':([28,40,41,42,43,44,45,],[33,47,-18,-19,-20,-21,48,]),'RPAREN':([29,30,32,35,37,49,],[34,-15,36,-16,39,-17,]),'TIPO_DADO':([31,],[35,]),'MAIOR':([38,],[41,]),'MENOR':([38,],[42,]),'MAIORIGUAL':([38,],[43,]),'MENORIGUAL':([38,],[44,]),}
+_lr_action_items = {'CLASS':([0,1,2,4,7,8,9,10,11,13,18,19,21,22,28,30,44,47,48,55,],[3,3,-1,-2,-27,-3,-4,-5,-6,-8,-9,-10,-7,-28,-13,-12,-11,-14,-16,-15,]),'$end':([1,2,4,7,8,9,10,11,13,18,19,21,22,28,30,44,47,48,55,],[0,-1,-2,-27,-3,-4,-5,-6,-8,-9,-10,-7,-28,-13,-12,-11,-14,-16,-15,]),'IDENTIFICADOR_CLASSE':([3,6,12,17,21,31,33,34,35,38,43,50,53,],[5,7,16,22,22,41,-31,-32,-33,46,41,46,56,]),'EQUIVALENTTO':([5,],[6,]),'SIMBOLO_ESPECIAL':([6,7,13,15,16,22,49,57,58,59,60,61,63,64,65,67,],[12,-27,17,21,-27,-28,54,62,-21,-22,-23,-24,66,-25,67,-26,]),'AND':([7,19,25,47,48,55,],[14,23,23,-14,-16,-15,]),'LPAREN':([14,20,23,24,29,31,33,34,35,43,],[20,24,20,24,36,38,-31,-32,-33,50,]),'RPAREN':([19,25,26,28,30,37,39,40,41,44,45,46,47,48,49,51,52,55,56,66,],[-10,-10,30,-13,-12,44,47,48,-17,-11,52,-29,-14,-16,-18,55,-19,-15,-30,-20,]),'IDENTIFICADOR_PROPRIEDADE':([20,24,36,38,],[27,27,27,27,]),'OR':([25,45,46,47,48,55,56,],[29,53,-29,-14,-16,-15,-30,]),'MIN':([27,],[32,]),'ONLY':([27,],[33,]),'SOME':([27,],[34,]),'VALUE':([27,],[35,]),'NAMESPACE':([31,33,34,35,43,],[42,-31,-32,-33,42,]),'CARDINALIDADE':([32,57,58,59,60,61,62,],[43,64,-21,-22,-23,-24,65,]),'TIPO_DADO':([42,],[49,]),'MAIOR':([54,],[58,]),'MENOR':([54,],[59,]),'MAIORIGUAL':([54,],[60,]),'MENORIGUAL':([54,],[61,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'ontologia':([0,],[1,]),'declaracao_classe_definida':([0,1,],[2,4,]),'tipo_classe_definida':([6,],[8,]),'classe_enumerada':([6,],[9,]),'classe_coberta':([6,],[10,]),'classe_aninhada':([6,],[11,]),'identificadores_classe_sequencia':([6,12,],[13,15,]),'aninhamento':([14,23,],[18,25,]),'conteudo_aninhamento':([14,23,],[19,19,]),'conteudo_aninhamento_pos':([26,27,33,],[29,32,37,]),'operador_relacional':([38,],[40,]),'cardinalidade_com_sem_aspas_simples':([40,],[46,]),}
+_lr_goto_items = {'ontologia':([0,],[1,]),'declaracao_classe_definida':([0,1,],[2,4,]),'tipo_classe_definida':([6,],[8,]),'classe_enumerada':([6,],[9,]),'classe_coberta':([6,],[10,]),'classe_aninhada':([6,],[11,]),'identificadores_classe_sequencia':([6,12,],[13,15,]),'aninhamento':([14,20,23,24,],[18,26,28,26,]),'conteudo_aninhamento':([14,20,23,24,29,31,],[19,25,19,25,37,40,]),'restricao_propriedade':([27,],[31,]),'conteudo_aninhamento_pos':([31,43,],[39,51,]),'identificadores_classe_or':([38,50,],[45,45,]),'operador_relacional':([54,],[57,]),'cardinalidade_com_sem_aspas_simples':([57,],[63,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,29 +27,37 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> ontologia","S'",1,None,None,None),
-  ('ontologia -> declaracao_classe_definida','ontologia',1,'p_ontologia','lexer.py',133),
-  ('ontologia -> ontologia declaracao_classe_definida','ontologia',2,'p_ontologia','lexer.py',134),
-  ('declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida','declaracao_classe_definida',4,'p_declaracao_classe_definida','lexer.py',141),
-  ('tipo_classe_definida -> classe_enumerada','tipo_classe_definida',1,'p_tipo_classe_definida','lexer.py',145),
-  ('tipo_classe_definida -> classe_coberta','tipo_classe_definida',1,'p_tipo_classe_definida','lexer.py',146),
-  ('tipo_classe_definida -> classe_aninhada','tipo_classe_definida',1,'p_tipo_classe_definida','lexer.py',147),
-  ('classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL','classe_enumerada',3,'p_classe_enumerada','lexer.py',151),
-  ('classe_coberta -> identificadores_classe_sequencia','classe_coberta',1,'p_classe_coberta','lexer.py',155),
-  ('classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento','classe_aninhada',3,'p_classe_aninhada','lexer.py',159),
-  ('aninhamento -> conteudo_aninhamento','aninhamento',1,'p_aninhamento','lexer.py',164),
-  ('aninhamento -> conteudo_aninhamento AND aninhamento','aninhamento',3,'p_aninhamento','lexer.py',165),
-  ('conteudo_aninhamento -> LPAREN IDENTIFICADOR_PROPRIEDADE SOME conteudo_aninhamento_pos RPAREN','conteudo_aninhamento',5,'p_conteudo_aninhamento','lexer.py',172),
-  ('conteudo_aninhamento -> LPAREN IDENTIFICADOR_PROPRIEDADE ONLY conteudo_aninhamento_pos RPAREN','conteudo_aninhamento',5,'p_conteudo_aninhamento','lexer.py',173),
-  ('conteudo_aninhamento -> LPAREN IDENTIFICADOR_PROPRIEDADE MIN CARDINALIDADE conteudo_aninhamento_pos RPAREN','conteudo_aninhamento',6,'p_conteudo_aninhamento','lexer.py',174),
-  ('conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE','conteudo_aninhamento_pos',1,'p_conteudo_aninhamento_pos','lexer.py',182),
-  ('conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO','conteudo_aninhamento_pos',2,'p_conteudo_aninhamento_pos','lexer.py',183),
-  ('conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL','conteudo_aninhamento_pos',6,'p_conteudo_aninhamento_pos','lexer.py',184),
-  ('operador_relacional -> MAIOR','operador_relacional',1,'p_operador_relacional','lexer.py',195),
-  ('operador_relacional -> MENOR','operador_relacional',1,'p_operador_relacional','lexer.py',196),
-  ('operador_relacional -> MAIORIGUAL','operador_relacional',1,'p_operador_relacional','lexer.py',197),
-  ('operador_relacional -> MENORIGUAL','operador_relacional',1,'p_operador_relacional','lexer.py',198),
-  ('cardinalidade_com_sem_aspas_simples -> CARDINALIDADE','cardinalidade_com_sem_aspas_simples',1,'p_cardinalidade_com_sem_aspas_simples','lexer.py',202),
-  ('cardinalidade_com_sem_aspas_simples -> SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIAL','cardinalidade_com_sem_aspas_simples',3,'p_cardinalidade_com_sem_aspas_simples','lexer.py',203),
-  ('identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE','identificadores_classe_sequencia',1,'p_identificadores_classe_sequencia','lexer.py',210),
-  ('identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE','identificadores_classe_sequencia',3,'p_identificadores_classe_sequencia','lexer.py',211),
+  ('ontologia -> declaracao_classe_definida','ontologia',1,'p_ontologia','lexer.py',145),
+  ('ontologia -> ontologia declaracao_classe_definida','ontologia',2,'p_ontologia','lexer.py',146),
+  ('declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida','declaracao_classe_definida',4,'p_declaracao_classe_definida','lexer.py',153),
+  ('tipo_classe_definida -> classe_enumerada','tipo_classe_definida',1,'p_tipo_classe_definida','lexer.py',157),
+  ('tipo_classe_definida -> classe_coberta','tipo_classe_definida',1,'p_tipo_classe_definida','lexer.py',158),
+  ('tipo_classe_definida -> classe_aninhada','tipo_classe_definida',1,'p_tipo_classe_definida','lexer.py',159),
+  ('classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL','classe_enumerada',3,'p_classe_enumerada','lexer.py',163),
+  ('classe_coberta -> identificadores_classe_sequencia','classe_coberta',1,'p_classe_coberta','lexer.py',167),
+  ('classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento','classe_aninhada',3,'p_classe_aninhada','lexer.py',171),
+  ('aninhamento -> conteudo_aninhamento','aninhamento',1,'p_aninhamento','lexer.py',176),
+  ('aninhamento -> LPAREN conteudo_aninhamento OR conteudo_aninhamento RPAREN','aninhamento',5,'p_aninhamento','lexer.py',177),
+  ('aninhamento -> LPAREN aninhamento RPAREN','aninhamento',3,'p_aninhamento','lexer.py',178),
+  ('aninhamento -> conteudo_aninhamento AND aninhamento','aninhamento',3,'p_aninhamento','lexer.py',179),
+  ('conteudo_aninhamento -> LPAREN IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos RPAREN','conteudo_aninhamento',5,'p_conteudo_aninhamento','lexer.py',190),
+  ('conteudo_aninhamento -> LPAREN IDENTIFICADOR_PROPRIEDADE MIN CARDINALIDADE conteudo_aninhamento_pos RPAREN','conteudo_aninhamento',6,'p_conteudo_aninhamento','lexer.py',191),
+  ('conteudo_aninhamento -> LPAREN IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento RPAREN','conteudo_aninhamento',5,'p_conteudo_aninhamento','lexer.py',192),
+  ('conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE','conteudo_aninhamento_pos',1,'p_conteudo_aninhamento_pos','lexer.py',200),
+  ('conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO','conteudo_aninhamento_pos',2,'p_conteudo_aninhamento_pos','lexer.py',201),
+  ('conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN','conteudo_aninhamento_pos',3,'p_conteudo_aninhamento_pos','lexer.py',202),
+  ('conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL','conteudo_aninhamento_pos',6,'p_conteudo_aninhamento_pos','lexer.py',203),
+  ('operador_relacional -> MAIOR','operador_relacional',1,'p_operador_relacional','lexer.py',216),
+  ('operador_relacional -> MENOR','operador_relacional',1,'p_operador_relacional','lexer.py',217),
+  ('operador_relacional -> MAIORIGUAL','operador_relacional',1,'p_operador_relacional','lexer.py',218),
+  ('operador_relacional -> MENORIGUAL','operador_relacional',1,'p_operador_relacional','lexer.py',219),
+  ('cardinalidade_com_sem_aspas_simples -> CARDINALIDADE','cardinalidade_com_sem_aspas_simples',1,'p_cardinalidade_com_sem_aspas_simples','lexer.py',223),
+  ('cardinalidade_com_sem_aspas_simples -> SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIAL','cardinalidade_com_sem_aspas_simples',3,'p_cardinalidade_com_sem_aspas_simples','lexer.py',224),
+  ('identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE','identificadores_classe_sequencia',1,'p_identificadores_classe_sequencia','lexer.py',231),
+  ('identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE','identificadores_classe_sequencia',3,'p_identificadores_classe_sequencia','lexer.py',232),
+  ('identificadores_classe_or -> IDENTIFICADOR_CLASSE','identificadores_classe_or',1,'p_identificadores_classe_or','lexer.py',239),
+  ('identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE','identificadores_classe_or',3,'p_identificadores_classe_or','lexer.py',240),
+  ('restricao_propriedade -> ONLY','restricao_propriedade',1,'p_restricao_propriedade','lexer.py',248),
+  ('restricao_propriedade -> SOME','restricao_propriedade',1,'p_restricao_propriedade','lexer.py',249),
+  ('restricao_propriedade -> VALUE','restricao_propriedade',1,'p_restricao_propriedade','lexer.py',250),
 ]
