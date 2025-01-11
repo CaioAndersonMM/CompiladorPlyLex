@@ -142,21 +142,50 @@ lexer = lex.lex()
 
 
 def p_ontologia(p):
-    """ontologia : declaracao_classe_definida
-                 | ontologia declaracao_classe_definida"""
+    """ontologia : declaracao_classe
+                 | ontologia declaracao_classe"""
     if len(p) == 2:
         p[0] = [p[1]]
     else:
         p[0] = p[1] + [p[2]]
 
+def p_declaracao_classe(p):
+    """declaracao_classe : declaracao_classe_definida
+                        | declaracao_classe_primitiva"""
+    p[0] = p[1]
+
+
+
 def p_declaracao_classe_definida(p):
     """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida individuals_opcional"""
     p[0] = ["classe definida", p[2], p[4], p[5]]
+
+def p_declaracao_classe_primitiva(p):
+    """declaracao_classe_primitiva : CLASS IDENTIFICADOR_CLASSE classe_primitiva_subclass_opcional individuals_opcional"""
+    
+    retorno = ["classe primitiva", p[2]]
+    if p[3] != None:
+        retorno = retorno + [p[3]]
+
+    p[0] = retorno + [p[4]]
 
 def p_tipo_classe_definida(p):
     """tipo_classe_definida : classe_enumerada
                              | classe_coberta
                              | classe_aninhada"""
+    p[0] = p[1]
+
+
+def p_classe_primitiva_subclass_opcional(p):
+    """classe_primitiva_subclass_opcional : SUBCLASSOF tipo_classe_primitiva
+                             | """
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = None
+
+def p_tipo_classe_primitiva(p):
+    """tipo_classe_primitiva : classe_aninhada"""
     p[0] = p[1]
 
 def p_classe_enumerada(p):
@@ -168,8 +197,13 @@ def p_classe_coberta(p):
     p[0] = ["coberta", p[1]]
 
 def p_classe_aninhada(p):
-    """classe_aninhada : IDENTIFICADOR_CLASSE AND aninhamento"""
-    p[0] = ["aninhada", p[1], p[3]]
+    """classe_aninhada : IDENTIFICADOR_CLASSE AND aninhamento
+                        | AND aninhamento"""
+    
+    if len(p) == 4:
+        p[0] = ["aninhada", p[1], p[3]]
+    else:
+        p[0] = ["aninhada", p[2]]
 
 
 def p_aninhamento(p):
@@ -213,14 +247,15 @@ def p_conteudo_aninhamento_pos(p):
 def p_individuals_opcional(p):
     """
     individuals_opcional : INDIVIDUALS identificadores_individuo_sequencia
-                         | INDIVIDUALS
                          | 
+                         | INDIVIDUALS
+                         | identificadores_individuo_sequencia
     """
     if len(p) == 3:
         p[0] = ["INDIVIDUALS", p[2]]
     elif len(p) == 2:
-        tratamento_personalizado_erros("'INDIVIDUALS' sem sequência de identificadores.", p)
-    else: 
+        tratamento_personalizado_erros("'Individuals' deve ser seguido de pelo menos um indivíduo.", p)
+    else:
         p[0] = ["INDIVIDUALS", []]
 
 
@@ -291,22 +326,13 @@ parser = yacc.yacc()
 # ============================
 
 def main():
-    entrada = """
-    Class: Customer
+    with open('src/entrada_parser.txt', 'r') as file:
+        entrada = file.read()
 
-        EquivalentTo:
-            Person
-            and (purchasedPizza some Pizza)
-            and ((numberOfPhone some xsd:string) or (purchasedPizza some Pizza))
-
-        Individuals:
-    """
     resultado = parser.parse(entrada, lexer=lexer)
     print("Árvore Sintática:")
     for i in resultado:
-        for j in i:
-            print(j)
-        print("")
+        print(i)
 
 if __name__ == "__main__":
     main()
