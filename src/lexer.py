@@ -150,8 +150,8 @@ def p_ontologia(p):
         p[0] = p[1] + [p[2]]
 
 def p_declaracao_classe_definida(p):
-    """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida"""
-    p[0] = ["classe definida", p[2], p[4]]
+    """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida individuals_opcional"""
+    p[0] = ["classe definida", p[2], p[4], p[5]]
 
 def p_tipo_classe_definida(p):
     """tipo_classe_definida : classe_enumerada
@@ -180,7 +180,7 @@ def p_aninhamento(p):
     if len(p) == 2:
         p[0] = [p[1]]
     elif len(p) == 6:
-        p[0] = ["or", p[2]] + [p[4]]
+        p[0] = [["or", p[2]] + [p[4]]]
     elif len(p) == 4 and p[1] == "(":
         p[0] = p[2]
     else:
@@ -209,6 +209,20 @@ def p_conteudo_aninhamento_pos(p):
         p[0] = ["or"] + [p[2]]
     else:
         p[0] = p[1]
+
+def p_individuals_opcional(p):
+    """
+    individuals_opcional : INDIVIDUALS identificadores_individuo_sequencia
+                         | INDIVIDUALS
+                         | 
+    """
+    if len(p) == 3:
+        p[0] = ["INDIVIDUALS", p[2]]
+    elif len(p) == 2:
+        tratamento_personalizado_erros("'INDIVIDUALS' sem sequência de identificadores.", p)
+    else: 
+        p[0] = ["INDIVIDUALS", []]
+
 
 # PARSER AUX #
 
@@ -244,11 +258,20 @@ def p_identificadores_classe_or(p):
     else:
         p[0] = p[1] + [p[3]]
 
+def p_identificadores_individuo_sequencia(p):
+    """identificadores_individuo_sequencia : IDENTIFICADOR_INDIVIDUO
+                                         | identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO"""
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[3]]
+
 def p_restricao_propriedade(p):
     """restricao_propriedade : ONLY
                             | SOME
                             | VALUE"""
     p[0] = p[1]
+
 
 def p_error(p):
     if p:
@@ -256,6 +279,10 @@ def p_error(p):
         print(p)
     else:
         print("Erro sintático: fim inesperado da entrada.")
+
+def tratamento_personalizado_erros(message, p):
+    print(f"Erro sintático, linha {p.lineno(1)}. {message}")
+    exit()
 
 parser = yacc.yacc()
 
@@ -265,15 +292,21 @@ parser = yacc.yacc()
 
 def main():
     entrada = """
-    Class: CheesyPizza
-    EquivalentTo:
-        Pizza
-        and (hasTopping some (hasSpiciness value Hot))
+    Class: Customer
+
+        EquivalentTo:
+            Person
+            and (purchasedPizza some Pizza)
+            and ((numberOfPhone some xsd:string) or (purchasedPizza some Pizza))
+
+        Individuals:
     """
     resultado = parser.parse(entrada, lexer=lexer)
     print("Árvore Sintática:")
     for i in resultado:
-        print(i)
+        for j in i:
+            print(j)
+        print("")
 
 if __name__ == "__main__":
     main()
