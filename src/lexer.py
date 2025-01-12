@@ -102,7 +102,7 @@ def t_NAMESPACE(t):
     return t
 
 def t_TIPO_DADO(t):
-    r'(integer|real|string|boolean|date|time|long|language|short|token|byte|Name|NCName)'
+    r'\b(integer|real|string|boolean|date|time|long|language|short|token|byte|Name|NCName)\b'
     if t.value in type_dado:
         return t
 
@@ -161,13 +161,15 @@ def p_declaracao_classe_definida(p):
     p[0] = ["classe definida", p[2], p[4], p[5]]
 
 def p_declaracao_classe_primitiva(p):
-    """declaracao_classe_primitiva : CLASS IDENTIFICADOR_CLASSE classe_primitiva_subclass_opcional individuals_opcional"""
+    """declaracao_classe_primitiva : CLASS IDENTIFICADOR_CLASSE subclassoff_opcional disjoint_opcional individuals_opcional"""
     
     retorno = ["classe primitiva", p[2]]
     if p[3] != None:
         retorno = retorno + [p[3]]
+    if p[4] != None:
+        retorno = retorno + [p[4]]
 
-    p[0] = retorno + [p[4]]
+    p[0] = retorno + [p[5]]
 
 def p_tipo_classe_definida(p):
     """tipo_classe_definida : classe_enumerada
@@ -176,12 +178,16 @@ def p_tipo_classe_definida(p):
     p[0] = p[1]
 
 
-def p_classe_primitiva_subclass_opcional(p):
-    """classe_primitiva_subclass_opcional : SUBCLASSOF sequencia_subclassof
+def p_subclassoff_opcional(p):
+    """subclassoff_opcional : SUBCLASSOF sequencia_subclassof
                              | SUBCLASSOF classe_aninhada
+                             | SUBCLASSOF IDENTIFICADOR_CLASSE
+                             | SUBCLASSOF IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof
                              | """
     if len(p) == 3:
-        p[0] = p[2]
+        p[0] = ["SUBCLASSOF", p[2]]
+    elif len(p) == 5:
+        p[0] = ["SUBCLASSOF", p[2], p[4]]
     else:
         p[0] = None
 
@@ -192,6 +198,14 @@ def p_sequencia_subclassof(p):
         p[0] = p[1] + [p[3]]
     else:
         p[0] = [p[1]]
+
+def p_disjoint_opcional(p):
+    """disjoint_opcional : DISJOINTCLASSES identificadores_classe_sequencia
+                             |  """
+    if len(p) == 3:    
+        p[0] = ["DISJOINT_CLASSES", p[2]]
+    else:
+        p[0] = None
 
 def p_classe_enumerada(p):
     """classe_enumerada : SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL"""
