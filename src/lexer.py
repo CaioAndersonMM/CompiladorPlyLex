@@ -178,6 +178,7 @@ def p_tipo_classe_definida(p):
 
 def p_classe_primitiva_subclass_opcional(p):
     """classe_primitiva_subclass_opcional : SUBCLASSOF sequencia_subclassof
+                             | SUBCLASSOF classe_aninhada
                              | """
     if len(p) == 3:
         p[0] = p[2]
