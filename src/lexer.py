@@ -72,6 +72,10 @@ def t_MIN(t):
     r'min'
     return t
 
+def t_EXACTLY(t):
+    r'exactly'
+    return t
+
 def t_CLASS(t):
     r'[Cc]lass\s*:'  # Permite "Class:" ou "class :" (com espaços opcionais)
     return t
@@ -245,7 +249,7 @@ def p_conteudo_aninhamento_com_parenteses(p):
 
 def p_conteudo_aninhamento(p):
     """conteudo_aninhamento :  IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
-                             | IDENTIFICADOR_PROPRIEDADE MIN CARDINALIDADE conteudo_aninhamento_pos
+                             | IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
                              | IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses"""
     
     if len(p) == 4:
@@ -328,6 +332,11 @@ def p_restricao_propriedade(p):
     """restricao_propriedade : ONLY
                             | SOME
                             | VALUE"""
+    p[0] = p[1]
+
+def p_restricao_palavra_reservada(p):
+    """restricao_palavra_reservada : MIN
+                            | EXACTLY"""
     p[0] = p[1]
 
 
