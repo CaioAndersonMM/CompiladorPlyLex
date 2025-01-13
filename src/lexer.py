@@ -22,8 +22,8 @@ reservadas = {
     'equivalentto': 'EQUIVALENTTO',
     'individuals': 'INDIVIDUALS',
     'subclassof': 'SUBCLASSOF',
-    'disjointclasses': 'DISJOINTCLASSES',
-    'disjointwith': 'DISJOINTWITH',
+    # 'disjointclasses': 'DISJOINTCLASSES',
+    # 'disjointwith': 'DISJOINTWITH',
 }
 
 # Tipos de dados
@@ -34,8 +34,8 @@ type_dado = [
 
 # Tokens
 tokens = [
-    'MAIORIGUAL', 'MENORIGUAL', 'MAIOR', 'MENOR', 'IDENTIFICADOR_CLASSE', 'IDENTIFICADOR_PROPRIEDADE', 'IDENTIFICADOR_INDIVIDUO',
-    'CARDINALIDADE', 'SIMBOLO_ESPECIAL', 'TIPO_DADO', 'NAMESPACE', 'LPAREN', 'RPAREN',
+    'MAIORIGUAL', 'MENORIGUAL', 'MAIOR', 'MENOR',  'IDENTIFICADOR_CLASSE', 'IDENTIFICADOR_PROPRIEDADE', 'IDENTIFICADOR_INDIVIDUO', 
+    'CARDINALIDADE', 'SIMBOLO_ESPECIAL', 'TIPO_DADO', 'NAMESPACE', 'LPAREN', 'RPAREN', 'DISJOINTCLASSES', 'DISJOINTWITH'
 ] + list(set(reservadas.values()))
 
 # Regras de tokens
@@ -94,6 +94,10 @@ def t_AND(t):
 
 def t_DISJOINTCLASSES(t):
     r'[Dd]isjoint[Cc]lasses\s*:'  # Permite variações e espaços opcionais
+    return t
+
+def t_DISJOINTWITH(t):
+    r'[Dd]isjoint[Ww]ith\s*:'  # Permite variações e espaços opcionais
     return t
 
 def t_INDIVIDUALS(t):
@@ -158,8 +162,6 @@ def p_declaracao_classe(p):
                         | declaracao_classe_primitiva"""
     p[0] = p[1]
 
-
-
 def p_declaracao_classe_definida(p):
     """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida individuals_opcional"""
     p[0] = ["classe definida", p[2], p[4], p[5]]
@@ -196,8 +198,8 @@ def p_subclassoff_opcional(p):
         p[0] = None
 
 def p_sequencia_subclassof(p):
-    """sequencia_subclassof : sequencia_subclassof SIMBOLO_ESPECIAL conteudo_aninhamento
-                   | conteudo_aninhamento """
+    """sequencia_subclassof : sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
+                   | aninhamento_ou_conteudo_aninhamento """
     if len(p) == 4:
         p[0] = p[1] + [p[3]]
     else:
@@ -205,9 +207,11 @@ def p_sequencia_subclassof(p):
 
 def p_disjoint_opcional(p):
     """disjoint_opcional : DISJOINTCLASSES identificadores_classe_sequencia
-                             |  """
-    if len(p) == 3:    
+                         | DISJOINTWITH identificadores_classe_sequencia"""
+    if p[1].lower() == 'disjointclasses:':
         p[0] = ["DISJOINT_CLASSES", p[2]]
+    elif p[1].lower() == 'disjointwith:':
+        p[0] = ["DISJOINT_WITH", p[2]]
     else:
         p[0] = None
 
@@ -339,6 +343,10 @@ def p_restricao_palavra_reservada(p):
                             | EXACTLY"""
     p[0] = p[1]
 
+def p_aninhamento_ou_conteudo_aninhamento(p):
+    """aninhamento_ou_conteudo_aninhamento : aninhamento
+                                           | conteudo_aninhamento"""
+    p[0] = p[1]
 
 def p_error(p):
     if p:
