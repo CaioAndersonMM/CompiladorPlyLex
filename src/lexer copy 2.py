@@ -247,38 +247,38 @@ def p_classe_aninhada(p):
 def p_aninhamento(p):
     """aninhamento : conteudo_aninhamento_com_parenteses
                    | conteudo_aninhamento
-                   | aninhamento AND aninhamento"""
+                   | LPAREN aninhamento RPAREN
+                   | conteudo_aninhamento_com_parenteses AND aninhamento
+                   | conteudo_aninhamento AND aninhamento"""
     if len(p) == 2:
         p[0] = [p[1]]
-    elif len(p) == 4:
-        p[0] = p[1] + p[3]
-
-def p_conteudo_aninhamento(p):
-    """conteudo_aninhamento :  IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
-                             | IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
-                             | IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-                             | IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-                             | IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
-                             | conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
-                             | conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses"""
-    
-    if len(p) == 4 and p[2] == "OR":
-        p[0] = ["OR", [p[1]], p[3]]
-    elif len(p) == 4 and p[2] == "AND":
-        p[0] = ["AND", [p[1]], p[3]]
-    elif len(p) == 4:
-        p[0] = [p[1]] + [p[2]] + [p[3]]
-    elif len(p) == 5:
-        p[0] = [p[1]] + [p[2]] + [p[3]] + [p[4]]
+    elif len(p) == 6 and p[3] == "or":
+        p[0] = [["or", p[2]] + [p[4]]]
+    elif len(p) == 6:
+        p[0] = [["and", p[2]] + [p[4]]]
+    elif len(p) == 4 and p[1] == "(":
+        p[0] = p[2]
     else:
-        p[0] = [p[1]] + [p[2]] + [p[3]] + [p[4]] + [p[5]]
-
+        p[0] = [[p[1]] + p[3]]
 
 def p_conteudo_aninhamento_com_parenteses(p):
     """conteudo_aninhamento_com_parenteses : LPAREN conteudo_aninhamento RPAREN"""
     p[0] = p[2]
 
-
+def p_conteudo_aninhamento(p):
+    """conteudo_aninhamento :  IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+                             | IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+                             | IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+                             | conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses"""
+    
+    if len(p) == 4 and p[2] == "OR2":
+        p[0] = ["or", [p[1]], p[3]]
+    elif len(p) == 4 and p[2] == "AND2":
+        p[0] = ["and", [p[1]], p[3]]
+    elif len(p) == 4:
+        p[0] = [p[1]] + [p[2]] + [p[3]]
+    else:
+        p[0] = [p[1]] + [p[2]] + [p[3]] + [p[4]]
 
 def p_conteudo_aninhamento_pos(p):
     """conteudo_aninhamento_pos : IDENTIFICADOR_CLASSE
@@ -290,7 +290,7 @@ def p_conteudo_aninhamento_pos(p):
     elif len(p) == 3:
         p[0] = [p[1]] + [p[2]]
     elif len(p) == 4:
-        p[0] = ["OR"] + [p[2]]
+        p[0] = ["or"] + [p[2]]
     else:
         p[0] = p[1]
 
@@ -359,7 +359,6 @@ def p_restricao_propriedade(p):
 
 def p_restricao_palavra_reservada(p):
     """restricao_palavra_reservada : MIN
-                            | SOME
                             | EXACTLY"""
     p[0] = p[1]
 

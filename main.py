@@ -1,11 +1,10 @@
 import os
-from src.lexer import lexer, parser, tabela_simbolos
+from src.lexer import lexer, parser
 
 def main():
     arquivo_entrada = "data/entrada.txt"
     arquivo_saida_tokens = "data/saida_tokens.txt"
     arquivo_saida_resumo = "data/saida_sumario.txt"
-    arquivo_saida_tabela = "data/saida_tabela_simbolos.txt"
     
     if not os.path.exists(arquivo_entrada):
         print(f"Erro: Arquivo '{arquivo_entrada}' não encontrado!")
@@ -60,6 +59,5 @@ def main():
                 f.write(f"Quantidade: {contador_tokens[atributo]}\n")
                 f.write(f"Valores: {', '.join(valores_identificados)}\n")
 
-    tabela_simbolos.save_in_file(arquivo_saida_tabela)
 if __name__ == "__main__":
     main()

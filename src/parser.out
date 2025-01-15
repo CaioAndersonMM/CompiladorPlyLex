@@ -14,120 +14,128 @@ Rule 1     ontologia -> declaracao_classe
 Rule 2     ontologia -> ontologia declaracao_classe
 Rule 3     declaracao_classe -> declaracao_classe_definida
 Rule 4     declaracao_classe -> declaracao_classe_primitiva
-Rule 5     declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida individuals_opcional
-Rule 6     declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE subclassoff_opcional disjoint_opcional individuals_opcional
+Rule 5     declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional
+Rule 6     declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva disjoint_opcional individuals_opcional
 Rule 7     tipo_classe_definida -> classe_enumerada
 Rule 8     tipo_classe_definida -> classe_coberta
 Rule 9     tipo_classe_definida -> classe_aninhada
-Rule 10    subclassoff_opcional -> SUBCLASSOF sequencia_subclassof
-Rule 11    subclassoff_opcional -> SUBCLASSOF classe_aninhada
-Rule 12    subclassoff_opcional -> SUBCLASSOF IDENTIFICADOR_CLASSE
-Rule 13    subclassoff_opcional -> SUBCLASSOF IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof
-Rule 14    subclassoff_opcional -> <empty>
-Rule 15    sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
-Rule 16    sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento
-Rule 17    disjoint_opcional -> DISJOINTCLASSES identificadores_classe_sequencia
-Rule 18    disjoint_opcional -> DISJOINTWITH identificadores_classe_sequencia
-Rule 19    classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL
-Rule 20    classe_coberta -> identificadores_classe_sequencia
-Rule 21    classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento
-Rule 22    classe_aninhada -> AND aninhamento
-Rule 23    aninhamento -> conteudo_aninhamento_com_parenteses
-Rule 24    aninhamento -> LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN
-Rule 25    aninhamento -> LPAREN aninhamento RPAREN
-Rule 26    aninhamento -> conteudo_aninhamento_com_parenteses AND aninhamento
-Rule 27    conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN
-Rule 28    conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
-Rule 29    conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-Rule 30    conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
-Rule 31    conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE
-Rule 32    conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO
-Rule 33    conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN
-Rule 34    conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
-Rule 35    individuals_opcional -> INDIVIDUALS identificadores_individuo_sequencia
-Rule 36    individuals_opcional -> <empty>
-Rule 37    individuals_opcional -> INDIVIDUALS
-Rule 38    individuals_opcional -> identificadores_individuo_sequencia
-Rule 39    operador_relacional -> MAIOR
-Rule 40    operador_relacional -> MENOR
-Rule 41    operador_relacional -> MAIORIGUAL
-Rule 42    operador_relacional -> MENORIGUAL
-Rule 43    cardinalidade_com_sem_aspas_simples -> CARDINALIDADE
-Rule 44    cardinalidade_com_sem_aspas_simples -> SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIAL
-Rule 45    identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE
-Rule 46    identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
-Rule 47    identificadores_classe_or -> IDENTIFICADOR_CLASSE
-Rule 48    identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE
-Rule 49    identificadores_individuo_sequencia -> IDENTIFICADOR_INDIVIDUO
-Rule 50    identificadores_individuo_sequencia -> identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO
-Rule 51    restricao_propriedade -> ONLY
-Rule 52    restricao_propriedade -> SOME
-Rule 53    restricao_propriedade -> VALUE
-Rule 54    restricao_palavra_reservada -> MIN
-Rule 55    restricao_palavra_reservada -> EXACTLY
-Rule 56    aninhamento_ou_conteudo_aninhamento -> aninhamento
-Rule 57    aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento
+Rule 10    tipo_classe_definida -> identificadores_classe_or
+Rule 11    subclass_opcional -> SUBCLASSOF tipo_classe_primitiva
+Rule 12    subclass_opcional -> <empty>
+Rule 13    tipo_classe_primitiva -> sequencia_subclassof
+Rule 14    tipo_classe_primitiva -> classe_aninhada
+Rule 15    tipo_classe_primitiva -> IDENTIFICADOR_CLASSE
+Rule 16    tipo_classe_primitiva -> IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof
+Rule 17    sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
+Rule 18    sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento
+Rule 19    disjoint_opcional -> DISJOINTCLASSES identificadores_classe_sequencia
+Rule 20    disjoint_opcional -> DISJOINTWITH identificadores_classe_sequencia
+Rule 21    disjoint_opcional -> <empty>
+Rule 22    classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL
+Rule 23    classe_coberta -> identificadores_classe_sequencia
+Rule 24    classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento
+Rule 25    classe_aninhada -> AND aninhamento
+Rule 26    aninhamento -> conteudo_aninhamento_com_parenteses
+Rule 27    aninhamento -> conteudo_aninhamento
+Rule 28    aninhamento -> aninhamento AND aninhamento
+Rule 29    conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+Rule 30    conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+Rule 31    conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+Rule 32    conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+Rule 33    conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+Rule 34    conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
+Rule 35    conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses
+Rule 36    conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN
+Rule 37    conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE
+Rule 38    conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO
+Rule 39    conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN
+Rule 40    conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
+Rule 41    individuals_opcional -> INDIVIDUALS identificadores_individuo_sequencia
+Rule 42    individuals_opcional -> <empty>
+Rule 43    individuals_opcional -> INDIVIDUALS
+Rule 44    individuals_opcional -> identificadores_individuo_sequencia
+Rule 45    operador_relacional -> MAIOR
+Rule 46    operador_relacional -> MENOR
+Rule 47    operador_relacional -> MAIORIGUAL
+Rule 48    operador_relacional -> MENORIGUAL
+Rule 49    cardinalidade_com_sem_aspas_simples -> CARDINALIDADE
+Rule 50    cardinalidade_com_sem_aspas_simples -> SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIAL
+Rule 51    identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE
+Rule 52    identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
+Rule 53    identificadores_classe_or -> IDENTIFICADOR_CLASSE
+Rule 54    identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE
+Rule 55    identificadores_individuo_sequencia -> IDENTIFICADOR_INDIVIDUO
+Rule 56    identificadores_individuo_sequencia -> identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO
+Rule 57    restricao_propriedade -> ONLY
+Rule 58    restricao_propriedade -> SOME
+Rule 59    restricao_propriedade -> VALUE
+Rule 60    restricao_palavra_reservada -> MIN
+Rule 61    restricao_palavra_reservada -> SOME
+Rule 62    restricao_palavra_reservada -> EXACTLY
+Rule 63    aninhamento_ou_conteudo_aninhamento -> aninhamento
+Rule 64    aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento
 
 Terminals, with rules where they appear
 
 ALL                  : 
-AND                  : 21 22 26
-CARDINALIDADE        : 29 43 44
+AND                  : 24 25 28 35
+CARDINALIDADE        : 31 32 49 50
 CLASS                : 5 6
-DISJOINTCLASSES      : 17
-DISJOINTWITH         : 18
+DISJOINTCLASSES      : 19
+DISJOINTWITH         : 20
 EQUIVALENTTO         : 5
-EXACTLY              : 55
-IDENTIFICADOR_CLASSE : 5 6 12 13 21 31 45 46 47 48
-IDENTIFICADOR_INDIVIDUO : 49 50
-IDENTIFICADOR_PROPRIEDADE : 28 29 30
-INDIVIDUALS          : 35 37
-LPAREN               : 24 25 27 33
-MAIOR                : 39
-MAIORIGUAL           : 41
+EXACTLY              : 62
+IDENTIFICADOR_CLASSE : 5 6 15 16 24 37 51 52 53 54
+IDENTIFICADOR_INDIVIDUO : 55 56
+IDENTIFICADOR_PROPRIEDADE : 29 30 30 31 32 32 33
+INDIVIDUALS          : 41 43
+LPAREN               : 36 39
+MAIOR                : 45
+MAIORIGUAL           : 47
 MAX                  : 
-MENOR                : 40
-MENORIGUAL           : 42
-MIN                  : 54
-NAMESPACE            : 32 34
+MENOR                : 46
+MENORIGUAL           : 48
+MIN                  : 60
+NAMESPACE            : 38 40
 NOT                  : 
-ONLY                 : 51
-OR                   : 24 48
-RPAREN               : 24 25 27 33
-SIMBOLO_ESPECIAL     : 13 15 19 19 34 34 44 44 46 50
-SOME                 : 52
-SUBCLASSOF           : 10 11 12 13
+ONLY                 : 57
+OR                   : 34 54
+RPAREN               : 36 39
+SIMBOLO_ESPECIAL     : 16 17 22 22 40 40 50 50 52 56
+SOME                 : 58 61
+SUBCLASSOF           : 6 11
 THAT                 : 
-TIPO_DADO            : 32 34
-VALUE                : 53
+TIPO_DADO            : 38 40
+VALUE                : 59
 error                : 
 
 Nonterminals, with rules where they appear
 
-aninhamento          : 21 22 25 26 56
-aninhamento_ou_conteudo_aninhamento : 15 16
-cardinalidade_com_sem_aspas_simples : 34
-classe_aninhada      : 9 11
+aninhamento          : 24 25 28 28 63
+aninhamento_ou_conteudo_aninhamento : 17 18
+cardinalidade_com_sem_aspas_simples : 40
+classe_aninhada      : 9 14
 classe_coberta       : 8
 classe_enumerada     : 7
-conteudo_aninhamento : 27 57
-conteudo_aninhamento_com_parenteses : 23 24 24 26 30
-conteudo_aninhamento_pos : 28 29
+conteudo_aninhamento : 27 36 64
+conteudo_aninhamento_com_parenteses : 26 33 34 34 35 35
+conteudo_aninhamento_pos : 29 30 31 32
 declaracao_classe    : 1 2
 declaracao_classe_definida : 3
 declaracao_classe_primitiva : 4
 disjoint_opcional    : 6
-identificadores_classe_or : 33 48
-identificadores_classe_sequencia : 17 18 19 20 46
-identificadores_individuo_sequencia : 35 38 50
+identificadores_classe_or : 10 39 54
+identificadores_classe_sequencia : 19 20 22 23 52
+identificadores_individuo_sequencia : 41 44 56
 individuals_opcional : 5 6
 ontologia            : 2 0
-operador_relacional  : 34
-restricao_palavra_reservada : 29
-restricao_propriedade : 28 30
-sequencia_subclassof : 10 13 15
-subclassoff_opcional : 6
+operador_relacional  : 40
+restricao_palavra_reservada : 31 32
+restricao_propriedade : 29 30 33
+sequencia_subclassof : 13 16 17
+subclass_opcional    : 5
 tipo_classe_definida : 5
+tipo_classe_primitiva : 6 11
 
 Parsing method: LALR
 
@@ -138,8 +146,8 @@ state 0
     (2) ontologia -> . ontologia declaracao_classe
     (3) declaracao_classe -> . declaracao_classe_definida
     (4) declaracao_classe -> . declaracao_classe_primitiva
-    (5) declaracao_classe_definida -> . CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida individuals_opcional
-    (6) declaracao_classe_primitiva -> . CLASS IDENTIFICADOR_CLASSE subclassoff_opcional disjoint_opcional individuals_opcional
+    (5) declaracao_classe_definida -> . CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional
+    (6) declaracao_classe_primitiva -> . CLASS IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva disjoint_opcional individuals_opcional
 
     CLASS           shift and go to state 5
 
@@ -154,8 +162,8 @@ state 1
     (2) ontologia -> ontologia . declaracao_classe
     (3) declaracao_classe -> . declaracao_classe_definida
     (4) declaracao_classe -> . declaracao_classe_primitiva
-    (5) declaracao_classe_definida -> . CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida individuals_opcional
-    (6) declaracao_classe_primitiva -> . CLASS IDENTIFICADOR_CLASSE subclassoff_opcional disjoint_opcional individuals_opcional
+    (5) declaracao_classe_definida -> . CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional
+    (6) declaracao_classe_primitiva -> . CLASS IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva disjoint_opcional individuals_opcional
 
     CLASS           shift and go to state 5
 
@@ -189,8 +197,8 @@ state 4
 
 state 5
 
-    (5) declaracao_classe_definida -> CLASS . IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida individuals_opcional
-    (6) declaracao_classe_primitiva -> CLASS . IDENTIFICADOR_CLASSE subclassoff_opcional disjoint_opcional individuals_opcional
+    (5) declaracao_classe_definida -> CLASS . IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional
+    (6) declaracao_classe_primitiva -> CLASS . IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva disjoint_opcional individuals_opcional
 
     IDENTIFICADOR_CLASSE shift and go to state 7
 
@@ -205,1045 +213,1375 @@ state 6
 
 state 7
 
-    (5) declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE . EQUIVALENTTO tipo_classe_definida individuals_opcional
-    (6) declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE . subclassoff_opcional disjoint_opcional individuals_opcional
-    (10) subclassoff_opcional -> . SUBCLASSOF sequencia_subclassof
-    (11) subclassoff_opcional -> . SUBCLASSOF classe_aninhada
-    (12) subclassoff_opcional -> . SUBCLASSOF IDENTIFICADOR_CLASSE
-    (13) subclassoff_opcional -> . SUBCLASSOF IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof
-    (14) subclassoff_opcional -> .
+    (5) declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE . EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional
+    (6) declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE . SUBCLASSOF tipo_classe_primitiva disjoint_opcional individuals_opcional
 
     EQUIVALENTTO    shift and go to state 8
-    SUBCLASSOF      shift and go to state 10
-    DISJOINTCLASSES reduce using rule 14 (subclassoff_opcional -> .)
-    DISJOINTWITH    reduce using rule 14 (subclassoff_opcional -> .)
+    SUBCLASSOF      shift and go to state 9
 
-    subclassoff_opcional           shift and go to state 9
 
 state 8
 
-    (5) declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO . tipo_classe_definida individuals_opcional
+    (5) declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO . tipo_classe_definida subclass_opcional individuals_opcional
     (7) tipo_classe_definida -> . classe_enumerada
     (8) tipo_classe_definida -> . classe_coberta
     (9) tipo_classe_definida -> . classe_aninhada
-    (19) classe_enumerada -> . SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL
-    (20) classe_coberta -> . identificadores_classe_sequencia
-    (21) classe_aninhada -> . IDENTIFICADOR_CLASSE AND aninhamento
-    (22) classe_aninhada -> . AND aninhamento
-    (45) identificadores_classe_sequencia -> . IDENTIFICADOR_CLASSE
-    (46) identificadores_classe_sequencia -> . identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
+    (10) tipo_classe_definida -> . identificadores_classe_or
+    (22) classe_enumerada -> . SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL
+    (23) classe_coberta -> . identificadores_classe_sequencia
+    (24) classe_aninhada -> . IDENTIFICADOR_CLASSE AND aninhamento
+    (25) classe_aninhada -> . AND aninhamento
+    (53) identificadores_classe_or -> . IDENTIFICADOR_CLASSE
+    (54) identificadores_classe_or -> . identificadores_classe_or OR IDENTIFICADOR_CLASSE
+    (51) identificadores_classe_sequencia -> . IDENTIFICADOR_CLASSE
+    (52) identificadores_classe_sequencia -> . identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
 
     SIMBOLO_ESPECIAL shift and go to state 16
-    IDENTIFICADOR_CLASSE shift and go to state 11
+    IDENTIFICADOR_CLASSE shift and go to state 10
     AND             shift and go to state 18
 
-    tipo_classe_definida           shift and go to state 12
-    classe_enumerada               shift and go to state 13
-    classe_coberta                 shift and go to state 14
-    classe_aninhada                shift and go to state 15
+    tipo_classe_definida           shift and go to state 11
+    classe_enumerada               shift and go to state 12
+    classe_coberta                 shift and go to state 13
+    classe_aninhada                shift and go to state 14
+    identificadores_classe_or      shift and go to state 15
     identificadores_classe_sequencia shift and go to state 17
 
 state 9
 
-    (6) declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE subclassoff_opcional . disjoint_opcional individuals_opcional
-    (17) disjoint_opcional -> . DISJOINTCLASSES identificadores_classe_sequencia
-    (18) disjoint_opcional -> . DISJOINTWITH identificadores_classe_sequencia
+    (6) declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE SUBCLASSOF . tipo_classe_primitiva disjoint_opcional individuals_opcional
+    (13) tipo_classe_primitiva -> . sequencia_subclassof
+    (14) tipo_classe_primitiva -> . classe_aninhada
+    (15) tipo_classe_primitiva -> . IDENTIFICADOR_CLASSE
+    (16) tipo_classe_primitiva -> . IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof
+    (17) sequencia_subclassof -> . sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
+    (18) sequencia_subclassof -> . aninhamento_ou_conteudo_aninhamento
+    (24) classe_aninhada -> . IDENTIFICADOR_CLASSE AND aninhamento
+    (25) classe_aninhada -> . AND aninhamento
+    (63) aninhamento_ou_conteudo_aninhamento -> . aninhamento
+    (64) aninhamento_ou_conteudo_aninhamento -> . conteudo_aninhamento
+    (26) aninhamento -> . conteudo_aninhamento_com_parenteses
+    (27) aninhamento -> . conteudo_aninhamento
+    (28) aninhamento -> . aninhamento AND aninhamento
+    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (31) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (32) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (33) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+    (34) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
+    (35) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses
+    (36) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
 
-    DISJOINTCLASSES shift and go to state 20
-    DISJOINTWITH    shift and go to state 21
+    IDENTIFICADOR_CLASSE shift and go to state 19
+    AND             shift and go to state 18
+    IDENTIFICADOR_PROPRIEDADE shift and go to state 27
+    LPAREN          shift and go to state 28
 
-    disjoint_opcional              shift and go to state 19
+    tipo_classe_primitiva          shift and go to state 20
+    sequencia_subclassof           shift and go to state 21
+    classe_aninhada                shift and go to state 22
+    aninhamento_ou_conteudo_aninhamento shift and go to state 23
+    aninhamento                    shift and go to state 24
+    conteudo_aninhamento           shift and go to state 25
+    conteudo_aninhamento_com_parenteses shift and go to state 26
 
 state 10
 
-    (10) subclassoff_opcional -> SUBCLASSOF . sequencia_subclassof
-    (11) subclassoff_opcional -> SUBCLASSOF . classe_aninhada
-    (12) subclassoff_opcional -> SUBCLASSOF . IDENTIFICADOR_CLASSE
-    (13) subclassoff_opcional -> SUBCLASSOF . IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof
-    (15) sequencia_subclassof -> . sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
-    (16) sequencia_subclassof -> . aninhamento_ou_conteudo_aninhamento
-    (21) classe_aninhada -> . IDENTIFICADOR_CLASSE AND aninhamento
-    (22) classe_aninhada -> . AND aninhamento
-    (56) aninhamento_ou_conteudo_aninhamento -> . aninhamento
-    (57) aninhamento_ou_conteudo_aninhamento -> . conteudo_aninhamento
-    (23) aninhamento -> . conteudo_aninhamento_com_parenteses
-    (24) aninhamento -> . LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN
-    (25) aninhamento -> . LPAREN aninhamento RPAREN
-    (26) aninhamento -> . conteudo_aninhamento_com_parenteses AND aninhamento
-    (28) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
-    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
-    (27) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
+    (24) classe_aninhada -> IDENTIFICADOR_CLASSE . AND aninhamento
+    (53) identificadores_classe_or -> IDENTIFICADOR_CLASSE .
+    (51) identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .
 
-    IDENTIFICADOR_CLASSE shift and go to state 24
-    AND             shift and go to state 18
-    LPAREN          shift and go to state 29
-    IDENTIFICADOR_PROPRIEDADE shift and go to state 30
+  ! reduce/reduce conflict for SUBCLASSOF resolved using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+  ! reduce/reduce conflict for INDIVIDUALS resolved using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+  ! reduce/reduce conflict for IDENTIFICADOR_INDIVIDUO resolved using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+  ! reduce/reduce conflict for CLASS resolved using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+  ! reduce/reduce conflict for $end resolved using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+    AND             shift and go to state 29
+    OR              reduce using rule 53 (identificadores_classe_or -> IDENTIFICADOR_CLASSE .)
+    SIMBOLO_ESPECIAL reduce using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+    SUBCLASSOF      reduce using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+    INDIVIDUALS     reduce using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+    CLASS           reduce using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+    $end            reduce using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
 
-    sequencia_subclassof           shift and go to state 22
-    classe_aninhada                shift and go to state 23
-    aninhamento_ou_conteudo_aninhamento shift and go to state 25
-    aninhamento                    shift and go to state 26
-    conteudo_aninhamento           shift and go to state 27
-    conteudo_aninhamento_com_parenteses shift and go to state 28
+  ! SUBCLASSOF      [ reduce using rule 53 (identificadores_classe_or -> IDENTIFICADOR_CLASSE .) ]
+  ! INDIVIDUALS     [ reduce using rule 53 (identificadores_classe_or -> IDENTIFICADOR_CLASSE .) ]
+  ! IDENTIFICADOR_INDIVIDUO [ reduce using rule 53 (identificadores_classe_or -> IDENTIFICADOR_CLASSE .) ]
+  ! CLASS           [ reduce using rule 53 (identificadores_classe_or -> IDENTIFICADOR_CLASSE .) ]
+  ! $end            [ reduce using rule 53 (identificadores_classe_or -> IDENTIFICADOR_CLASSE .) ]
+
 
 state 11
 
-    (21) classe_aninhada -> IDENTIFICADOR_CLASSE . AND aninhamento
-    (45) identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .
+    (5) declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida . subclass_opcional individuals_opcional
+    (11) subclass_opcional -> . SUBCLASSOF tipo_classe_primitiva
+    (12) subclass_opcional -> .
 
-    AND             shift and go to state 31
-    SIMBOLO_ESPECIAL reduce using rule 45 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
-    INDIVIDUALS     reduce using rule 45 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 45 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
-    CLASS           reduce using rule 45 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
-    $end            reduce using rule 45 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+    SUBCLASSOF      shift and go to state 31
+    INDIVIDUALS     reduce using rule 12 (subclass_opcional -> .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 12 (subclass_opcional -> .)
+    CLASS           reduce using rule 12 (subclass_opcional -> .)
+    $end            reduce using rule 12 (subclass_opcional -> .)
 
+    subclass_opcional              shift and go to state 30
 
 state 12
 
-    (5) declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida . individuals_opcional
-    (35) individuals_opcional -> . INDIVIDUALS identificadores_individuo_sequencia
-    (36) individuals_opcional -> .
-    (37) individuals_opcional -> . INDIVIDUALS
-    (38) individuals_opcional -> . identificadores_individuo_sequencia
-    (49) identificadores_individuo_sequencia -> . IDENTIFICADOR_INDIVIDUO
-    (50) identificadores_individuo_sequencia -> . identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO
-
-    INDIVIDUALS     shift and go to state 33
-    CLASS           reduce using rule 36 (individuals_opcional -> .)
-    $end            reduce using rule 36 (individuals_opcional -> .)
-    IDENTIFICADOR_INDIVIDUO shift and go to state 35
-
-    individuals_opcional           shift and go to state 32
-    identificadores_individuo_sequencia shift and go to state 34
-
-state 13
-
     (7) tipo_classe_definida -> classe_enumerada .
 
+    SUBCLASSOF      reduce using rule 7 (tipo_classe_definida -> classe_enumerada .)
     INDIVIDUALS     reduce using rule 7 (tipo_classe_definida -> classe_enumerada .)
     IDENTIFICADOR_INDIVIDUO reduce using rule 7 (tipo_classe_definida -> classe_enumerada .)
     CLASS           reduce using rule 7 (tipo_classe_definida -> classe_enumerada .)
     $end            reduce using rule 7 (tipo_classe_definida -> classe_enumerada .)
 
 
-state 14
+state 13
 
     (8) tipo_classe_definida -> classe_coberta .
 
+    SUBCLASSOF      reduce using rule 8 (tipo_classe_definida -> classe_coberta .)
     INDIVIDUALS     reduce using rule 8 (tipo_classe_definida -> classe_coberta .)
     IDENTIFICADOR_INDIVIDUO reduce using rule 8 (tipo_classe_definida -> classe_coberta .)
     CLASS           reduce using rule 8 (tipo_classe_definida -> classe_coberta .)
     $end            reduce using rule 8 (tipo_classe_definida -> classe_coberta .)
 
 
-state 15
+state 14
 
     (9) tipo_classe_definida -> classe_aninhada .
 
+    SUBCLASSOF      reduce using rule 9 (tipo_classe_definida -> classe_aninhada .)
     INDIVIDUALS     reduce using rule 9 (tipo_classe_definida -> classe_aninhada .)
     IDENTIFICADOR_INDIVIDUO reduce using rule 9 (tipo_classe_definida -> classe_aninhada .)
     CLASS           reduce using rule 9 (tipo_classe_definida -> classe_aninhada .)
     $end            reduce using rule 9 (tipo_classe_definida -> classe_aninhada .)
 
 
+state 15
+
+    (10) tipo_classe_definida -> identificadores_classe_or .
+    (54) identificadores_classe_or -> identificadores_classe_or . OR IDENTIFICADOR_CLASSE
+
+    SUBCLASSOF      reduce using rule 10 (tipo_classe_definida -> identificadores_classe_or .)
+    INDIVIDUALS     reduce using rule 10 (tipo_classe_definida -> identificadores_classe_or .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 10 (tipo_classe_definida -> identificadores_classe_or .)
+    CLASS           reduce using rule 10 (tipo_classe_definida -> identificadores_classe_or .)
+    $end            reduce using rule 10 (tipo_classe_definida -> identificadores_classe_or .)
+    OR              shift and go to state 32
+
+
 state 16
 
-    (19) classe_enumerada -> SIMBOLO_ESPECIAL . identificadores_classe_sequencia SIMBOLO_ESPECIAL
-    (45) identificadores_classe_sequencia -> . IDENTIFICADOR_CLASSE
-    (46) identificadores_classe_sequencia -> . identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
+    (22) classe_enumerada -> SIMBOLO_ESPECIAL . identificadores_classe_sequencia SIMBOLO_ESPECIAL
+    (51) identificadores_classe_sequencia -> . IDENTIFICADOR_CLASSE
+    (52) identificadores_classe_sequencia -> . identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
 
-    IDENTIFICADOR_CLASSE shift and go to state 37
+    IDENTIFICADOR_CLASSE shift and go to state 34
 
-    identificadores_classe_sequencia shift and go to state 36
+    identificadores_classe_sequencia shift and go to state 33
 
 state 17
 
-    (20) classe_coberta -> identificadores_classe_sequencia .
-    (46) identificadores_classe_sequencia -> identificadores_classe_sequencia . SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
+    (23) classe_coberta -> identificadores_classe_sequencia .
+    (52) identificadores_classe_sequencia -> identificadores_classe_sequencia . SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
 
-    INDIVIDUALS     reduce using rule 20 (classe_coberta -> identificadores_classe_sequencia .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 20 (classe_coberta -> identificadores_classe_sequencia .)
-    CLASS           reduce using rule 20 (classe_coberta -> identificadores_classe_sequencia .)
-    $end            reduce using rule 20 (classe_coberta -> identificadores_classe_sequencia .)
-    SIMBOLO_ESPECIAL shift and go to state 38
+    SUBCLASSOF      reduce using rule 23 (classe_coberta -> identificadores_classe_sequencia .)
+    INDIVIDUALS     reduce using rule 23 (classe_coberta -> identificadores_classe_sequencia .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 23 (classe_coberta -> identificadores_classe_sequencia .)
+    CLASS           reduce using rule 23 (classe_coberta -> identificadores_classe_sequencia .)
+    $end            reduce using rule 23 (classe_coberta -> identificadores_classe_sequencia .)
+    SIMBOLO_ESPECIAL shift and go to state 35
 
 
 state 18
 
-    (22) classe_aninhada -> AND . aninhamento
-    (23) aninhamento -> . conteudo_aninhamento_com_parenteses
-    (24) aninhamento -> . LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN
-    (25) aninhamento -> . LPAREN aninhamento RPAREN
-    (26) aninhamento -> . conteudo_aninhamento_com_parenteses AND aninhamento
-    (27) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
+    (25) classe_aninhada -> AND . aninhamento
+    (26) aninhamento -> . conteudo_aninhamento_com_parenteses
+    (27) aninhamento -> . conteudo_aninhamento
+    (28) aninhamento -> . aninhamento AND aninhamento
+    (36) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
+    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (31) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (32) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (33) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+    (34) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
+    (35) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses
 
-    LPAREN          shift and go to state 29
+    LPAREN          shift and go to state 28
+    IDENTIFICADOR_PROPRIEDADE shift and go to state 27
 
-    aninhamento                    shift and go to state 39
-    conteudo_aninhamento_com_parenteses shift and go to state 28
+    aninhamento                    shift and go to state 36
+    conteudo_aninhamento_com_parenteses shift and go to state 26
+    conteudo_aninhamento           shift and go to state 37
 
 state 19
 
-    (6) declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE subclassoff_opcional disjoint_opcional . individuals_opcional
-    (35) individuals_opcional -> . INDIVIDUALS identificadores_individuo_sequencia
-    (36) individuals_opcional -> .
-    (37) individuals_opcional -> . INDIVIDUALS
-    (38) individuals_opcional -> . identificadores_individuo_sequencia
-    (49) identificadores_individuo_sequencia -> . IDENTIFICADOR_INDIVIDUO
-    (50) identificadores_individuo_sequencia -> . identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO
+    (15) tipo_classe_primitiva -> IDENTIFICADOR_CLASSE .
+    (16) tipo_classe_primitiva -> IDENTIFICADOR_CLASSE . SIMBOLO_ESPECIAL sequencia_subclassof
+    (24) classe_aninhada -> IDENTIFICADOR_CLASSE . AND aninhamento
 
-    INDIVIDUALS     shift and go to state 33
-    CLASS           reduce using rule 36 (individuals_opcional -> .)
-    $end            reduce using rule 36 (individuals_opcional -> .)
-    IDENTIFICADOR_INDIVIDUO shift and go to state 35
+    DISJOINTCLASSES reduce using rule 15 (tipo_classe_primitiva -> IDENTIFICADOR_CLASSE .)
+    DISJOINTWITH    reduce using rule 15 (tipo_classe_primitiva -> IDENTIFICADOR_CLASSE .)
+    INDIVIDUALS     reduce using rule 15 (tipo_classe_primitiva -> IDENTIFICADOR_CLASSE .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 15 (tipo_classe_primitiva -> IDENTIFICADOR_CLASSE .)
+    CLASS           reduce using rule 15 (tipo_classe_primitiva -> IDENTIFICADOR_CLASSE .)
+    $end            reduce using rule 15 (tipo_classe_primitiva -> IDENTIFICADOR_CLASSE .)
+    SIMBOLO_ESPECIAL shift and go to state 38
+    AND             shift and go to state 29
 
-    individuals_opcional           shift and go to state 40
-    identificadores_individuo_sequencia shift and go to state 34
 
 state 20
 
-    (17) disjoint_opcional -> DISJOINTCLASSES . identificadores_classe_sequencia
-    (45) identificadores_classe_sequencia -> . IDENTIFICADOR_CLASSE
-    (46) identificadores_classe_sequencia -> . identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
+    (6) declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva . disjoint_opcional individuals_opcional
+    (19) disjoint_opcional -> . DISJOINTCLASSES identificadores_classe_sequencia
+    (20) disjoint_opcional -> . DISJOINTWITH identificadores_classe_sequencia
+    (21) disjoint_opcional -> .
 
-    IDENTIFICADOR_CLASSE shift and go to state 37
+    DISJOINTCLASSES shift and go to state 40
+    DISJOINTWITH    shift and go to state 41
+    INDIVIDUALS     reduce using rule 21 (disjoint_opcional -> .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 21 (disjoint_opcional -> .)
+    CLASS           reduce using rule 21 (disjoint_opcional -> .)
+    $end            reduce using rule 21 (disjoint_opcional -> .)
 
-    identificadores_classe_sequencia shift and go to state 41
+    disjoint_opcional              shift and go to state 39
 
 state 21
 
-    (18) disjoint_opcional -> DISJOINTWITH . identificadores_classe_sequencia
-    (45) identificadores_classe_sequencia -> . IDENTIFICADOR_CLASSE
-    (46) identificadores_classe_sequencia -> . identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
+    (13) tipo_classe_primitiva -> sequencia_subclassof .
+    (17) sequencia_subclassof -> sequencia_subclassof . SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
 
-    IDENTIFICADOR_CLASSE shift and go to state 37
+    DISJOINTCLASSES reduce using rule 13 (tipo_classe_primitiva -> sequencia_subclassof .)
+    DISJOINTWITH    reduce using rule 13 (tipo_classe_primitiva -> sequencia_subclassof .)
+    INDIVIDUALS     reduce using rule 13 (tipo_classe_primitiva -> sequencia_subclassof .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 13 (tipo_classe_primitiva -> sequencia_subclassof .)
+    CLASS           reduce using rule 13 (tipo_classe_primitiva -> sequencia_subclassof .)
+    $end            reduce using rule 13 (tipo_classe_primitiva -> sequencia_subclassof .)
+    SIMBOLO_ESPECIAL shift and go to state 42
 
-    identificadores_classe_sequencia shift and go to state 42
 
 state 22
 
-    (10) subclassoff_opcional -> SUBCLASSOF sequencia_subclassof .
-    (15) sequencia_subclassof -> sequencia_subclassof . SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
+    (14) tipo_classe_primitiva -> classe_aninhada .
 
-    DISJOINTCLASSES reduce using rule 10 (subclassoff_opcional -> SUBCLASSOF sequencia_subclassof .)
-    DISJOINTWITH    reduce using rule 10 (subclassoff_opcional -> SUBCLASSOF sequencia_subclassof .)
-    SIMBOLO_ESPECIAL shift and go to state 43
+    DISJOINTCLASSES reduce using rule 14 (tipo_classe_primitiva -> classe_aninhada .)
+    DISJOINTWITH    reduce using rule 14 (tipo_classe_primitiva -> classe_aninhada .)
+    INDIVIDUALS     reduce using rule 14 (tipo_classe_primitiva -> classe_aninhada .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 14 (tipo_classe_primitiva -> classe_aninhada .)
+    CLASS           reduce using rule 14 (tipo_classe_primitiva -> classe_aninhada .)
+    $end            reduce using rule 14 (tipo_classe_primitiva -> classe_aninhada .)
 
 
 state 23
 
-    (11) subclassoff_opcional -> SUBCLASSOF classe_aninhada .
+    (18) sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento .
 
-    DISJOINTCLASSES reduce using rule 11 (subclassoff_opcional -> SUBCLASSOF classe_aninhada .)
-    DISJOINTWITH    reduce using rule 11 (subclassoff_opcional -> SUBCLASSOF classe_aninhada .)
+    SIMBOLO_ESPECIAL reduce using rule 18 (sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento .)
+    DISJOINTCLASSES reduce using rule 18 (sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento .)
+    DISJOINTWITH    reduce using rule 18 (sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento .)
+    INDIVIDUALS     reduce using rule 18 (sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 18 (sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento .)
+    CLASS           reduce using rule 18 (sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento .)
+    $end            reduce using rule 18 (sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento .)
 
 
 state 24
 
-    (12) subclassoff_opcional -> SUBCLASSOF IDENTIFICADOR_CLASSE .
-    (13) subclassoff_opcional -> SUBCLASSOF IDENTIFICADOR_CLASSE . SIMBOLO_ESPECIAL sequencia_subclassof
-    (21) classe_aninhada -> IDENTIFICADOR_CLASSE . AND aninhamento
+    (63) aninhamento_ou_conteudo_aninhamento -> aninhamento .
+    (28) aninhamento -> aninhamento . AND aninhamento
 
-    DISJOINTCLASSES reduce using rule 12 (subclassoff_opcional -> SUBCLASSOF IDENTIFICADOR_CLASSE .)
-    DISJOINTWITH    reduce using rule 12 (subclassoff_opcional -> SUBCLASSOF IDENTIFICADOR_CLASSE .)
-    SIMBOLO_ESPECIAL shift and go to state 44
-    AND             shift and go to state 31
+    SIMBOLO_ESPECIAL reduce using rule 63 (aninhamento_ou_conteudo_aninhamento -> aninhamento .)
+    DISJOINTCLASSES reduce using rule 63 (aninhamento_ou_conteudo_aninhamento -> aninhamento .)
+    DISJOINTWITH    reduce using rule 63 (aninhamento_ou_conteudo_aninhamento -> aninhamento .)
+    INDIVIDUALS     reduce using rule 63 (aninhamento_ou_conteudo_aninhamento -> aninhamento .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 63 (aninhamento_ou_conteudo_aninhamento -> aninhamento .)
+    CLASS           reduce using rule 63 (aninhamento_ou_conteudo_aninhamento -> aninhamento .)
+    $end            reduce using rule 63 (aninhamento_ou_conteudo_aninhamento -> aninhamento .)
+    AND             shift and go to state 43
 
 
 state 25
 
-    (16) sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento .
+    (64) aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento .
+    (27) aninhamento -> conteudo_aninhamento .
 
-    SIMBOLO_ESPECIAL reduce using rule 16 (sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento .)
-    DISJOINTCLASSES reduce using rule 16 (sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento .)
-    DISJOINTWITH    reduce using rule 16 (sequencia_subclassof -> aninhamento_ou_conteudo_aninhamento .)
+  ! reduce/reduce conflict for SIMBOLO_ESPECIAL resolved using rule 27 (aninhamento -> conteudo_aninhamento .)
+  ! reduce/reduce conflict for DISJOINTCLASSES resolved using rule 27 (aninhamento -> conteudo_aninhamento .)
+  ! reduce/reduce conflict for DISJOINTWITH resolved using rule 27 (aninhamento -> conteudo_aninhamento .)
+  ! reduce/reduce conflict for INDIVIDUALS resolved using rule 27 (aninhamento -> conteudo_aninhamento .)
+  ! reduce/reduce conflict for IDENTIFICADOR_INDIVIDUO resolved using rule 27 (aninhamento -> conteudo_aninhamento .)
+  ! reduce/reduce conflict for CLASS resolved using rule 27 (aninhamento -> conteudo_aninhamento .)
+  ! reduce/reduce conflict for $end resolved using rule 27 (aninhamento -> conteudo_aninhamento .)
+    AND             reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    SIMBOLO_ESPECIAL reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    DISJOINTCLASSES reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    DISJOINTWITH    reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    INDIVIDUALS     reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    CLASS           reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    $end            reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+
+  ! SIMBOLO_ESPECIAL [ reduce using rule 64 (aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento .) ]
+  ! DISJOINTCLASSES [ reduce using rule 64 (aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento .) ]
+  ! DISJOINTWITH    [ reduce using rule 64 (aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento .) ]
+  ! INDIVIDUALS     [ reduce using rule 64 (aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento .) ]
+  ! IDENTIFICADOR_INDIVIDUO [ reduce using rule 64 (aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento .) ]
+  ! CLASS           [ reduce using rule 64 (aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento .) ]
+  ! $end            [ reduce using rule 64 (aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento .) ]
 
 
 state 26
 
-    (56) aninhamento_ou_conteudo_aninhamento -> aninhamento .
+    (26) aninhamento -> conteudo_aninhamento_com_parenteses .
+    (34) conteudo_aninhamento -> conteudo_aninhamento_com_parenteses . OR conteudo_aninhamento_com_parenteses
+    (35) conteudo_aninhamento -> conteudo_aninhamento_com_parenteses . AND conteudo_aninhamento_com_parenteses
 
-    SIMBOLO_ESPECIAL reduce using rule 56 (aninhamento_ou_conteudo_aninhamento -> aninhamento .)
-    DISJOINTCLASSES reduce using rule 56 (aninhamento_ou_conteudo_aninhamento -> aninhamento .)
-    DISJOINTWITH    reduce using rule 56 (aninhamento_ou_conteudo_aninhamento -> aninhamento .)
+  ! shift/reduce conflict for AND resolved as shift
+    SIMBOLO_ESPECIAL reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses .)
+    DISJOINTCLASSES reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses .)
+    DISJOINTWITH    reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses .)
+    INDIVIDUALS     reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses .)
+    CLASS           reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses .)
+    $end            reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses .)
+    SUBCLASSOF      reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses .)
+    OR              shift and go to state 44
+    AND             shift and go to state 45
+
+  ! AND             [ reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses .) ]
 
 
 state 27
 
-    (57) aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento .
+    (29) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE . restricao_propriedade conteudo_aninhamento_pos
+    (30) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (31) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE . restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (32) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (33) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE . restricao_propriedade conteudo_aninhamento_com_parenteses
+    (57) restricao_propriedade -> . ONLY
+    (58) restricao_propriedade -> . SOME
+    (59) restricao_propriedade -> . VALUE
+    (60) restricao_palavra_reservada -> . MIN
+    (61) restricao_palavra_reservada -> . SOME
+    (62) restricao_palavra_reservada -> . EXACTLY
 
-    SIMBOLO_ESPECIAL reduce using rule 57 (aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento .)
-    DISJOINTCLASSES reduce using rule 57 (aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento .)
-    DISJOINTWITH    reduce using rule 57 (aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento .)
+    IDENTIFICADOR_PROPRIEDADE shift and go to state 46
+    ONLY            shift and go to state 49
+    SOME            shift and go to state 50
+    VALUE           shift and go to state 51
+    MIN             shift and go to state 52
+    EXACTLY         shift and go to state 53
 
+    restricao_propriedade          shift and go to state 47
+    restricao_palavra_reservada    shift and go to state 48
 
 state 28
 
-    (23) aninhamento -> conteudo_aninhamento_com_parenteses .
-    (26) aninhamento -> conteudo_aninhamento_com_parenteses . AND aninhamento
+    (36) conteudo_aninhamento_com_parenteses -> LPAREN . conteudo_aninhamento RPAREN
+    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (31) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (32) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (33) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+    (34) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
+    (35) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses
+    (36) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
 
-    SIMBOLO_ESPECIAL reduce using rule 23 (aninhamento -> conteudo_aninhamento_com_parenteses .)
-    DISJOINTCLASSES reduce using rule 23 (aninhamento -> conteudo_aninhamento_com_parenteses .)
-    DISJOINTWITH    reduce using rule 23 (aninhamento -> conteudo_aninhamento_com_parenteses .)
-    INDIVIDUALS     reduce using rule 23 (aninhamento -> conteudo_aninhamento_com_parenteses .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 23 (aninhamento -> conteudo_aninhamento_com_parenteses .)
-    CLASS           reduce using rule 23 (aninhamento -> conteudo_aninhamento_com_parenteses .)
-    $end            reduce using rule 23 (aninhamento -> conteudo_aninhamento_com_parenteses .)
-    RPAREN          reduce using rule 23 (aninhamento -> conteudo_aninhamento_com_parenteses .)
-    AND             shift and go to state 45
+    IDENTIFICADOR_PROPRIEDADE shift and go to state 27
+    LPAREN          shift and go to state 28
 
+    conteudo_aninhamento           shift and go to state 54
+    conteudo_aninhamento_com_parenteses shift and go to state 55
 
 state 29
 
-    (24) aninhamento -> LPAREN . conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN
-    (25) aninhamento -> LPAREN . aninhamento RPAREN
-    (27) conteudo_aninhamento_com_parenteses -> LPAREN . conteudo_aninhamento RPAREN
-    (27) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
-    (23) aninhamento -> . conteudo_aninhamento_com_parenteses
-    (24) aninhamento -> . LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN
-    (25) aninhamento -> . LPAREN aninhamento RPAREN
-    (26) aninhamento -> . conteudo_aninhamento_com_parenteses AND aninhamento
-    (28) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
-    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+    (24) classe_aninhada -> IDENTIFICADOR_CLASSE AND . aninhamento
+    (26) aninhamento -> . conteudo_aninhamento_com_parenteses
+    (27) aninhamento -> . conteudo_aninhamento
+    (28) aninhamento -> . aninhamento AND aninhamento
+    (36) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
+    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (31) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (32) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (33) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+    (34) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
+    (35) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses
 
-    LPAREN          shift and go to state 46
-    IDENTIFICADOR_PROPRIEDADE shift and go to state 30
+    LPAREN          shift and go to state 28
+    IDENTIFICADOR_PROPRIEDADE shift and go to state 27
 
-    conteudo_aninhamento_com_parenteses shift and go to state 47
-    aninhamento                    shift and go to state 48
-    conteudo_aninhamento           shift and go to state 49
+    aninhamento                    shift and go to state 56
+    conteudo_aninhamento_com_parenteses shift and go to state 26
+    conteudo_aninhamento           shift and go to state 37
 
 state 30
 
-    (28) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE . restricao_propriedade conteudo_aninhamento_pos
-    (29) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE . restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-    (30) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE . restricao_propriedade conteudo_aninhamento_com_parenteses
-    (51) restricao_propriedade -> . ONLY
-    (52) restricao_propriedade -> . SOME
-    (53) restricao_propriedade -> . VALUE
-    (54) restricao_palavra_reservada -> . MIN
-    (55) restricao_palavra_reservada -> . EXACTLY
+    (5) declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional . individuals_opcional
+    (41) individuals_opcional -> . INDIVIDUALS identificadores_individuo_sequencia
+    (42) individuals_opcional -> .
+    (43) individuals_opcional -> . INDIVIDUALS
+    (44) individuals_opcional -> . identificadores_individuo_sequencia
+    (55) identificadores_individuo_sequencia -> . IDENTIFICADOR_INDIVIDUO
+    (56) identificadores_individuo_sequencia -> . identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO
 
-    ONLY            shift and go to state 52
-    SOME            shift and go to state 53
-    VALUE           shift and go to state 54
-    MIN             shift and go to state 55
-    EXACTLY         shift and go to state 56
+    INDIVIDUALS     shift and go to state 58
+    CLASS           reduce using rule 42 (individuals_opcional -> .)
+    $end            reduce using rule 42 (individuals_opcional -> .)
+    IDENTIFICADOR_INDIVIDUO shift and go to state 60
 
-    restricao_propriedade          shift and go to state 50
-    restricao_palavra_reservada    shift and go to state 51
+    individuals_opcional           shift and go to state 57
+    identificadores_individuo_sequencia shift and go to state 59
 
 state 31
 
-    (21) classe_aninhada -> IDENTIFICADOR_CLASSE AND . aninhamento
-    (23) aninhamento -> . conteudo_aninhamento_com_parenteses
-    (24) aninhamento -> . LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN
-    (25) aninhamento -> . LPAREN aninhamento RPAREN
-    (26) aninhamento -> . conteudo_aninhamento_com_parenteses AND aninhamento
-    (27) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
+    (11) subclass_opcional -> SUBCLASSOF . tipo_classe_primitiva
+    (13) tipo_classe_primitiva -> . sequencia_subclassof
+    (14) tipo_classe_primitiva -> . classe_aninhada
+    (15) tipo_classe_primitiva -> . IDENTIFICADOR_CLASSE
+    (16) tipo_classe_primitiva -> . IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof
+    (17) sequencia_subclassof -> . sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
+    (18) sequencia_subclassof -> . aninhamento_ou_conteudo_aninhamento
+    (24) classe_aninhada -> . IDENTIFICADOR_CLASSE AND aninhamento
+    (25) classe_aninhada -> . AND aninhamento
+    (63) aninhamento_ou_conteudo_aninhamento -> . aninhamento
+    (64) aninhamento_ou_conteudo_aninhamento -> . conteudo_aninhamento
+    (26) aninhamento -> . conteudo_aninhamento_com_parenteses
+    (27) aninhamento -> . conteudo_aninhamento
+    (28) aninhamento -> . aninhamento AND aninhamento
+    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (31) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (32) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (33) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+    (34) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
+    (35) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses
+    (36) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
 
-    LPAREN          shift and go to state 29
+    IDENTIFICADOR_CLASSE shift and go to state 19
+    AND             shift and go to state 18
+    IDENTIFICADOR_PROPRIEDADE shift and go to state 27
+    LPAREN          shift and go to state 28
 
-    aninhamento                    shift and go to state 57
-    conteudo_aninhamento_com_parenteses shift and go to state 28
+    tipo_classe_primitiva          shift and go to state 61
+    sequencia_subclassof           shift and go to state 21
+    classe_aninhada                shift and go to state 22
+    aninhamento_ou_conteudo_aninhamento shift and go to state 23
+    aninhamento                    shift and go to state 24
+    conteudo_aninhamento           shift and go to state 25
+    conteudo_aninhamento_com_parenteses shift and go to state 26
 
 state 32
 
-    (5) declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida individuals_opcional .
+    (54) identificadores_classe_or -> identificadores_classe_or OR . IDENTIFICADOR_CLASSE
 
-    CLASS           reduce using rule 5 (declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida individuals_opcional .)
-    $end            reduce using rule 5 (declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida individuals_opcional .)
+    IDENTIFICADOR_CLASSE shift and go to state 62
 
 
 state 33
 
-    (35) individuals_opcional -> INDIVIDUALS . identificadores_individuo_sequencia
-    (37) individuals_opcional -> INDIVIDUALS .
-    (49) identificadores_individuo_sequencia -> . IDENTIFICADOR_INDIVIDUO
-    (50) identificadores_individuo_sequencia -> . identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO
+    (22) classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia . SIMBOLO_ESPECIAL
+    (52) identificadores_classe_sequencia -> identificadores_classe_sequencia . SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
 
-    CLASS           reduce using rule 37 (individuals_opcional -> INDIVIDUALS .)
-    $end            reduce using rule 37 (individuals_opcional -> INDIVIDUALS .)
-    IDENTIFICADOR_INDIVIDUO shift and go to state 35
+    SIMBOLO_ESPECIAL shift and go to state 63
 
-    identificadores_individuo_sequencia shift and go to state 58
 
 state 34
 
-    (38) individuals_opcional -> identificadores_individuo_sequencia .
-    (50) identificadores_individuo_sequencia -> identificadores_individuo_sequencia . SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO
+    (51) identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .
 
-    CLASS           reduce using rule 38 (individuals_opcional -> identificadores_individuo_sequencia .)
-    $end            reduce using rule 38 (individuals_opcional -> identificadores_individuo_sequencia .)
-    SIMBOLO_ESPECIAL shift and go to state 59
+    SIMBOLO_ESPECIAL reduce using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+    INDIVIDUALS     reduce using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+    CLASS           reduce using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+    $end            reduce using rule 51 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
 
 
 state 35
 
-    (49) identificadores_individuo_sequencia -> IDENTIFICADOR_INDIVIDUO .
+    (52) identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL . IDENTIFICADOR_CLASSE
 
-    SIMBOLO_ESPECIAL reduce using rule 49 (identificadores_individuo_sequencia -> IDENTIFICADOR_INDIVIDUO .)
-    CLASS           reduce using rule 49 (identificadores_individuo_sequencia -> IDENTIFICADOR_INDIVIDUO .)
-    $end            reduce using rule 49 (identificadores_individuo_sequencia -> IDENTIFICADOR_INDIVIDUO .)
+    IDENTIFICADOR_CLASSE shift and go to state 64
 
 
 state 36
 
-    (19) classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia . SIMBOLO_ESPECIAL
-    (46) identificadores_classe_sequencia -> identificadores_classe_sequencia . SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
+    (25) classe_aninhada -> AND aninhamento .
+    (28) aninhamento -> aninhamento . AND aninhamento
 
-    SIMBOLO_ESPECIAL shift and go to state 60
+    SUBCLASSOF      reduce using rule 25 (classe_aninhada -> AND aninhamento .)
+    INDIVIDUALS     reduce using rule 25 (classe_aninhada -> AND aninhamento .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 25 (classe_aninhada -> AND aninhamento .)
+    CLASS           reduce using rule 25 (classe_aninhada -> AND aninhamento .)
+    $end            reduce using rule 25 (classe_aninhada -> AND aninhamento .)
+    DISJOINTCLASSES reduce using rule 25 (classe_aninhada -> AND aninhamento .)
+    DISJOINTWITH    reduce using rule 25 (classe_aninhada -> AND aninhamento .)
+    AND             shift and go to state 43
 
 
 state 37
 
-    (45) identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .
+    (27) aninhamento -> conteudo_aninhamento .
 
-    SIMBOLO_ESPECIAL reduce using rule 45 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
-    INDIVIDUALS     reduce using rule 45 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 45 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
-    CLASS           reduce using rule 45 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
-    $end            reduce using rule 45 (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE .)
+    AND             reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    SUBCLASSOF      reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    INDIVIDUALS     reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    CLASS           reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    $end            reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    DISJOINTCLASSES reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    DISJOINTWITH    reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
+    SIMBOLO_ESPECIAL reduce using rule 27 (aninhamento -> conteudo_aninhamento .)
 
 
 state 38
 
-    (46) identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL . IDENTIFICADOR_CLASSE
+    (16) tipo_classe_primitiva -> IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL . sequencia_subclassof
+    (17) sequencia_subclassof -> . sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
+    (18) sequencia_subclassof -> . aninhamento_ou_conteudo_aninhamento
+    (63) aninhamento_ou_conteudo_aninhamento -> . aninhamento
+    (64) aninhamento_ou_conteudo_aninhamento -> . conteudo_aninhamento
+    (26) aninhamento -> . conteudo_aninhamento_com_parenteses
+    (27) aninhamento -> . conteudo_aninhamento
+    (28) aninhamento -> . aninhamento AND aninhamento
+    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (31) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (32) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (33) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+    (34) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
+    (35) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses
+    (36) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
 
-    IDENTIFICADOR_CLASSE shift and go to state 61
+    IDENTIFICADOR_PROPRIEDADE shift and go to state 27
+    LPAREN          shift and go to state 28
 
+    sequencia_subclassof           shift and go to state 65
+    aninhamento_ou_conteudo_aninhamento shift and go to state 23
+    aninhamento                    shift and go to state 24
+    conteudo_aninhamento           shift and go to state 25
+    conteudo_aninhamento_com_parenteses shift and go to state 26
 
 state 39
 
-    (22) classe_aninhada -> AND aninhamento .
+    (6) declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva disjoint_opcional . individuals_opcional
+    (41) individuals_opcional -> . INDIVIDUALS identificadores_individuo_sequencia
+    (42) individuals_opcional -> .
+    (43) individuals_opcional -> . INDIVIDUALS
+    (44) individuals_opcional -> . identificadores_individuo_sequencia
+    (55) identificadores_individuo_sequencia -> . IDENTIFICADOR_INDIVIDUO
+    (56) identificadores_individuo_sequencia -> . identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO
 
-    INDIVIDUALS     reduce using rule 22 (classe_aninhada -> AND aninhamento .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 22 (classe_aninhada -> AND aninhamento .)
-    CLASS           reduce using rule 22 (classe_aninhada -> AND aninhamento .)
-    $end            reduce using rule 22 (classe_aninhada -> AND aninhamento .)
-    DISJOINTCLASSES reduce using rule 22 (classe_aninhada -> AND aninhamento .)
-    DISJOINTWITH    reduce using rule 22 (classe_aninhada -> AND aninhamento .)
+    INDIVIDUALS     shift and go to state 58
+    CLASS           reduce using rule 42 (individuals_opcional -> .)
+    $end            reduce using rule 42 (individuals_opcional -> .)
+    IDENTIFICADOR_INDIVIDUO shift and go to state 60
 
+    individuals_opcional           shift and go to state 66
+    identificadores_individuo_sequencia shift and go to state 59
 
 state 40
 
-    (6) declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE subclassoff_opcional disjoint_opcional individuals_opcional .
+    (19) disjoint_opcional -> DISJOINTCLASSES . identificadores_classe_sequencia
+    (51) identificadores_classe_sequencia -> . IDENTIFICADOR_CLASSE
+    (52) identificadores_classe_sequencia -> . identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
 
-    CLASS           reduce using rule 6 (declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE subclassoff_opcional disjoint_opcional individuals_opcional .)
-    $end            reduce using rule 6 (declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE subclassoff_opcional disjoint_opcional individuals_opcional .)
+    IDENTIFICADOR_CLASSE shift and go to state 34
 
+    identificadores_classe_sequencia shift and go to state 67
 
 state 41
 
-    (17) disjoint_opcional -> DISJOINTCLASSES identificadores_classe_sequencia .
-    (46) identificadores_classe_sequencia -> identificadores_classe_sequencia . SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
+    (20) disjoint_opcional -> DISJOINTWITH . identificadores_classe_sequencia
+    (51) identificadores_classe_sequencia -> . IDENTIFICADOR_CLASSE
+    (52) identificadores_classe_sequencia -> . identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
 
-    INDIVIDUALS     reduce using rule 17 (disjoint_opcional -> DISJOINTCLASSES identificadores_classe_sequencia .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 17 (disjoint_opcional -> DISJOINTCLASSES identificadores_classe_sequencia .)
-    CLASS           reduce using rule 17 (disjoint_opcional -> DISJOINTCLASSES identificadores_classe_sequencia .)
-    $end            reduce using rule 17 (disjoint_opcional -> DISJOINTCLASSES identificadores_classe_sequencia .)
-    SIMBOLO_ESPECIAL shift and go to state 38
+    IDENTIFICADOR_CLASSE shift and go to state 34
 
+    identificadores_classe_sequencia shift and go to state 68
 
 state 42
 
-    (18) disjoint_opcional -> DISJOINTWITH identificadores_classe_sequencia .
-    (46) identificadores_classe_sequencia -> identificadores_classe_sequencia . SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
+    (17) sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL . aninhamento_ou_conteudo_aninhamento
+    (63) aninhamento_ou_conteudo_aninhamento -> . aninhamento
+    (64) aninhamento_ou_conteudo_aninhamento -> . conteudo_aninhamento
+    (26) aninhamento -> . conteudo_aninhamento_com_parenteses
+    (27) aninhamento -> . conteudo_aninhamento
+    (28) aninhamento -> . aninhamento AND aninhamento
+    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (31) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (32) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (33) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+    (34) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
+    (35) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses
+    (36) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
 
-    INDIVIDUALS     reduce using rule 18 (disjoint_opcional -> DISJOINTWITH identificadores_classe_sequencia .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 18 (disjoint_opcional -> DISJOINTWITH identificadores_classe_sequencia .)
-    CLASS           reduce using rule 18 (disjoint_opcional -> DISJOINTWITH identificadores_classe_sequencia .)
-    $end            reduce using rule 18 (disjoint_opcional -> DISJOINTWITH identificadores_classe_sequencia .)
-    SIMBOLO_ESPECIAL shift and go to state 38
+    IDENTIFICADOR_PROPRIEDADE shift and go to state 27
+    LPAREN          shift and go to state 28
 
+    aninhamento_ou_conteudo_aninhamento shift and go to state 69
+    aninhamento                    shift and go to state 24
+    conteudo_aninhamento           shift and go to state 25
+    conteudo_aninhamento_com_parenteses shift and go to state 26
 
 state 43
 
-    (15) sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL . aninhamento_ou_conteudo_aninhamento
-    (56) aninhamento_ou_conteudo_aninhamento -> . aninhamento
-    (57) aninhamento_ou_conteudo_aninhamento -> . conteudo_aninhamento
-    (23) aninhamento -> . conteudo_aninhamento_com_parenteses
-    (24) aninhamento -> . LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN
-    (25) aninhamento -> . LPAREN aninhamento RPAREN
-    (26) aninhamento -> . conteudo_aninhamento_com_parenteses AND aninhamento
-    (28) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
-    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
-    (27) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
+    (28) aninhamento -> aninhamento AND . aninhamento
+    (26) aninhamento -> . conteudo_aninhamento_com_parenteses
+    (27) aninhamento -> . conteudo_aninhamento
+    (28) aninhamento -> . aninhamento AND aninhamento
+    (36) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
+    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (31) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (32) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (33) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+    (34) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
+    (35) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses
 
-    LPAREN          shift and go to state 29
-    IDENTIFICADOR_PROPRIEDADE shift and go to state 30
+    LPAREN          shift and go to state 28
+    IDENTIFICADOR_PROPRIEDADE shift and go to state 27
 
-    aninhamento_ou_conteudo_aninhamento shift and go to state 62
-    aninhamento                    shift and go to state 26
-    conteudo_aninhamento           shift and go to state 27
-    conteudo_aninhamento_com_parenteses shift and go to state 28
+    aninhamento                    shift and go to state 70
+    conteudo_aninhamento_com_parenteses shift and go to state 26
+    conteudo_aninhamento           shift and go to state 37
 
 state 44
 
-    (13) subclassoff_opcional -> SUBCLASSOF IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL . sequencia_subclassof
-    (15) sequencia_subclassof -> . sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
-    (16) sequencia_subclassof -> . aninhamento_ou_conteudo_aninhamento
-    (56) aninhamento_ou_conteudo_aninhamento -> . aninhamento
-    (57) aninhamento_ou_conteudo_aninhamento -> . conteudo_aninhamento
-    (23) aninhamento -> . conteudo_aninhamento_com_parenteses
-    (24) aninhamento -> . LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN
-    (25) aninhamento -> . LPAREN aninhamento RPAREN
-    (26) aninhamento -> . conteudo_aninhamento_com_parenteses AND aninhamento
-    (28) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
-    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
-    (27) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
+    (34) conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR . conteudo_aninhamento_com_parenteses
+    (36) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
 
-    LPAREN          shift and go to state 29
-    IDENTIFICADOR_PROPRIEDADE shift and go to state 30
+    LPAREN          shift and go to state 28
 
-    sequencia_subclassof           shift and go to state 63
-    aninhamento_ou_conteudo_aninhamento shift and go to state 25
-    aninhamento                    shift and go to state 26
-    conteudo_aninhamento           shift and go to state 27
-    conteudo_aninhamento_com_parenteses shift and go to state 28
+    conteudo_aninhamento_com_parenteses shift and go to state 71
 
 state 45
 
-    (26) aninhamento -> conteudo_aninhamento_com_parenteses AND . aninhamento
-    (23) aninhamento -> . conteudo_aninhamento_com_parenteses
-    (24) aninhamento -> . LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN
-    (25) aninhamento -> . LPAREN aninhamento RPAREN
-    (26) aninhamento -> . conteudo_aninhamento_com_parenteses AND aninhamento
-    (27) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
+    (35) conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND . conteudo_aninhamento_com_parenteses
+    (36) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
 
-    LPAREN          shift and go to state 29
+    LPAREN          shift and go to state 28
 
-    conteudo_aninhamento_com_parenteses shift and go to state 28
-    aninhamento                    shift and go to state 64
+    conteudo_aninhamento_com_parenteses shift and go to state 72
 
 state 46
 
-    (27) conteudo_aninhamento_com_parenteses -> LPAREN . conteudo_aninhamento RPAREN
-    (24) aninhamento -> LPAREN . conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN
-    (25) aninhamento -> LPAREN . aninhamento RPAREN
-    (28) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
-    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
-    (27) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
-    (23) aninhamento -> . conteudo_aninhamento_com_parenteses
-    (24) aninhamento -> . LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN
-    (25) aninhamento -> . LPAREN aninhamento RPAREN
-    (26) aninhamento -> . conteudo_aninhamento_com_parenteses AND aninhamento
+    (30) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE . restricao_propriedade conteudo_aninhamento_pos
+    (32) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE . restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (57) restricao_propriedade -> . ONLY
+    (58) restricao_propriedade -> . SOME
+    (59) restricao_propriedade -> . VALUE
+    (60) restricao_palavra_reservada -> . MIN
+    (61) restricao_palavra_reservada -> . SOME
+    (62) restricao_palavra_reservada -> . EXACTLY
 
-    IDENTIFICADOR_PROPRIEDADE shift and go to state 30
-    LPAREN          shift and go to state 46
+    ONLY            shift and go to state 49
+    SOME            shift and go to state 50
+    VALUE           shift and go to state 51
+    MIN             shift and go to state 52
+    EXACTLY         shift and go to state 53
 
-    conteudo_aninhamento           shift and go to state 49
-    conteudo_aninhamento_com_parenteses shift and go to state 47
-    aninhamento                    shift and go to state 48
+    restricao_propriedade          shift and go to state 73
+    restricao_palavra_reservada    shift and go to state 74
 
 state 47
 
-    (24) aninhamento -> LPAREN conteudo_aninhamento_com_parenteses . OR conteudo_aninhamento_com_parenteses RPAREN
-    (23) aninhamento -> conteudo_aninhamento_com_parenteses .
-    (26) aninhamento -> conteudo_aninhamento_com_parenteses . AND aninhamento
+    (29) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade . conteudo_aninhamento_pos
+    (33) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade . conteudo_aninhamento_com_parenteses
+    (37) conteudo_aninhamento_pos -> . IDENTIFICADOR_CLASSE
+    (38) conteudo_aninhamento_pos -> . NAMESPACE TIPO_DADO
+    (39) conteudo_aninhamento_pos -> . LPAREN identificadores_classe_or RPAREN
+    (40) conteudo_aninhamento_pos -> . NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
+    (36) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
 
-    OR              shift and go to state 65
-    RPAREN          reduce using rule 23 (aninhamento -> conteudo_aninhamento_com_parenteses .)
-    AND             shift and go to state 45
+    IDENTIFICADOR_CLASSE shift and go to state 77
+    NAMESPACE       shift and go to state 78
+    LPAREN          shift and go to state 79
 
+    conteudo_aninhamento_pos       shift and go to state 75
+    conteudo_aninhamento_com_parenteses shift and go to state 76
 
 state 48
 
-    (25) aninhamento -> LPAREN aninhamento . RPAREN
+    (31) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada . CARDINALIDADE conteudo_aninhamento_pos
 
-    RPAREN          shift and go to state 66
+    CARDINALIDADE   shift and go to state 80
 
 
 state 49
 
-    (27) conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento . RPAREN
+    (57) restricao_propriedade -> ONLY .
 
-    RPAREN          shift and go to state 67
+    IDENTIFICADOR_CLASSE reduce using rule 57 (restricao_propriedade -> ONLY .)
+    NAMESPACE       reduce using rule 57 (restricao_propriedade -> ONLY .)
+    LPAREN          reduce using rule 57 (restricao_propriedade -> ONLY .)
 
 
 state 50
 
-    (28) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade . conteudo_aninhamento_pos
-    (30) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade . conteudo_aninhamento_com_parenteses
-    (31) conteudo_aninhamento_pos -> . IDENTIFICADOR_CLASSE
-    (32) conteudo_aninhamento_pos -> . NAMESPACE TIPO_DADO
-    (33) conteudo_aninhamento_pos -> . LPAREN identificadores_classe_or RPAREN
-    (34) conteudo_aninhamento_pos -> . NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
-    (27) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
+    (58) restricao_propriedade -> SOME .
+    (61) restricao_palavra_reservada -> SOME .
 
-    IDENTIFICADOR_CLASSE shift and go to state 70
-    NAMESPACE       shift and go to state 71
-    LPAREN          shift and go to state 72
+    IDENTIFICADOR_CLASSE reduce using rule 58 (restricao_propriedade -> SOME .)
+    NAMESPACE       reduce using rule 58 (restricao_propriedade -> SOME .)
+    LPAREN          reduce using rule 58 (restricao_propriedade -> SOME .)
+    CARDINALIDADE   reduce using rule 61 (restricao_palavra_reservada -> SOME .)
 
-    conteudo_aninhamento_pos       shift and go to state 68
-    conteudo_aninhamento_com_parenteses shift and go to state 69
 
 state 51
 
-    (29) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada . CARDINALIDADE conteudo_aninhamento_pos
+    (59) restricao_propriedade -> VALUE .
 
-    CARDINALIDADE   shift and go to state 73
+    IDENTIFICADOR_CLASSE reduce using rule 59 (restricao_propriedade -> VALUE .)
+    NAMESPACE       reduce using rule 59 (restricao_propriedade -> VALUE .)
+    LPAREN          reduce using rule 59 (restricao_propriedade -> VALUE .)
 
 
 state 52
 
-    (51) restricao_propriedade -> ONLY .
+    (60) restricao_palavra_reservada -> MIN .
 
-    IDENTIFICADOR_CLASSE reduce using rule 51 (restricao_propriedade -> ONLY .)
-    NAMESPACE       reduce using rule 51 (restricao_propriedade -> ONLY .)
-    LPAREN          reduce using rule 51 (restricao_propriedade -> ONLY .)
+    CARDINALIDADE   reduce using rule 60 (restricao_palavra_reservada -> MIN .)
 
 
 state 53
 
-    (52) restricao_propriedade -> SOME .
+    (62) restricao_palavra_reservada -> EXACTLY .
 
-    IDENTIFICADOR_CLASSE reduce using rule 52 (restricao_propriedade -> SOME .)
-    NAMESPACE       reduce using rule 52 (restricao_propriedade -> SOME .)
-    LPAREN          reduce using rule 52 (restricao_propriedade -> SOME .)
+    CARDINALIDADE   reduce using rule 62 (restricao_palavra_reservada -> EXACTLY .)
 
 
 state 54
 
-    (53) restricao_propriedade -> VALUE .
+    (36) conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento . RPAREN
 
-    IDENTIFICADOR_CLASSE reduce using rule 53 (restricao_propriedade -> VALUE .)
-    NAMESPACE       reduce using rule 53 (restricao_propriedade -> VALUE .)
-    LPAREN          reduce using rule 53 (restricao_propriedade -> VALUE .)
+    RPAREN          shift and go to state 81
 
 
 state 55
 
-    (54) restricao_palavra_reservada -> MIN .
+    (34) conteudo_aninhamento -> conteudo_aninhamento_com_parenteses . OR conteudo_aninhamento_com_parenteses
+    (35) conteudo_aninhamento -> conteudo_aninhamento_com_parenteses . AND conteudo_aninhamento_com_parenteses
 
-    CARDINALIDADE   reduce using rule 54 (restricao_palavra_reservada -> MIN .)
+    OR              shift and go to state 44
+    AND             shift and go to state 45
 
 
 state 56
 
-    (55) restricao_palavra_reservada -> EXACTLY .
+    (24) classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .
+    (28) aninhamento -> aninhamento . AND aninhamento
 
-    CARDINALIDADE   reduce using rule 55 (restricao_palavra_reservada -> EXACTLY .)
+    SUBCLASSOF      reduce using rule 24 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
+    INDIVIDUALS     reduce using rule 24 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 24 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
+    CLASS           reduce using rule 24 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
+    $end            reduce using rule 24 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
+    DISJOINTCLASSES reduce using rule 24 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
+    DISJOINTWITH    reduce using rule 24 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
+    AND             shift and go to state 43
 
 
 state 57
 
-    (21) classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .
+    (5) declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional .
 
-    INDIVIDUALS     reduce using rule 21 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 21 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
-    CLASS           reduce using rule 21 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
-    $end            reduce using rule 21 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
-    DISJOINTCLASSES reduce using rule 21 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
-    DISJOINTWITH    reduce using rule 21 (classe_aninhada -> IDENTIFICADOR_CLASSE AND aninhamento .)
+    CLASS           reduce using rule 5 (declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional .)
+    $end            reduce using rule 5 (declaracao_classe_definida -> CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional .)
 
 
 state 58
 
-    (35) individuals_opcional -> INDIVIDUALS identificadores_individuo_sequencia .
-    (50) identificadores_individuo_sequencia -> identificadores_individuo_sequencia . SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO
+    (41) individuals_opcional -> INDIVIDUALS . identificadores_individuo_sequencia
+    (43) individuals_opcional -> INDIVIDUALS .
+    (55) identificadores_individuo_sequencia -> . IDENTIFICADOR_INDIVIDUO
+    (56) identificadores_individuo_sequencia -> . identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO
 
-    CLASS           reduce using rule 35 (individuals_opcional -> INDIVIDUALS identificadores_individuo_sequencia .)
-    $end            reduce using rule 35 (individuals_opcional -> INDIVIDUALS identificadores_individuo_sequencia .)
-    SIMBOLO_ESPECIAL shift and go to state 59
+    CLASS           reduce using rule 43 (individuals_opcional -> INDIVIDUALS .)
+    $end            reduce using rule 43 (individuals_opcional -> INDIVIDUALS .)
+    IDENTIFICADOR_INDIVIDUO shift and go to state 60
 
+    identificadores_individuo_sequencia shift and go to state 82
 
 state 59
 
-    (50) identificadores_individuo_sequencia -> identificadores_individuo_sequencia SIMBOLO_ESPECIAL . IDENTIFICADOR_INDIVIDUO
+    (44) individuals_opcional -> identificadores_individuo_sequencia .
+    (56) identificadores_individuo_sequencia -> identificadores_individuo_sequencia . SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO
 
-    IDENTIFICADOR_INDIVIDUO shift and go to state 74
+    CLASS           reduce using rule 44 (individuals_opcional -> identificadores_individuo_sequencia .)
+    $end            reduce using rule 44 (individuals_opcional -> identificadores_individuo_sequencia .)
+    SIMBOLO_ESPECIAL shift and go to state 83
 
 
 state 60
 
-    (19) classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL .
-    (46) identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL . IDENTIFICADOR_CLASSE
+    (55) identificadores_individuo_sequencia -> IDENTIFICADOR_INDIVIDUO .
 
-    INDIVIDUALS     reduce using rule 19 (classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 19 (classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL .)
-    CLASS           reduce using rule 19 (classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL .)
-    $end            reduce using rule 19 (classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL .)
-    IDENTIFICADOR_CLASSE shift and go to state 61
+    SIMBOLO_ESPECIAL reduce using rule 55 (identificadores_individuo_sequencia -> IDENTIFICADOR_INDIVIDUO .)
+    CLASS           reduce using rule 55 (identificadores_individuo_sequencia -> IDENTIFICADOR_INDIVIDUO .)
+    $end            reduce using rule 55 (identificadores_individuo_sequencia -> IDENTIFICADOR_INDIVIDUO .)
 
 
 state 61
 
-    (46) identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .
+    (11) subclass_opcional -> SUBCLASSOF tipo_classe_primitiva .
 
-    SIMBOLO_ESPECIAL reduce using rule 46 (identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .)
-    INDIVIDUALS     reduce using rule 46 (identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 46 (identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .)
-    CLASS           reduce using rule 46 (identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .)
-    $end            reduce using rule 46 (identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .)
+    INDIVIDUALS     reduce using rule 11 (subclass_opcional -> SUBCLASSOF tipo_classe_primitiva .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 11 (subclass_opcional -> SUBCLASSOF tipo_classe_primitiva .)
+    CLASS           reduce using rule 11 (subclass_opcional -> SUBCLASSOF tipo_classe_primitiva .)
+    $end            reduce using rule 11 (subclass_opcional -> SUBCLASSOF tipo_classe_primitiva .)
 
 
 state 62
 
-    (15) sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento .
+    (54) identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE .
 
-    SIMBOLO_ESPECIAL reduce using rule 15 (sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento .)
-    DISJOINTCLASSES reduce using rule 15 (sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento .)
-    DISJOINTWITH    reduce using rule 15 (sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento .)
+    OR              reduce using rule 54 (identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE .)
+    SUBCLASSOF      reduce using rule 54 (identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE .)
+    INDIVIDUALS     reduce using rule 54 (identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 54 (identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE .)
+    CLASS           reduce using rule 54 (identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE .)
+    $end            reduce using rule 54 (identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE .)
+    RPAREN          reduce using rule 54 (identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE .)
 
 
 state 63
 
-    (13) subclassoff_opcional -> SUBCLASSOF IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof .
-    (15) sequencia_subclassof -> sequencia_subclassof . SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
+    (22) classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL .
+    (52) identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL . IDENTIFICADOR_CLASSE
 
-    DISJOINTCLASSES reduce using rule 13 (subclassoff_opcional -> SUBCLASSOF IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof .)
-    DISJOINTWITH    reduce using rule 13 (subclassoff_opcional -> SUBCLASSOF IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof .)
-    SIMBOLO_ESPECIAL shift and go to state 43
+    SUBCLASSOF      reduce using rule 22 (classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL .)
+    INDIVIDUALS     reduce using rule 22 (classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 22 (classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL .)
+    CLASS           reduce using rule 22 (classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL .)
+    $end            reduce using rule 22 (classe_enumerada -> SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL .)
+    IDENTIFICADOR_CLASSE shift and go to state 64
 
 
 state 64
 
-    (26) aninhamento -> conteudo_aninhamento_com_parenteses AND aninhamento .
+    (52) identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .
 
-    SIMBOLO_ESPECIAL reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses AND aninhamento .)
-    DISJOINTCLASSES reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses AND aninhamento .)
-    DISJOINTWITH    reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses AND aninhamento .)
-    INDIVIDUALS     reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses AND aninhamento .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses AND aninhamento .)
-    CLASS           reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses AND aninhamento .)
-    $end            reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses AND aninhamento .)
-    RPAREN          reduce using rule 26 (aninhamento -> conteudo_aninhamento_com_parenteses AND aninhamento .)
+    SIMBOLO_ESPECIAL reduce using rule 52 (identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .)
+    SUBCLASSOF      reduce using rule 52 (identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .)
+    INDIVIDUALS     reduce using rule 52 (identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 52 (identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .)
+    CLASS           reduce using rule 52 (identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .)
+    $end            reduce using rule 52 (identificadores_classe_sequencia -> identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE .)
 
 
 state 65
 
-    (24) aninhamento -> LPAREN conteudo_aninhamento_com_parenteses OR . conteudo_aninhamento_com_parenteses RPAREN
-    (27) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
+    (16) tipo_classe_primitiva -> IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof .
+    (17) sequencia_subclassof -> sequencia_subclassof . SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
 
-    LPAREN          shift and go to state 75
+    DISJOINTCLASSES reduce using rule 16 (tipo_classe_primitiva -> IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof .)
+    DISJOINTWITH    reduce using rule 16 (tipo_classe_primitiva -> IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof .)
+    INDIVIDUALS     reduce using rule 16 (tipo_classe_primitiva -> IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 16 (tipo_classe_primitiva -> IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof .)
+    CLASS           reduce using rule 16 (tipo_classe_primitiva -> IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof .)
+    $end            reduce using rule 16 (tipo_classe_primitiva -> IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof .)
+    SIMBOLO_ESPECIAL shift and go to state 42
 
-    conteudo_aninhamento_com_parenteses shift and go to state 76
 
 state 66
 
-    (25) aninhamento -> LPAREN aninhamento RPAREN .
+    (6) declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva disjoint_opcional individuals_opcional .
 
-    SIMBOLO_ESPECIAL reduce using rule 25 (aninhamento -> LPAREN aninhamento RPAREN .)
-    DISJOINTCLASSES reduce using rule 25 (aninhamento -> LPAREN aninhamento RPAREN .)
-    DISJOINTWITH    reduce using rule 25 (aninhamento -> LPAREN aninhamento RPAREN .)
-    INDIVIDUALS     reduce using rule 25 (aninhamento -> LPAREN aninhamento RPAREN .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 25 (aninhamento -> LPAREN aninhamento RPAREN .)
-    CLASS           reduce using rule 25 (aninhamento -> LPAREN aninhamento RPAREN .)
-    $end            reduce using rule 25 (aninhamento -> LPAREN aninhamento RPAREN .)
-    RPAREN          reduce using rule 25 (aninhamento -> LPAREN aninhamento RPAREN .)
+    CLASS           reduce using rule 6 (declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva disjoint_opcional individuals_opcional .)
+    $end            reduce using rule 6 (declaracao_classe_primitiva -> CLASS IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva disjoint_opcional individuals_opcional .)
 
 
 state 67
 
-    (27) conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .
+    (19) disjoint_opcional -> DISJOINTCLASSES identificadores_classe_sequencia .
+    (52) identificadores_classe_sequencia -> identificadores_classe_sequencia . SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
 
-    AND             reduce using rule 27 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
-    SIMBOLO_ESPECIAL reduce using rule 27 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
-    DISJOINTCLASSES reduce using rule 27 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
-    DISJOINTWITH    reduce using rule 27 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
-    INDIVIDUALS     reduce using rule 27 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 27 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
-    CLASS           reduce using rule 27 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
-    $end            reduce using rule 27 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
-    OR              reduce using rule 27 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
-    RPAREN          reduce using rule 27 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
+    INDIVIDUALS     reduce using rule 19 (disjoint_opcional -> DISJOINTCLASSES identificadores_classe_sequencia .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 19 (disjoint_opcional -> DISJOINTCLASSES identificadores_classe_sequencia .)
+    CLASS           reduce using rule 19 (disjoint_opcional -> DISJOINTCLASSES identificadores_classe_sequencia .)
+    $end            reduce using rule 19 (disjoint_opcional -> DISJOINTCLASSES identificadores_classe_sequencia .)
+    SIMBOLO_ESPECIAL shift and go to state 35
 
 
 state 68
 
-    (28) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .
+    (20) disjoint_opcional -> DISJOINTWITH identificadores_classe_sequencia .
+    (52) identificadores_classe_sequencia -> identificadores_classe_sequencia . SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE
 
-    SIMBOLO_ESPECIAL reduce using rule 28 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
-    DISJOINTCLASSES reduce using rule 28 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
-    DISJOINTWITH    reduce using rule 28 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
-    RPAREN          reduce using rule 28 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    INDIVIDUALS     reduce using rule 20 (disjoint_opcional -> DISJOINTWITH identificadores_classe_sequencia .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 20 (disjoint_opcional -> DISJOINTWITH identificadores_classe_sequencia .)
+    CLASS           reduce using rule 20 (disjoint_opcional -> DISJOINTWITH identificadores_classe_sequencia .)
+    $end            reduce using rule 20 (disjoint_opcional -> DISJOINTWITH identificadores_classe_sequencia .)
+    SIMBOLO_ESPECIAL shift and go to state 35
 
 
 state 69
 
-    (30) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .
+    (17) sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento .
 
-    SIMBOLO_ESPECIAL reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
-    DISJOINTCLASSES reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
-    DISJOINTWITH    reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
-    RPAREN          reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
+    SIMBOLO_ESPECIAL reduce using rule 17 (sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento .)
+    DISJOINTCLASSES reduce using rule 17 (sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento .)
+    DISJOINTWITH    reduce using rule 17 (sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento .)
+    INDIVIDUALS     reduce using rule 17 (sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 17 (sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento .)
+    CLASS           reduce using rule 17 (sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento .)
+    $end            reduce using rule 17 (sequencia_subclassof -> sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento .)
 
 
 state 70
 
-    (31) conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .
+    (28) aninhamento -> aninhamento AND aninhamento .
+    (28) aninhamento -> aninhamento . AND aninhamento
 
-    SIMBOLO_ESPECIAL reduce using rule 31 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
-    DISJOINTCLASSES reduce using rule 31 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
-    DISJOINTWITH    reduce using rule 31 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
-    RPAREN          reduce using rule 31 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
+  ! shift/reduce conflict for AND resolved as shift
+    SIMBOLO_ESPECIAL reduce using rule 28 (aninhamento -> aninhamento AND aninhamento .)
+    DISJOINTCLASSES reduce using rule 28 (aninhamento -> aninhamento AND aninhamento .)
+    DISJOINTWITH    reduce using rule 28 (aninhamento -> aninhamento AND aninhamento .)
+    INDIVIDUALS     reduce using rule 28 (aninhamento -> aninhamento AND aninhamento .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 28 (aninhamento -> aninhamento AND aninhamento .)
+    CLASS           reduce using rule 28 (aninhamento -> aninhamento AND aninhamento .)
+    $end            reduce using rule 28 (aninhamento -> aninhamento AND aninhamento .)
+    SUBCLASSOF      reduce using rule 28 (aninhamento -> aninhamento AND aninhamento .)
+    AND             shift and go to state 43
+
+  ! AND             [ reduce using rule 28 (aninhamento -> aninhamento AND aninhamento .) ]
 
 
 state 71
 
-    (32) conteudo_aninhamento_pos -> NAMESPACE . TIPO_DADO
-    (34) conteudo_aninhamento_pos -> NAMESPACE . TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
+    (34) conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses .
 
-    TIPO_DADO       shift and go to state 77
+    SIMBOLO_ESPECIAL reduce using rule 34 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses .)
+    DISJOINTCLASSES reduce using rule 34 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses .)
+    DISJOINTWITH    reduce using rule 34 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses .)
+    INDIVIDUALS     reduce using rule 34 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 34 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses .)
+    CLASS           reduce using rule 34 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses .)
+    $end            reduce using rule 34 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses .)
+    AND             reduce using rule 34 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses .)
+    SUBCLASSOF      reduce using rule 34 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses .)
+    RPAREN          reduce using rule 34 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses .)
 
 
 state 72
 
-    (33) conteudo_aninhamento_pos -> LPAREN . identificadores_classe_or RPAREN
-    (27) conteudo_aninhamento_com_parenteses -> LPAREN . conteudo_aninhamento RPAREN
-    (47) identificadores_classe_or -> . IDENTIFICADOR_CLASSE
-    (48) identificadores_classe_or -> . identificadores_classe_or OR IDENTIFICADOR_CLASSE
-    (28) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
-    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+    (35) conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses .
 
-    IDENTIFICADOR_CLASSE shift and go to state 79
-    IDENTIFICADOR_PROPRIEDADE shift and go to state 30
+    SIMBOLO_ESPECIAL reduce using rule 35 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses .)
+    DISJOINTCLASSES reduce using rule 35 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses .)
+    DISJOINTWITH    reduce using rule 35 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses .)
+    INDIVIDUALS     reduce using rule 35 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 35 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses .)
+    CLASS           reduce using rule 35 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses .)
+    $end            reduce using rule 35 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses .)
+    AND             reduce using rule 35 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses .)
+    SUBCLASSOF      reduce using rule 35 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses .)
+    RPAREN          reduce using rule 35 (conteudo_aninhamento -> conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses .)
 
-    identificadores_classe_or      shift and go to state 78
-    conteudo_aninhamento           shift and go to state 49
 
 state 73
 
-    (29) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE . conteudo_aninhamento_pos
-    (31) conteudo_aninhamento_pos -> . IDENTIFICADOR_CLASSE
-    (32) conteudo_aninhamento_pos -> . NAMESPACE TIPO_DADO
-    (33) conteudo_aninhamento_pos -> . LPAREN identificadores_classe_or RPAREN
-    (34) conteudo_aninhamento_pos -> . NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
+    (30) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade . conteudo_aninhamento_pos
+    (37) conteudo_aninhamento_pos -> . IDENTIFICADOR_CLASSE
+    (38) conteudo_aninhamento_pos -> . NAMESPACE TIPO_DADO
+    (39) conteudo_aninhamento_pos -> . LPAREN identificadores_classe_or RPAREN
+    (40) conteudo_aninhamento_pos -> . NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
 
-    IDENTIFICADOR_CLASSE shift and go to state 70
-    NAMESPACE       shift and go to state 71
-    LPAREN          shift and go to state 81
+    IDENTIFICADOR_CLASSE shift and go to state 77
+    NAMESPACE       shift and go to state 78
+    LPAREN          shift and go to state 85
 
-    conteudo_aninhamento_pos       shift and go to state 80
+    conteudo_aninhamento_pos       shift and go to state 84
 
 state 74
 
-    (50) identificadores_individuo_sequencia -> identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO .
+    (32) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada . CARDINALIDADE conteudo_aninhamento_pos
 
-    SIMBOLO_ESPECIAL reduce using rule 50 (identificadores_individuo_sequencia -> identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO .)
-    CLASS           reduce using rule 50 (identificadores_individuo_sequencia -> identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO .)
-    $end            reduce using rule 50 (identificadores_individuo_sequencia -> identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO .)
+    CARDINALIDADE   shift and go to state 86
 
 
 state 75
 
-    (27) conteudo_aninhamento_com_parenteses -> LPAREN . conteudo_aninhamento RPAREN
-    (28) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
-    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+    (29) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .
 
-    IDENTIFICADOR_PROPRIEDADE shift and go to state 30
+    SIMBOLO_ESPECIAL reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    DISJOINTCLASSES reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    DISJOINTWITH    reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    INDIVIDUALS     reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    CLASS           reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    $end            reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    AND             reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    SUBCLASSOF      reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    RPAREN          reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
 
-    conteudo_aninhamento           shift and go to state 49
 
 state 76
 
-    (24) aninhamento -> LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses . RPAREN
+    (33) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .
 
-    RPAREN          shift and go to state 82
+    SIMBOLO_ESPECIAL reduce using rule 33 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
+    DISJOINTCLASSES reduce using rule 33 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
+    DISJOINTWITH    reduce using rule 33 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
+    INDIVIDUALS     reduce using rule 33 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 33 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
+    CLASS           reduce using rule 33 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
+    $end            reduce using rule 33 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
+    AND             reduce using rule 33 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
+    SUBCLASSOF      reduce using rule 33 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
+    RPAREN          reduce using rule 33 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses .)
 
 
 state 77
 
-    (32) conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .
-    (34) conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO . SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
+    (37) conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .
 
-  ! shift/reduce conflict for SIMBOLO_ESPECIAL resolved as shift
-    DISJOINTCLASSES reduce using rule 32 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .)
-    DISJOINTWITH    reduce using rule 32 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .)
-    RPAREN          reduce using rule 32 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .)
-    SIMBOLO_ESPECIAL shift and go to state 83
-
-  ! SIMBOLO_ESPECIAL [ reduce using rule 32 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .) ]
+    SIMBOLO_ESPECIAL reduce using rule 37 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
+    DISJOINTCLASSES reduce using rule 37 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
+    DISJOINTWITH    reduce using rule 37 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
+    INDIVIDUALS     reduce using rule 37 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 37 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
+    CLASS           reduce using rule 37 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
+    $end            reduce using rule 37 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
+    AND             reduce using rule 37 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
+    SUBCLASSOF      reduce using rule 37 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
+    RPAREN          reduce using rule 37 (conteudo_aninhamento_pos -> IDENTIFICADOR_CLASSE .)
 
 
 state 78
 
-    (33) conteudo_aninhamento_pos -> LPAREN identificadores_classe_or . RPAREN
-    (48) identificadores_classe_or -> identificadores_classe_or . OR IDENTIFICADOR_CLASSE
+    (38) conteudo_aninhamento_pos -> NAMESPACE . TIPO_DADO
+    (40) conteudo_aninhamento_pos -> NAMESPACE . TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
 
-    RPAREN          shift and go to state 84
-    OR              shift and go to state 85
+    TIPO_DADO       shift and go to state 87
 
 
 state 79
 
-    (47) identificadores_classe_or -> IDENTIFICADOR_CLASSE .
+    (39) conteudo_aninhamento_pos -> LPAREN . identificadores_classe_or RPAREN
+    (36) conteudo_aninhamento_com_parenteses -> LPAREN . conteudo_aninhamento RPAREN
+    (53) identificadores_classe_or -> . IDENTIFICADOR_CLASSE
+    (54) identificadores_classe_or -> . identificadores_classe_or OR IDENTIFICADOR_CLASSE
+    (29) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (30) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+    (31) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (32) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+    (33) conteudo_aninhamento -> . IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+    (34) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
+    (35) conteudo_aninhamento -> . conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses
+    (36) conteudo_aninhamento_com_parenteses -> . LPAREN conteudo_aninhamento RPAREN
 
-    RPAREN          reduce using rule 47 (identificadores_classe_or -> IDENTIFICADOR_CLASSE .)
-    OR              reduce using rule 47 (identificadores_classe_or -> IDENTIFICADOR_CLASSE .)
+    IDENTIFICADOR_CLASSE shift and go to state 89
+    IDENTIFICADOR_PROPRIEDADE shift and go to state 27
+    LPAREN          shift and go to state 28
 
+    identificadores_classe_or      shift and go to state 88
+    conteudo_aninhamento           shift and go to state 54
+    conteudo_aninhamento_com_parenteses shift and go to state 55
 
 state 80
 
-    (29) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .
+    (31) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE . conteudo_aninhamento_pos
+    (37) conteudo_aninhamento_pos -> . IDENTIFICADOR_CLASSE
+    (38) conteudo_aninhamento_pos -> . NAMESPACE TIPO_DADO
+    (39) conteudo_aninhamento_pos -> . LPAREN identificadores_classe_or RPAREN
+    (40) conteudo_aninhamento_pos -> . NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
 
-    SIMBOLO_ESPECIAL reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
-    DISJOINTCLASSES reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
-    DISJOINTWITH    reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
-    RPAREN          reduce using rule 29 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    IDENTIFICADOR_CLASSE shift and go to state 77
+    NAMESPACE       shift and go to state 78
+    LPAREN          shift and go to state 85
 
+    conteudo_aninhamento_pos       shift and go to state 90
 
 state 81
 
-    (33) conteudo_aninhamento_pos -> LPAREN . identificadores_classe_or RPAREN
-    (47) identificadores_classe_or -> . IDENTIFICADOR_CLASSE
-    (48) identificadores_classe_or -> . identificadores_classe_or OR IDENTIFICADOR_CLASSE
+    (36) conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .
 
-    IDENTIFICADOR_CLASSE shift and go to state 79
+    OR              reduce using rule 36 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
+    AND             reduce using rule 36 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
+    SIMBOLO_ESPECIAL reduce using rule 36 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
+    DISJOINTCLASSES reduce using rule 36 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
+    DISJOINTWITH    reduce using rule 36 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
+    INDIVIDUALS     reduce using rule 36 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 36 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
+    CLASS           reduce using rule 36 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
+    $end            reduce using rule 36 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
+    SUBCLASSOF      reduce using rule 36 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
+    RPAREN          reduce using rule 36 (conteudo_aninhamento_com_parenteses -> LPAREN conteudo_aninhamento RPAREN .)
 
-    identificadores_classe_or      shift and go to state 78
 
 state 82
 
-    (24) aninhamento -> LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN .
+    (41) individuals_opcional -> INDIVIDUALS identificadores_individuo_sequencia .
+    (56) identificadores_individuo_sequencia -> identificadores_individuo_sequencia . SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO
 
-    SIMBOLO_ESPECIAL reduce using rule 24 (aninhamento -> LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN .)
-    DISJOINTCLASSES reduce using rule 24 (aninhamento -> LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN .)
-    DISJOINTWITH    reduce using rule 24 (aninhamento -> LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN .)
-    INDIVIDUALS     reduce using rule 24 (aninhamento -> LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN .)
-    IDENTIFICADOR_INDIVIDUO reduce using rule 24 (aninhamento -> LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN .)
-    CLASS           reduce using rule 24 (aninhamento -> LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN .)
-    $end            reduce using rule 24 (aninhamento -> LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN .)
-    RPAREN          reduce using rule 24 (aninhamento -> LPAREN conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses RPAREN .)
+    CLASS           reduce using rule 41 (individuals_opcional -> INDIVIDUALS identificadores_individuo_sequencia .)
+    $end            reduce using rule 41 (individuals_opcional -> INDIVIDUALS identificadores_individuo_sequencia .)
+    SIMBOLO_ESPECIAL shift and go to state 83
 
 
 state 83
 
-    (34) conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL . operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
-    (39) operador_relacional -> . MAIOR
-    (40) operador_relacional -> . MENOR
-    (41) operador_relacional -> . MAIORIGUAL
-    (42) operador_relacional -> . MENORIGUAL
+    (56) identificadores_individuo_sequencia -> identificadores_individuo_sequencia SIMBOLO_ESPECIAL . IDENTIFICADOR_INDIVIDUO
 
-    MAIOR           shift and go to state 87
-    MENOR           shift and go to state 88
-    MAIORIGUAL      shift and go to state 89
-    MENORIGUAL      shift and go to state 90
+    IDENTIFICADOR_INDIVIDUO shift and go to state 91
 
-    operador_relacional            shift and go to state 86
 
 state 84
 
-    (33) conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .
+    (30) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .
 
-    SIMBOLO_ESPECIAL reduce using rule 33 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
-    DISJOINTCLASSES reduce using rule 33 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
-    DISJOINTWITH    reduce using rule 33 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
-    RPAREN          reduce using rule 33 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
+    SIMBOLO_ESPECIAL reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    DISJOINTCLASSES reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    DISJOINTWITH    reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    INDIVIDUALS     reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    CLASS           reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    $end            reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    AND             reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    SUBCLASSOF      reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
+    RPAREN          reduce using rule 30 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos .)
 
 
 state 85
 
-    (48) identificadores_classe_or -> identificadores_classe_or OR . IDENTIFICADOR_CLASSE
+    (39) conteudo_aninhamento_pos -> LPAREN . identificadores_classe_or RPAREN
+    (53) identificadores_classe_or -> . IDENTIFICADOR_CLASSE
+    (54) identificadores_classe_or -> . identificadores_classe_or OR IDENTIFICADOR_CLASSE
 
-    IDENTIFICADOR_CLASSE shift and go to state 91
+    IDENTIFICADOR_CLASSE shift and go to state 89
 
+    identificadores_classe_or      shift and go to state 88
 
 state 86
 
-    (34) conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional . cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
-    (43) cardinalidade_com_sem_aspas_simples -> . CARDINALIDADE
-    (44) cardinalidade_com_sem_aspas_simples -> . SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIAL
+    (32) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE . conteudo_aninhamento_pos
+    (37) conteudo_aninhamento_pos -> . IDENTIFICADOR_CLASSE
+    (38) conteudo_aninhamento_pos -> . NAMESPACE TIPO_DADO
+    (39) conteudo_aninhamento_pos -> . LPAREN identificadores_classe_or RPAREN
+    (40) conteudo_aninhamento_pos -> . NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
 
-    CARDINALIDADE   shift and go to state 94
-    SIMBOLO_ESPECIAL shift and go to state 92
+    IDENTIFICADOR_CLASSE shift and go to state 77
+    NAMESPACE       shift and go to state 78
+    LPAREN          shift and go to state 85
 
-    cardinalidade_com_sem_aspas_simples shift and go to state 93
+    conteudo_aninhamento_pos       shift and go to state 92
 
 state 87
 
-    (39) operador_relacional -> MAIOR .
+    (38) conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .
+    (40) conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO . SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
 
-    CARDINALIDADE   reduce using rule 39 (operador_relacional -> MAIOR .)
-    SIMBOLO_ESPECIAL reduce using rule 39 (operador_relacional -> MAIOR .)
+  ! shift/reduce conflict for SIMBOLO_ESPECIAL resolved as shift
+    DISJOINTCLASSES reduce using rule 38 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .)
+    DISJOINTWITH    reduce using rule 38 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .)
+    INDIVIDUALS     reduce using rule 38 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 38 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .)
+    CLASS           reduce using rule 38 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .)
+    $end            reduce using rule 38 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .)
+    AND             reduce using rule 38 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .)
+    SUBCLASSOF      reduce using rule 38 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .)
+    RPAREN          reduce using rule 38 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .)
+    SIMBOLO_ESPECIAL shift and go to state 93
+
+  ! SIMBOLO_ESPECIAL [ reduce using rule 38 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO .) ]
 
 
 state 88
 
-    (40) operador_relacional -> MENOR .
+    (39) conteudo_aninhamento_pos -> LPAREN identificadores_classe_or . RPAREN
+    (54) identificadores_classe_or -> identificadores_classe_or . OR IDENTIFICADOR_CLASSE
 
-    CARDINALIDADE   reduce using rule 40 (operador_relacional -> MENOR .)
-    SIMBOLO_ESPECIAL reduce using rule 40 (operador_relacional -> MENOR .)
+    RPAREN          shift and go to state 94
+    OR              shift and go to state 32
 
 
 state 89
 
-    (41) operador_relacional -> MAIORIGUAL .
+    (53) identificadores_classe_or -> IDENTIFICADOR_CLASSE .
 
-    CARDINALIDADE   reduce using rule 41 (operador_relacional -> MAIORIGUAL .)
-    SIMBOLO_ESPECIAL reduce using rule 41 (operador_relacional -> MAIORIGUAL .)
+    RPAREN          reduce using rule 53 (identificadores_classe_or -> IDENTIFICADOR_CLASSE .)
+    OR              reduce using rule 53 (identificadores_classe_or -> IDENTIFICADOR_CLASSE .)
 
 
 state 90
 
-    (42) operador_relacional -> MENORIGUAL .
+    (31) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .
 
-    CARDINALIDADE   reduce using rule 42 (operador_relacional -> MENORIGUAL .)
-    SIMBOLO_ESPECIAL reduce using rule 42 (operador_relacional -> MENORIGUAL .)
+    SIMBOLO_ESPECIAL reduce using rule 31 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    DISJOINTCLASSES reduce using rule 31 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    DISJOINTWITH    reduce using rule 31 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    INDIVIDUALS     reduce using rule 31 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 31 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    CLASS           reduce using rule 31 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    $end            reduce using rule 31 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    AND             reduce using rule 31 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    SUBCLASSOF      reduce using rule 31 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    RPAREN          reduce using rule 31 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
 
 
 state 91
 
-    (48) identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE .
+    (56) identificadores_individuo_sequencia -> identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO .
 
-    RPAREN          reduce using rule 48 (identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE .)
-    OR              reduce using rule 48 (identificadores_classe_or -> identificadores_classe_or OR IDENTIFICADOR_CLASSE .)
+    SIMBOLO_ESPECIAL reduce using rule 56 (identificadores_individuo_sequencia -> identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO .)
+    CLASS           reduce using rule 56 (identificadores_individuo_sequencia -> identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO .)
+    $end            reduce using rule 56 (identificadores_individuo_sequencia -> identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO .)
 
 
 state 92
 
-    (44) cardinalidade_com_sem_aspas_simples -> SIMBOLO_ESPECIAL . CARDINALIDADE SIMBOLO_ESPECIAL
+    (32) conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .
 
-    CARDINALIDADE   shift and go to state 95
+    SIMBOLO_ESPECIAL reduce using rule 32 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    DISJOINTCLASSES reduce using rule 32 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    DISJOINTWITH    reduce using rule 32 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    INDIVIDUALS     reduce using rule 32 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 32 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    CLASS           reduce using rule 32 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    $end            reduce using rule 32 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    AND             reduce using rule 32 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    SUBCLASSOF      reduce using rule 32 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
+    RPAREN          reduce using rule 32 (conteudo_aninhamento -> IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos .)
 
 
 state 93
 
-    (34) conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples . SIMBOLO_ESPECIAL
+    (40) conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL . operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
+    (45) operador_relacional -> . MAIOR
+    (46) operador_relacional -> . MENOR
+    (47) operador_relacional -> . MAIORIGUAL
+    (48) operador_relacional -> . MENORIGUAL
 
-    SIMBOLO_ESPECIAL shift and go to state 96
+    MAIOR           shift and go to state 96
+    MENOR           shift and go to state 97
+    MAIORIGUAL      shift and go to state 98
+    MENORIGUAL      shift and go to state 99
 
+    operador_relacional            shift and go to state 95
 
 state 94
 
-    (43) cardinalidade_com_sem_aspas_simples -> CARDINALIDADE .
+    (39) conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .
 
-    SIMBOLO_ESPECIAL reduce using rule 43 (cardinalidade_com_sem_aspas_simples -> CARDINALIDADE .)
+    SIMBOLO_ESPECIAL reduce using rule 39 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
+    DISJOINTCLASSES reduce using rule 39 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
+    DISJOINTWITH    reduce using rule 39 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
+    INDIVIDUALS     reduce using rule 39 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 39 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
+    CLASS           reduce using rule 39 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
+    $end            reduce using rule 39 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
+    AND             reduce using rule 39 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
+    SUBCLASSOF      reduce using rule 39 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
+    RPAREN          reduce using rule 39 (conteudo_aninhamento_pos -> LPAREN identificadores_classe_or RPAREN .)
 
 
 state 95
 
-    (44) cardinalidade_com_sem_aspas_simples -> SIMBOLO_ESPECIAL CARDINALIDADE . SIMBOLO_ESPECIAL
+    (40) conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional . cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL
+    (49) cardinalidade_com_sem_aspas_simples -> . CARDINALIDADE
+    (50) cardinalidade_com_sem_aspas_simples -> . SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIAL
 
-    SIMBOLO_ESPECIAL shift and go to state 97
+    CARDINALIDADE   shift and go to state 102
+    SIMBOLO_ESPECIAL shift and go to state 100
 
+    cardinalidade_com_sem_aspas_simples shift and go to state 101
 
 state 96
 
-    (34) conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .
+    (45) operador_relacional -> MAIOR .
 
-    SIMBOLO_ESPECIAL reduce using rule 34 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
-    DISJOINTCLASSES reduce using rule 34 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
-    DISJOINTWITH    reduce using rule 34 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
-    RPAREN          reduce using rule 34 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
+    CARDINALIDADE   reduce using rule 45 (operador_relacional -> MAIOR .)
+    SIMBOLO_ESPECIAL reduce using rule 45 (operador_relacional -> MAIOR .)
 
 
 state 97
 
-    (44) cardinalidade_com_sem_aspas_simples -> SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIAL .
+    (46) operador_relacional -> MENOR .
 
-    SIMBOLO_ESPECIAL reduce using rule 44 (cardinalidade_com_sem_aspas_simples -> SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIAL .)
+    CARDINALIDADE   reduce using rule 46 (operador_relacional -> MENOR .)
+    SIMBOLO_ESPECIAL reduce using rule 46 (operador_relacional -> MENOR .)
+
+
+state 98
+
+    (47) operador_relacional -> MAIORIGUAL .
+
+    CARDINALIDADE   reduce using rule 47 (operador_relacional -> MAIORIGUAL .)
+    SIMBOLO_ESPECIAL reduce using rule 47 (operador_relacional -> MAIORIGUAL .)
+
+
+state 99
+
+    (48) operador_relacional -> MENORIGUAL .
+
+    CARDINALIDADE   reduce using rule 48 (operador_relacional -> MENORIGUAL .)
+    SIMBOLO_ESPECIAL reduce using rule 48 (operador_relacional -> MENORIGUAL .)
+
+
+state 100
+
+    (50) cardinalidade_com_sem_aspas_simples -> SIMBOLO_ESPECIAL . CARDINALIDADE SIMBOLO_ESPECIAL
+
+    CARDINALIDADE   shift and go to state 103
+
+
+state 101
+
+    (40) conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples . SIMBOLO_ESPECIAL
+
+    SIMBOLO_ESPECIAL shift and go to state 104
+
+
+state 102
+
+    (49) cardinalidade_com_sem_aspas_simples -> CARDINALIDADE .
+
+    SIMBOLO_ESPECIAL reduce using rule 49 (cardinalidade_com_sem_aspas_simples -> CARDINALIDADE .)
+
+
+state 103
+
+    (50) cardinalidade_com_sem_aspas_simples -> SIMBOLO_ESPECIAL CARDINALIDADE . SIMBOLO_ESPECIAL
+
+    SIMBOLO_ESPECIAL shift and go to state 105
+
+
+state 104
+
+    (40) conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .
+
+    SIMBOLO_ESPECIAL reduce using rule 40 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
+    DISJOINTCLASSES reduce using rule 40 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
+    DISJOINTWITH    reduce using rule 40 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
+    INDIVIDUALS     reduce using rule 40 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
+    IDENTIFICADOR_INDIVIDUO reduce using rule 40 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
+    CLASS           reduce using rule 40 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
+    $end            reduce using rule 40 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
+    AND             reduce using rule 40 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
+    SUBCLASSOF      reduce using rule 40 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
+    RPAREN          reduce using rule 40 (conteudo_aninhamento_pos -> NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL .)
+
+
+state 105
+
+    (50) cardinalidade_com_sem_aspas_simples -> SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIAL .
+
+    SIMBOLO_ESPECIAL reduce using rule 50 (cardinalidade_com_sem_aspas_simples -> SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIAL .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for SIMBOLO_ESPECIAL in state 77 resolved as shift
+WARNING: shift/reduce conflict for AND in state 26 resolved as shift
+WARNING: shift/reduce conflict for AND in state 70 resolved as shift
+WARNING: shift/reduce conflict for SIMBOLO_ESPECIAL in state 87 resolved as shift
+WARNING: reduce/reduce conflict in state 10 resolved using rule (identificadores_classe_sequencia -> IDENTIFICADOR_CLASSE)
+WARNING: rejected rule (identificadores_classe_or -> IDENTIFICADOR_CLASSE) in state 10
+WARNING: reduce/reduce conflict in state 25 resolved using rule (aninhamento -> conteudo_aninhamento)
+WARNING: rejected rule (aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento) in state 25
+WARNING: Rule (aninhamento_ou_conteudo_aninhamento -> conteudo_aninhamento) is never reduced
