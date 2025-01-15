@@ -77,15 +77,15 @@ def t_EXACTLY(t):
     return t
 
 def t_CLASS(t):
-    r'[Cc]lass\s*:'  # Permite "Class:" ou "class :" (com espaços opcionais)
+    r'[Cc][Ll][Aa][Ss][Ss]\s*:'
     return t
 
 def t_SUBCLASSOF(t):
-    r'[Ss]ub[Cc]lass[Oo]f\s*:'  # Permite variações de maiúsculas/minúsculas e espaços opcionais
+    r'[Ss][Uu][Bb][Cc][Ll][Aa][Ss][Ss][Oo][Ff]\s*:'
     return t
 
 def t_EQUIVALENTTO(t):
-    r'[Ee]quivalent[Tt]o\s*:'  # Permite variações e espaços opcionais
+    r'[Ee][Qq][Uu][Ii][Vv][Aa][Ll][Ee][Nn][Tt][Tt][Oo]\s*:'
     return t
 
 def t_AND(t):
@@ -93,15 +93,15 @@ def t_AND(t):
     return t
 
 def t_DISJOINTCLASSES(t):
-    r'[Dd]isjoint[Cc]lasses\s*:'  # Permite variações e espaços opcionais
+    r'[Dd][Ii][Ss][Jj][Oo][Ii][Nn][Tt][Cc][Ll][Aa][Ss][Ss][Ee][Ss]\s*:'
     return t
 
 def t_DISJOINTWITH(t):
-    r'[Dd]isjoint[Ww]ith\s*:'  # Permite variações e espaços opcionais
+    r'[Dd][Ii][Ss][Jj][Oo][Ii][Nn][Tt][Ww][Ii][Tt][Hh]\s*:'
     return t
 
 def t_INDIVIDUALS(t):
-    r'[Ii]ndividuals\s*:'  # Permite variações e espaços opcionais
+    r'[Ii][Nn][Dd][Ii][Vv][Ii][Dd][Uu][Aa][Ll][Ss]\s*:'
     return t
 
 def t_NAMESPACE(t):
@@ -148,7 +148,6 @@ lexer = lex.lex()
 # PARSER
 # ============================
 
-
 def p_ontologia(p):
     """ontologia : declaracao_classe
                  | ontologia declaracao_classe"""
@@ -159,8 +158,15 @@ def p_ontologia(p):
 
 def p_declaracao_classe(p):
     """declaracao_classe : declaracao_classe_definida
-                        | declaracao_classe_primitiva"""
+                        | declaracao_classe_primitiva
+                        | declaracao_classe_errada"""
     p[0] = p[1]
+
+def p_declaracao_classe_errada(p):
+    """declaracao_classe_errada : CLASS IDENTIFICADOR_CLASSE DISJOINTCLASSES identificadores_classe_sequencia
+                                | CLASS IDENTIFICADOR_CLASSE DISJOINTWITH identificadores_classe_sequencia
+                                | CLASS IDENTIFICADOR_CLASSE INDIVIDUALS individuals_opcional"""
+    tratamento_personalizado_erros("Declaracao de classe esta errada.", p)
 
 def p_declaracao_classe_definida(p):
     """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional"""
@@ -353,12 +359,16 @@ def p_identificadores_individuo_sequencia(p):
 
 def p_restricao_propriedade(p):
     """restricao_propriedade : ONLY
+                            | ALL
                             | SOME
-                            | VALUE"""
+                            | VALUE
+                            | NOT
+                            | THAT"""
     p[0] = p[1]
 
 def p_restricao_palavra_reservada(p):
     """restricao_palavra_reservada : MIN
+                            | MAX
                             | SOME
                             | EXACTLY"""
     p[0] = p[1]
@@ -379,7 +389,7 @@ def tratamento_personalizado_erros(message, p):
     print(f"Erro sintático, linha {p.lineno(1)}. {message}")
     exit()
 
-parser = yacc.yacc()
+parser = yacc.yacc(debug=False, write_tables=False, errorlog=yacc.NullLogger())
 
 # ============================
 # MAIN
@@ -390,9 +400,13 @@ def main():
         entrada = file.read()
 
     resultado = parser.parse(entrada, lexer=lexer)
-    print("Árvore Sintática:")
-    for i in resultado:
-        print(i)
+    if resultado is not None:
+        print("Árvore Sintática:")
+        for i in resultado:
+            print(i)
+        print("\n" + "="*30)
+        print(" " * 10 + "OK!")
+        print("="*30 + "\n")
 
 if __name__ == "__main__":
     main()
