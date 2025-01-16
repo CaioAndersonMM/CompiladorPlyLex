@@ -209,9 +209,9 @@ def p_tipo_classe_primitiva(p):
                              | IDENTIFICADOR_CLASSE
                              | IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof"""
     if len(p) == 2:
-        p[0] = ["SUBCLASSOF", p[1]]
+        p[0] = [p[1]]
     elif len(p) == 4:
-        p[0] = ["SUBCLASSOF", p[1], p[3]]
+        p[0] = [p[1], p[3]]
 
 def p_sequencia_subclassof(p):
     """sequencia_subclassof : sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
@@ -257,22 +257,15 @@ def p_aninhamento(p):
     if len(p) == 2:
         p[0] = [p[1]]
     elif len(p) == 4:
-        p[0] = p[1] + p[3]
+        p[0] = p[1] + p[3] # aninhamento AND aninhamento and a
 
 def p_conteudo_aninhamento(p):
     """conteudo_aninhamento :  IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
                              | IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
                              | IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
                              | IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-                             | IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
-                             | conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
-                             | conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses"""
-    
-    if len(p) == 4 and p[2] == "OR":
-        p[0] = ["OR", [p[1]], p[3]]
-    elif len(p) == 4 and p[2] == "AND":
-        p[0] = ["AND", [p[1]], p[3]]
-    elif len(p) == 4:
+                             | IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses"""
+    if len(p) == 4:
         p[0] = [p[1]] + [p[2]] + [p[3]]
     elif len(p) == 5:
         p[0] = [p[1]] + [p[2]] + [p[3]] + [p[4]]
@@ -281,8 +274,12 @@ def p_conteudo_aninhamento(p):
 
 
 def p_conteudo_aninhamento_com_parenteses(p):
-    """conteudo_aninhamento_com_parenteses : LPAREN conteudo_aninhamento RPAREN"""
-    p[0] = p[2]
+    """conteudo_aninhamento_com_parenteses : LPAREN conteudo_aninhamento RPAREN
+                                            | LPAREN conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses RPAREN"""
+    if len(p) == 4:
+        p[0] = p[2]
+    else:
+        p[0] = ["AND", p[2], p[4]]
 
 
 
@@ -322,6 +319,11 @@ def p_operador_relacional(p):
                             | MENOR
                             | MAIORIGUAL
                             | MENORIGUAL"""
+    p[0] = p[1]
+
+def p_or_and(p):
+    """or_and : OR
+                            | AND"""
     p[0] = p[1]
 
 def p_cardinalidade_com_sem_aspas_simples(p):

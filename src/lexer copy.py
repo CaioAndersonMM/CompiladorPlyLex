@@ -8,6 +8,7 @@ import ply.yacc as yacc
 # Definindo palavras reservadas
 reservadas = {
     'some': 'SOME',
+    'only': 'ONLY',
     'all': 'ALL',
     'value': 'VALUE',
     'min': 'MIN',
@@ -21,8 +22,8 @@ reservadas = {
     'equivalentto': 'EQUIVALENTTO',
     'individuals': 'INDIVIDUALS',
     'subclassof': 'SUBCLASSOF',
-    'disjointclasses': 'DISJOINTCLASSES',
-    'disjointwith': 'DISJOINTWITH',
+    # 'disjointclasses': 'DISJOINTCLASSES',
+    # 'disjointwith': 'DISJOINTWITH',
 }
 
 # Tipos de dados
@@ -33,8 +34,8 @@ type_dado = [
 
 # Tokens
 tokens = [
-    'MAIORIGUAL', 'IDENTIFICADOR_CLASSE', 'IDENTIFICADOR_PROPRIEDADE', 'IDENTIFICADOR_INDIVIDUO',
-    'CARDINALIDADE', 'SIMBOLO_ESPECIAL', 'TIPO_DADO', 'NAMESPACE', 'LPAREN', 'RPAREN',
+    'MAIORIGUAL', 'MENORIGUAL', 'MAIOR', 'MENOR',  'IDENTIFICADOR_CLASSE', 'IDENTIFICADOR_PROPRIEDADE', 'IDENTIFICADOR_INDIVIDUO', 
+    'CARDINALIDADE', 'SIMBOLO_ESPECIAL', 'TIPO_DADO', 'NAMESPACE', 'LPAREN', 'RPAREN', 'DISJOINTCLASSES', 'DISJOINTWITH'
 ] + list(set(reservadas.values()))
 
 # Regras de tokens
@@ -42,6 +43,9 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_ignore = ' \t'  # Ignorar espaços e tabulações
 t_MAIORIGUAL = r'>='
+t_MENORIGUAL = r'<='
+t_MAIOR = r'>'
+t_MENOR = r'<'
 
 def t_NEWLINE(t):
     r'\n+'
@@ -51,16 +55,37 @@ def t_NEWLINE(t):
 def t_SOME(t):
     r'some'
     return t
+
+def t_ONLY(t):
+    r'only'
+    return t
+
+def t_VALUE(t):
+    r'value'
+    return t
+
+def t_OR(t):
+    r'or'
+    return t
+
+def t_MIN(t):
+    r'min'
+    return t
+
+def t_EXACTLY(t):
+    r'exactly'
+    return t
+
 def t_CLASS(t):
-    r'[Cc]lass\s*:'  # Permite "Class:" ou "class :" (com espaços opcionais)
+    r'[Cc][Ll][Aa][Ss][Ss]\s*:'
     return t
 
 def t_SUBCLASSOF(t):
-    r'[Ss]ub[Cc]lass[Oo]f\s*:'  # Permite variações de maiúsculas/minúsculas e espaços opcionais
+    r'[Ss][Uu][Bb][Cc][Ll][Aa][Ss][Ss][Oo][Ff]\s*:'
     return t
 
 def t_EQUIVALENTTO(t):
-    r'[Ee]quivalent[Tt]o\s*:'  # Permite variações e espaços opcionais
+    r'[Ee][Qq][Uu][Ii][Vv][Aa][Ll][Ee][Nn][Tt][Tt][Oo]\s*:'
     return t
 
 def t_AND(t):
@@ -68,11 +93,15 @@ def t_AND(t):
     return t
 
 def t_DISJOINTCLASSES(t):
-    r'[Dd]isjoint[Cc]lasses\s*:'  # Permite variações e espaços opcionais
+    r'[Dd][Ii][Ss][Jj][Oo][Ii][Nn][Tt][Cc][Ll][Aa][Ss][Ss][Ee][Ss]\s*:'
+    return t
+
+def t_DISJOINTWITH(t):
+    r'[Dd][Ii][Ss][Jj][Oo][Ii][Nn][Tt][Ww][Ii][Tt][Hh]\s*:'
     return t
 
 def t_INDIVIDUALS(t):
-    r'[Ii]ndividuals\s*:'  # Permite variações e espaços opcionais
+    r'[Ii][Nn][Dd][Ii][Vv][Ii][Dd][Uu][Aa][Ll][Ss]\s*:'
     return t
 
 def t_NAMESPACE(t):
@@ -81,7 +110,7 @@ def t_NAMESPACE(t):
     return t
 
 def t_TIPO_DADO(t):
-    r'(integer|real|string|boolean|date|time|long|language|short|token|byte|Name|NCName)'
+    r'\b(integer|real|string|boolean|date|time|long|language|short|token|byte|Name|NCName)\b'
     if t.value in type_dado:
         return t
 
@@ -119,139 +148,265 @@ lexer = lex.lex()
 # PARSER
 # ============================
 
-
 def p_ontologia(p):
     """ontologia : declaracao_classe
-                 | declaracao_classe_definida
-                 | ontologia declaracao_classe
-                 | ontologia declaracao_classe_definida"""
+                 | ontologia declaracao_classe"""
     if len(p) == 2:
         p[0] = [p[1]]
     else:
         p[0] = p[1] + [p[2]]
 
+def p_declaracao_classe(p):
+    """declaracao_classe : declaracao_classe_definida
+                        | declaracao_classe_primitiva
+                        | declaracao_classe_errada"""
+    p[0] = p[1]
+
+def p_declaracao_classe_errada(p):
+    """declaracao_classe_errada : CLASS IDENTIFICADOR_CLASSE DISJOINTCLASSES identificadores_classe_sequencia
+                                | CLASS IDENTIFICADOR_CLASSE DISJOINTWITH identificadores_classe_sequencia
+                                | CLASS IDENTIFICADOR_CLASSE INDIVIDUALS individuals_opcional"""
+    tratamento_personalizado_erros("Declaracao de classe esta errada.", p)
 
 def p_declaracao_classe_definida(p):
-    """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO lista_restricoes_definidas corpo_classe
-                                  | CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO lista_restricoes_definidas"""
-    if len(p) == 6:
-        p[0] = ("ClasseDefinida", p[2], p[4], p[5])
+    """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional"""
+    p[0] = ["classe definida", p[2], p[4]]
+
+    if p[5] != None:
+        p[0] += [p[5]]
+    if p[6] != None:
+        p[0] += [p[5]]
+
+def p_declaracao_classe_primitiva(p):
+    """declaracao_classe_primitiva : CLASS IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva disjoint_opcional individuals_opcional"""
+    
+    p[0] = ["classe primitiva", p[2], p[4]]
+    if p[5] != None:
+        p[0] += [p[5]]
+    if p[6] != None:
+        p[0] += [p[6]]
+
+def p_tipo_classe_definida(p):
+    """tipo_classe_definida : classe_enumerada
+                             | classe_coberta
+                             | classe_aninhada
+                             | identificadores_classe_or"""
+    p[0] = p[1]
+
+def p_subclass_opcional(p):
+    """subclass_opcional : SUBCLASSOF tipo_classe_primitiva
+                             | """
+    
+    p[0] = None
+
+    if len(p) > 1:
+        p[0] = p[2]
+
+
+def p_tipo_classe_primitiva(p):
+    """tipo_classe_primitiva : sequencia_subclassof
+                             | classe_aninhada
+                             | IDENTIFICADOR_CLASSE
+                             | IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof"""
+    if len(p) == 2:
+        p[0] = ["SUBCLASSOF", p[1]]
+    elif len(p) == 4:
+        p[0] = ["SUBCLASSOF", p[1], p[3]]
+
+def p_sequencia_subclassof(p):
+    """sequencia_subclassof : sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
+                   | aninhamento_ou_conteudo_aninhamento """
+    if len(p) == 4:
+        p[0] = p[1] + [p[3]]
     else:
-        p[0] = ("ClasseDefinida", p[2], p[4])
+        p[0] = [p[1]]
 
-def p_declaracao_classe(p):
-    """declaracao_classe : CLASS IDENTIFICADOR_CLASSE SUBCLASSOF lista_restricoes corpo_classe
-                         | CLASS IDENTIFICADOR_CLASSE SUBCLASSOF lista_restricoes"""
-    if len(p) == 6:
-        p[0] = ("ClassePrimitiva", p[2], p[4], p[5])
+def p_disjoint_opcional(p):
+    """disjoint_opcional : DISJOINTCLASSES identificadores_classe_sequencia
+                         | DISJOINTWITH identificadores_classe_sequencia
+                         | """
+    if len(p) == 1:
+        p[0] = None
+    elif p[1].lower() == 'disjointclasses:':
+        p[0] = ["DISJOINT_CLASSES", p[2]]
+    elif p[1].lower() == 'disjointwith:':
+        p[0] = ["DISJOINT_WITH", p[2]]
+
+def p_classe_enumerada(p):
+    """classe_enumerada : SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL"""
+    p[0] = ["enumerada", p[2]]
+
+def p_classe_coberta(p):
+    """classe_coberta : identificadores_classe_sequencia"""
+    p[0] = ["coberta", p[1]]
+
+def p_classe_aninhada(p):
+    """classe_aninhada : IDENTIFICADOR_CLASSE AND aninhamento
+                        | AND aninhamento"""
+    
+    if len(p) == 4:
+        p[0] = [p[1], "AND", p[3]]
     else:
-        p[0] = ("ClassePrimitiva", p[2], p[4])
+        p[0] = ["AND", p[2]]
 
-def p_corpo_classe_primitiva(p):
-    """corpo_classe : restricoes disjunto individuos
-                    | restricoes disjunto
-                    | restricoes individuos
-                    | disjunto individuos
-                    | restricoes
-                    | disjunto
-                    | individuos"""
-    p[0] = p[1:]
 
-def p_restricoes(p):
-    """restricoes : SUBCLASSOF lista_restricoes"""
-    p[0] = ("Restricoes", p[2])
+def p_aninhamento(p):
+    """aninhamento : conteudo_aninhamento_com_parenteses
+                   | conteudo_aninhamento
+                   | aninhamento AND aninhamento"""
+    if len(p) == 2:
+        p[0] = [p[1]]
+    elif len(p) == 4:
+        p[0] = p[1] + p[3]
 
-def p_lista_restricoes(p):
-    """lista_restricoes : restricao
-                        | lista_restricoes SIMBOLO_ESPECIAL restricao"""
+def p_conteudo_aninhamento(p):
+    """conteudo_aninhamento :  IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+                             | IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
+                             | IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+                             | IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
+                             | IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses
+                             | conteudo_aninhamento_com_parenteses OR conteudo_aninhamento_com_parenteses
+                             | conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses"""
+    
+    if len(p) == 4 and p[2] == "OR":
+        p[0] = ["OR", [p[1]], p[3]]
+    elif len(p) == 4 and p[2] == "AND":
+        p[0] = ["AND", [p[1]], p[3]]
+    elif len(p) == 4:
+        p[0] = [p[1]] + [p[2]] + [p[3]]
+    elif len(p) == 5:
+        p[0] = [p[1]] + [p[2]] + [p[3]] + [p[4]]
+    else:
+        p[0] = [p[1]] + [p[2]] + [p[3]] + [p[4]] + [p[5]]
+
+
+def p_conteudo_aninhamento_com_parenteses(p):
+    """conteudo_aninhamento_com_parenteses : LPAREN conteudo_aninhamento RPAREN"""
+    p[0] = p[2]
+
+
+
+def p_conteudo_aninhamento_pos(p):
+    """conteudo_aninhamento_pos : IDENTIFICADOR_CLASSE
+                                | NAMESPACE TIPO_DADO
+                                | LPAREN identificadores_classe_or RPAREN
+                                | NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL"""
+    if len(p) == 7:
+        p[0] = [p[1]] + [p[2]] + [[p[4]] + [p[5]]]
+    elif len(p) == 3:
+        p[0] = [p[1]] + [p[2]]
+    elif len(p) == 4:
+        p[0] = ["OR"] + [p[2]]
+    else:
+        p[0] = p[1]
+
+def p_individuals_opcional(p):
+    """
+    individuals_opcional : INDIVIDUALS identificadores_individuo_sequencia
+                         | 
+                         | INDIVIDUALS
+                         | identificadores_individuo_sequencia
+    """
+    if len(p) == 3:
+        p[0] = ["INDIVIDUALS", p[2]]
+    elif len(p) == 2:
+        tratamento_personalizado_erros("'Individuals' deve ser seguido de pelo menos um indivíduo.", p)
+    else:
+        p[0] = None
+
+
+# PARSER AUX #
+
+def p_operador_relacional(p):
+    """operador_relacional : MAIOR
+                            | MENOR
+                            | MAIORIGUAL
+                            | MENORIGUAL"""
+    p[0] = p[1]
+
+def p_cardinalidade_com_sem_aspas_simples(p):
+    """cardinalidade_com_sem_aspas_simples : CARDINALIDADE
+                                | SIMBOLO_ESPECIAL CARDINALIDADE SIMBOLO_ESPECIAL"""
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = p[2]
+
+def p_identificadores_classe_sequencia(p):
+    """identificadores_classe_sequencia : IDENTIFICADOR_CLASSE
+                                         | identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE"""
     if len(p) == 2:
         p[0] = [p[1]]
     else:
         p[0] = p[1] + [p[3]]
 
-def p_lista_restricoes_definidas(p):
-    """lista_restricoes_definidas : restricao_definidas
-                        | lista_restricoes_definidas SIMBOLO_ESPECIAL restricao_definidas"""
+def p_identificadores_classe_or(p):
+    """identificadores_classe_or : IDENTIFICADOR_CLASSE
+                                | identificadores_classe_or OR IDENTIFICADOR_CLASSE"""
+    
     if len(p) == 2:
         p[0] = [p[1]]
     else:
         p[0] = p[1] + [p[3]]
 
-def p_restricao(p):
-    """restricao : IDENTIFICADOR_PROPRIEDADE SOME IDENTIFICADOR_CLASSE
-                 | IDENTIFICADOR_PROPRIEDADE SOME NAMESPACE TIPO_DADO"""
-    p[0] = ("Restricao", p[1], p[3])
-
-def p_restricao_definidas(p):
-    """restricao_definidas : IDENTIFICADOR_CLASSE AND LPAREN lista_restricoes RPAREN
-                           | IDENTIFICADOR_PROPRIEDADE SOME IDENTIFICADOR_CLASSE
-                           | IDENTIFICADOR_PROPRIEDADE SOME NAMESPACE TIPO_DADO '[' CARDINALIDADE ']'
-                           | IDENTIFICADOR_PROPRIEDADE SOME NAMESPACE TIPO_DADO '[' MAIORIGUAL CARDINALIDADE ']'
-                           | IDENTIFICADOR_PROPRIEDADE AND LPAREN lista_restricoes_definidas RPAREN
-                           | IDENTIFICADOR_PROPRIEDADE AND NAMESPACE TIPO_DADO '[' MAIORIGUAL CARDINALIDADE ']'
-                           | IDENTIFICADOR_PROPRIEDADE AND LPAREN IDENTIFICADOR_PROPRIEDADE SOME IDENTIFICADOR_CLASSE RPAREN
-                           | IDENTIFICADOR_CLASSE AND LPAREN IDENTIFICADOR_PROPRIEDADE SOME NAMESPACE TIPO_DADO '[' MAIORIGUAL CARDINALIDADE ']' RPAREN
-                           | IDENTIFICADOR_CLASSE AND LPAREN IDENTIFICADOR_PROPRIEDADE SOME NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL MAIORIGUAL CARDINALIDADE SIMBOLO_ESPECIAL RPAREN""" # essa ultima regra cubriu a ultima da classe definida
-    if len(p) == 5:  # Caso com parênteses
-        p[0] = ("Restricao", p[1], p[4])
-    elif len(p) == 8 and p[5] == "MAIORIGUAL":  # Com >=
-        p[0] = ("Restricao", p[1], p[3], p[5], p[6])
-    else:
-        p[0] = ("Restricao", p[1], p[3])
-
-
-def p_disjunto(p):
-    """disjunto : DISJOINTCLASSES lista_classes"""
-    p[0] = ("Disjunto", p[2])
-
-def p_lista_classes(p):
-    """lista_classes : IDENTIFICADOR_CLASSE
-                     | lista_classes SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE"""
+def p_identificadores_individuo_sequencia(p):
+    """identificadores_individuo_sequencia : IDENTIFICADOR_INDIVIDUO
+                                         | identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO"""
     if len(p) == 2:
         p[0] = [p[1]]
     else:
         p[0] = p[1] + [p[3]]
 
-def p_individuos(p):
-    """individuos : INDIVIDUALS lista_individuos"""
-    p[0] = ("Individuos", p[2])
+def p_restricao_propriedade(p):
+    """restricao_propriedade : ONLY
+                            | ALL
+                            | SOME
+                            | VALUE
+                            | NOT
+                            | THAT"""
+    p[0] = p[1]
 
-def p_lista_individuos(p):
-    """lista_individuos : IDENTIFICADOR_INDIVIDUO
-                        | lista_individuos SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO"""
-    if len(p) == 2:
-        p[0] = [p[1]]
-    else:
-        p[0] = p[1] + [p[3]]
+def p_restricao_palavra_reservada(p):
+    """restricao_palavra_reservada : MIN
+                            | MAX
+                            | SOME
+                            | EXACTLY"""
+    p[0] = p[1]
+
+def p_aninhamento_ou_conteudo_aninhamento(p):
+    """aninhamento_ou_conteudo_aninhamento : aninhamento
+                                           | conteudo_aninhamento"""
+    p[0] = p[1]
 
 def p_error(p):
     if p:
         print(f"Erro sintático no token: {p.type}, valor: '{p.value}', linha: {p.lineno}")
+        print(p)
     else:
         print("Erro sintático: fim inesperado da entrada.")
 
-parser = yacc.yacc()
+def tratamento_personalizado_erros(message, p):
+    print(f"Erro sintático, linha {p.lineno(1)}. {message}")
+    exit()
+
+parser = yacc.yacc(debug=False, write_tables=False, errorlog=yacc.NullLogger())
 
 # ============================
 # MAIN
 # ============================
 
 def main():
-    entrada = """
-    Class: CheesyPizza
-    EquivalentTo:
-    Pizza and (hasTopping some CheeseTopping)
-    Individuals:
-    CheesyPizza1
+    with open('src/entrada_parser.txt', 'r') as file:
+        entrada = file.read()
 
-    Class: HighCaloriePizza
-    EquivalentTo:
-    Pizza and (hasCaloricContent some xsd:integer[>= 400])
-    """
     resultado = parser.parse(entrada, lexer=lexer)
-    print("Árvore Sintática:")
-    for i in resultado:
-        print(i)
+    if resultado is not None:
+        print("Árvore Sintática:")
+        for i in resultado:
+            print(i)
+        print("\n" + "="*30)
+        print(" " * 10 + "OK!")
+        print("="*30 + "\n")
 
 if __name__ == "__main__":
     main()
