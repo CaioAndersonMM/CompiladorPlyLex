@@ -152,6 +152,7 @@ lexer = lex.lex()
 # ============================
 
 types = []
+errors = []
 
 def add_new_type(type):
     if type not in types:
@@ -305,7 +306,6 @@ def p_conteudo_aninhamento_pos(p):
     elif len(p) == 3:
         p[0] = [p[1], [p[2]]]
     elif len(p) == 4:
-        print(p[2])
         add_new_type("FECHADA")
         p[0] = p[2]
     elif len(p) == 2:
@@ -419,8 +419,7 @@ def p_error(p):
         print("Erro sintático: fim inesperado da entrada.")
 
 def tratamento_personalizado_erros(message, p):
-    print(f"Erro sintático, linha {p.lineno(1)}. {message}")
-    exit()
+    errors.append(f"Erro sintático, linha {p.lineno(1)}. {message}")
 
 parser = yacc.yacc(debug=False, write_tables=False, errorlog=yacc.NullLogger())
 
@@ -433,12 +432,20 @@ def main():
         entrada = file.read()
 
     resultado = parser.parse(entrada, lexer=lexer)
+    resultado = [item for item in resultado if item is not None]
+
     if resultado is not None:
         print("Árvore Sintática:")
         for i in resultado:
             print(i)
         print("\n" + "="*30)
-        print(" " * 10 + "OK!")
+
+        if len(errors) == 0:
+            print(" " * 10 + "OK!")
+        else:
+            for i in errors:
+                print(i)
+
         print("="*30 + "\n")
 
 if __name__ == "__main__":

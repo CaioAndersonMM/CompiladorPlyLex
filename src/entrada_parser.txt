@@ -6,16 +6,6 @@ Class: Customer
         and (numberOfPhone some xsd:string)
 
     Individuals:
-        Customer1,
-        Customer10,
-        Customer2,
-        Customer3,
-        Customer4,
-        Customer5,
-        Customer6,
-        Customer7,
-        Customer8,
-        Customer9
 
 Class: Employee
 
@@ -132,6 +122,16 @@ Class: VegetarianPizza
         Pizza
         and (hasTopping only
         (CheeseTopping or VegetableTopping))
+
+Class: PizzaBase
+
+    DisjointClasses:
+        Pizza, PizzaBase, PizzaTopping
+
+Class: PizzaTopping
+
+    DisjointClasses:
+        Pizza, PizzaBase, PizzaTopping
 
 Class: Spiciness
 
