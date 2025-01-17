@@ -129,6 +129,21 @@ Token(TIPO_DADO, 'string')
 Token(SIMBOLO_ESPECIAL, ')')
 ````
 
+### Mas agora, será retornado a nossa árvore sintática no terminal do usuário, junto com dois novos arvivos:
+#### parser.out: Gerado automaticamente pelo PLY durante a execução do analisador sintático. Contém informações detalhadas sobre a gramática, incluindo:
+- Produções: Todas as regras sintáticas definidas em YACC.
+- Estados do Autômato LR: Representação detalhada dos estados gerados para a análise sintática.
+- Tabelas de Análise: Incluem as ações (shift, reduce, goto) para cada estado.
+  
+#### parsetab: Este arquivo armazena tabelas de análise sintática geradas pelo PLY, otimizando a execução futura. Ele inclui:
+- Tabelas de Parsing: Estruturas pré-calculadas para agilizar a análise sintática.
+- Cache: Permite evitar o cálculo repetitivo das tabelas, acelerando a inicialização do parser.
+
+
+![image](https://github.com/user-attachments/assets/3d1d33ee-8fa3-4ab5-98ba-e29a153ddd18)
+
+
+-------
 ## **Tabela de Símbolos**
 A Tabela de Símbolos mantém o controle dos tokens identificados durante o processo de análise léxica. Cada entrada contém informações sobre o símbolo, seu tipo e a linha em que foi encontrado. O objetivo da tabela de símbolos é fornecer um mapeamento detalhado e organizado dos tokens analisados, o que facilita o processo de análise sintática e semântica subsequente.
 - A tabela é implementada como um dicionário Python (self.tabela = {}), onde cada símbolo é a chave, e o valor associado é outro dicionário contendo outras informações.
