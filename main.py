@@ -1,60 +1,52 @@
-import os
-from src.lexer import lexer, tabela_simbolos
+from src.principal import lexer, parser, errors
 
 def main():
-    arquivo_entrada = "data/entrada.txt"
-    arquivo_saida_tokens = "data/saida_tokens.txt"
-    arquivo_saida_resumo = "data/saida_sumario.txt"
-    arquivo_saida_tabela = "data/saida_tabela_simbolos.txt"
-    
-    if not os.path.exists(arquivo_entrada):
-        print(f"Erro: Arquivo '{arquivo_entrada}' não encontrado!")
+    print("Escolha o arquivo a ser processado:")
+    print("1 - data/entrada")
+    print("2 - data/entrada2")
+    escolha = input("Digite o número correspondente à sua escolha: ")
+
+    if escolha == '1':
+        caminho_arquivo = 'data/entrada'
+    elif escolha == '2':
+        caminho_arquivo = 'data/entrada2'
+    else:
+        print("Opção inválida. Saindo do programa.")
         return
-        
-    with open(arquivo_entrada, "r", encoding="utf-8") as f:
-        conteudo = f.read()
-    
-    lexer.input(conteudo)
 
-    contador_tokens = {}
-    tokens_identificados = []
+    caminho_arquivo += ".txt"
+    try:
+        with open(caminho_arquivo, 'r') as file:
+            entrada = file.read()
+    except FileNotFoundError:
+        print(f"Erro: O arquivo {caminho_arquivo} não foi encontrado.")
+        return
 
-    for token in lexer:
-        tokens_identificados.append(token)
-        if token.type not in contador_tokens:
-            contador_tokens[token.type] = 0
-        contador_tokens[token.type] += 1
+    resultado = parser.parse(entrada, lexer=lexer)
+    resultado = [item for item in resultado if item is not None]
 
-    with open(arquivo_saida_tokens, "w", encoding="utf-8") as f:
-        f.write("=== Tokens Identificados ===\n")
-        for token in tokens_identificados:
-            f.write(f"Token({token.type}, '{token.value}')\n")
-    
-    with open(arquivo_saida_resumo, "w", encoding="utf-8") as f:
-        f.write("=== Resumo dos Tokens ===\n")
-        f.write(f"{'Token':<20}{'Quantidade':<10}\n")
-        f.write("-" * 30 + "\n")
-        for token_type, count in contador_tokens.items():
-            f.write(f"{token_type:<20}{count:<10}\n")
-        
-        atributos_interessantes = [
-            "IDENTIFICADOR_CLASSE",
-            "IDENTIFICADOR_PROPRIEDADE",
-            "IDENTIFICADOR_INDIVIDUO",
-            "CARDINALIDADE",
-            "TIPO_DADO",
-            "PALAVRA_RESERVADA",
-        ]
-        
-        for atributo in atributos_interessantes:
-            if atributo in contador_tokens:
-                valores_identificados = [
-                    token.value for token in tokens_identificados if token.type == atributo
-                ]
-                f.write(f"\n=== {atributo} ===\n")
-                f.write(f"Quantidade: {contador_tokens[atributo]}\n")
-                f.write(f"Valores: {', '.join(valores_identificados)}\n")
+    if resultado is not None:
+        print("Árvore Sintática:")
+        for classe in resultado:
+            print(classe[0])
+            print(classe[1])
+            
+            print("---")
+            i = 2
+            while i < len(classe):
+                print(classe[i])
+                i += 1
+            print("")
 
-    tabela_simbolos.save_in_file(arquivo_saida_tabela)
+        print("\n" + "="*30)
+
+        if len(errors) == 0:
+            print(" " * 10 + "OK!")
+        else:
+            for i in errors:
+                print(i)
+
+        print("="*30 + "\n")
+
 if __name__ == "__main__":
     main()
