@@ -5,17 +5,17 @@ Class: Customer
         and (purchasedPizza some Pizza)
         and (numberOfPhone some xsd:string)
 
-Individuals:
-    Customer1,
-    Customer10,
-    Customer2,
-    Customer3,
-    Customer4,
-    Customer5,
-    Customer6,
-    Customer7,
-    Customer8,
-    Customer9
+    Individuals:
+        Customer1,
+        Customer10,
+        Customer2,
+        Customer3,
+        Customer4,
+        Customer5,
+        Customer6,
+        Customer7,
+        Customer8,
+        Customer9
 
 Class: Employee
 
@@ -146,4 +146,4 @@ Class: PizzaTopping
 Class: Spiciness
 
     EquivalentTo:
-        {Hot , Medium , Mild}
+        {Hot1 , Medium1 , Mild1}

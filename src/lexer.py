@@ -35,12 +35,15 @@ type_dado = [
 # Tokens
 tokens = [
     'MAIORIGUAL', 'MENORIGUAL', 'MAIOR', 'MENOR',  'IDENTIFICADOR_CLASSE', 'IDENTIFICADOR_PROPRIEDADE', 'IDENTIFICADOR_INDIVIDUO', 
-    'CARDINALIDADE', 'SIMBOLO_ESPECIAL', 'TIPO_DADO', 'NAMESPACE', 'LPAREN', 'RPAREN', 'DISJOINTCLASSES', 'DISJOINTWITH'
+    'CARDINALIDADE', 'SIMBOLO_ESPECIAL', 'TIPO_DADO', 'NAMESPACE', 'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', "COMMA", 'OPENKEY', 'DISJOINTCLASSES', 'DISJOINTWITH'
 ] + list(set(reservadas.values()))
 
 # Regras de tokens
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+t_LBRACE = r'\{'
+t_RBRACE = r'\}'
+t_COMMA = r'\,'
 t_ignore = ' \t'  # Ignorar espaços e tabulações
 t_MAIORIGUAL = r'>='
 t_MENORIGUAL = r'<='
@@ -131,7 +134,7 @@ def t_CARDINALIDADE(t):
     return t
 
 def t_SIMBOLO_ESPECIAL(t):
-    r'([\{\},\[\]\'"])'
+    r'([\[\]\'"])'
     return t
 
 def t_comment(t):
@@ -148,6 +151,12 @@ lexer = lex.lex()
 # PARSER
 # ============================
 
+types = []
+
+def add_new_type(type):
+    if type not in types:
+        types.append(type)
+
 def p_ontologia(p):
     """ontologia : declaracao_classe
                  | ontologia declaracao_classe"""
@@ -160,37 +169,35 @@ def p_declaracao_classe(p):
     """declaracao_classe : declaracao_classe_definida
                         | declaracao_classe_primitiva
                         | declaracao_classe_errada"""
+    
+    global types
+    types = []
+    
     p[0] = p[1]
-
-def p_declaracao_classe_errada(p):
-    """declaracao_classe_errada : CLASS IDENTIFICADOR_CLASSE DISJOINTCLASSES identificadores_classe_sequencia
-                                | CLASS IDENTIFICADOR_CLASSE DISJOINTWITH identificadores_classe_sequencia
-                                | CLASS IDENTIFICADOR_CLASSE INDIVIDUALS individuals_opcional"""
-    tratamento_personalizado_erros("Declaracao de classe esta errada.", p)
 
 def p_declaracao_classe_definida(p):
     """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional"""
-    p[0] = ["classe definida", p[2], p[4]]
-
-    if p[5] != None:
-        p[0] += [p[5]]
-    if p[6] != None:
-        p[0] += [p[5]]
+    p[0] = [p[2], ["DEFINIDA", types], p[4]]
 
 def p_declaracao_classe_primitiva(p):
     """declaracao_classe_primitiva : CLASS IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva disjoint_opcional individuals_opcional"""
-    
-    p[0] = ["classe primitiva", p[2], p[4]]
+    p[0] = [p[2], ["PRIMITIVA", types], p[4]]
+
     if p[5] != None:
         p[0] += [p[5]]
     if p[6] != None:
         p[0] += [p[6]]
 
+def p_declaracao_classe_errada(p):
+    """declaracao_classe_errada : CLASS IDENTIFICADOR_CLASSE DISJOINTCLASSES identificadores_classe_sequencia
+                                | CLASS IDENTIFICADOR_CLASSE DISJOINTWITH identificadores_classe_sequencia
+                                | CLASS IDENTIFICADOR_CLASSE INDIVIDUALS individuals_opcional"""
+    tratamento_personalizado_erros("Declaracao incorreta de classe.", p)
+
 def p_tipo_classe_definida(p):
     """tipo_classe_definida : classe_enumerada
                              | classe_coberta
-                             | classe_aninhada
-                             | identificadores_classe_or"""
+                             | classe_aninhada"""
     p[0] = p[1]
 
 def p_subclass_opcional(p):
@@ -207,14 +214,14 @@ def p_tipo_classe_primitiva(p):
     """tipo_classe_primitiva : sequencia_subclassof
                              | classe_aninhada
                              | IDENTIFICADOR_CLASSE
-                             | IDENTIFICADOR_CLASSE SIMBOLO_ESPECIAL sequencia_subclassof"""
+                             | IDENTIFICADOR_CLASSE COMMA sequencia_subclassof"""
     if len(p) == 2:
         p[0] = [p[1]]
     elif len(p) == 4:
         p[0] = [p[1], p[3]]
 
 def p_sequencia_subclassof(p):
-    """sequencia_subclassof : sequencia_subclassof SIMBOLO_ESPECIAL aninhamento_ou_conteudo_aninhamento
+    """sequencia_subclassof : sequencia_subclassof COMMA aninhamento_ou_conteudo_aninhamento
                    | aninhamento_ou_conteudo_aninhamento """
     if len(p) == 4:
         p[0] = p[1] + [p[3]]
@@ -233,12 +240,14 @@ def p_disjoint_opcional(p):
         p[0] = ["DISJOINT_WITH", p[2]]
 
 def p_classe_enumerada(p):
-    """classe_enumerada : SIMBOLO_ESPECIAL identificadores_classe_sequencia SIMBOLO_ESPECIAL"""
-    p[0] = ["enumerada", p[2]]
+    """classe_enumerada : LBRACE identificadores_individuo_sequencia RBRACE"""
+    p[0] = ["enum", p[2]]
+    add_new_type("ENUMERADA")
 
 def p_classe_coberta(p):
-    """classe_coberta : identificadores_classe_sequencia"""
+    """classe_coberta : identificadores_classe_or"""
     p[0] = ["coberta", p[1]]
+    add_new_type("COBERTA")
 
 def p_classe_aninhada(p):
     """classe_aninhada : IDENTIFICADOR_CLASSE AND aninhamento
@@ -257,45 +266,53 @@ def p_aninhamento(p):
     if len(p) == 2:
         p[0] = [p[1]]
     elif len(p) == 4:
-        p[0] = p[1] + p[3] # aninhamento AND aninhamento and a
+        p[0] = p[1] + p[3]
 
 def p_conteudo_aninhamento(p):
     """conteudo_aninhamento :  IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
                              | IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_pos
                              | IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-                             | IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos
-                             | IDENTIFICADOR_PROPRIEDADE restricao_propriedade conteudo_aninhamento_com_parenteses"""
+                             | IDENTIFICADOR_PROPRIEDADE IDENTIFICADOR_PROPRIEDADE restricao_palavra_reservada CARDINALIDADE conteudo_aninhamento_pos"""
+
     if len(p) == 4:
         p[0] = [p[1]] + [p[2]] + [p[3]]
+
     elif len(p) == 5:
         p[0] = [p[1]] + [p[2]] + [p[3]] + [p[4]]
+
     else:
         p[0] = [p[1]] + [p[2]] + [p[3]] + [p[4]] + [p[5]]
 
 
 def p_conteudo_aninhamento_com_parenteses(p):
     """conteudo_aninhamento_com_parenteses : LPAREN conteudo_aninhamento RPAREN
-                                            | LPAREN conteudo_aninhamento_com_parenteses AND conteudo_aninhamento_com_parenteses RPAREN"""
+                                            | LPAREN conteudo_aninhamento_com_parenteses or_and conteudo_aninhamento_com_parenteses RPAREN"""
     if len(p) == 4:
         p[0] = p[2]
     else:
-        p[0] = ["AND", p[2], p[4]]
+        p[0] = [p[3], p[2], p[4]]
 
 
 
 def p_conteudo_aninhamento_pos(p):
     """conteudo_aninhamento_pos : IDENTIFICADOR_CLASSE
+                                | conteudo_aninhamento_com_parenteses
                                 | NAMESPACE TIPO_DADO
-                                | LPAREN identificadores_classe_or RPAREN
+                                | LPAREN identificadores_classe_or_and RPAREN
                                 | NAMESPACE TIPO_DADO SIMBOLO_ESPECIAL operador_relacional cardinalidade_com_sem_aspas_simples SIMBOLO_ESPECIAL"""
     if len(p) == 7:
-        p[0] = [p[1]] + [p[2]] + [[p[4]] + [p[5]]]
+        p[0] = [p[1], p[2], [[p[4], p[5]]]]
     elif len(p) == 3:
-        p[0] = [p[1]] + [p[2]]
+        p[0] = [p[1], [p[2]]]
     elif len(p) == 4:
-        p[0] = ["OR"] + [p[2]]
-    else:
+        print(p[2])
+        add_new_type("FECHADA")
+        p[0] = p[2]
+    elif len(p) == 2:
         p[0] = p[1]
+
+        if isinstance(p[1], list):
+            add_new_type("ANINHADA")
 
 def p_individuals_opcional(p):
     """
@@ -323,8 +340,11 @@ def p_operador_relacional(p):
 
 def p_or_and(p):
     """or_and : OR
-                            | AND"""
-    p[0] = p[1]
+                | AND"""
+    if p[1] == "or":
+        p[0] = "OR"
+    else:
+        p[0] = "AND"
 
 def p_cardinalidade_com_sem_aspas_simples(p):
     """cardinalidade_com_sem_aspas_simples : CARDINALIDADE
@@ -336,11 +356,14 @@ def p_cardinalidade_com_sem_aspas_simples(p):
 
 def p_identificadores_classe_sequencia(p):
     """identificadores_classe_sequencia : IDENTIFICADOR_CLASSE
-                                         | identificadores_classe_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_CLASSE"""
+                                         | identificadores_classe_sequencia COMMA identificadores_classe_sequencia
+                                         | identificadores_classe_sequencia identificadores_classe_sequencia"""
     if len(p) == 2:
         p[0] = [p[1]]
+    elif len(p) == 4:
+        p[0] = p[1] + p[3]
     else:
-        p[0] = p[1] + [p[3]]
+        tratamento_personalizado_erros("Vírgula não presente na sequência de identificadores de classe.")
 
 def p_identificadores_classe_or(p):
     """identificadores_classe_or : IDENTIFICADOR_CLASSE
@@ -351,13 +374,21 @@ def p_identificadores_classe_or(p):
     else:
         p[0] = p[1] + [p[3]]
 
-def p_identificadores_individuo_sequencia(p):
-    """identificadores_individuo_sequencia : IDENTIFICADOR_INDIVIDUO
-                                         | identificadores_individuo_sequencia SIMBOLO_ESPECIAL IDENTIFICADOR_INDIVIDUO"""
+def p_identificadores_classe_or_and(p):
+    """identificadores_classe_or_and : IDENTIFICADOR_CLASSE
+                                      | identificadores_classe_or_and or_and IDENTIFICADOR_CLASSE"""
     if len(p) == 2:
         p[0] = [p[1]]
     else:
-        p[0] = p[1] + [p[3]]
+        p[0] = p[1] + [p[2], p[3]]
+
+def p_identificadores_individuo_sequencia(p):
+    """identificadores_individuo_sequencia : IDENTIFICADOR_INDIVIDUO
+                                         | identificadores_individuo_sequencia COMMA identificadores_individuo_sequencia"""
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + p[3]
 
 def p_restricao_propriedade(p):
     """restricao_propriedade : ONLY
