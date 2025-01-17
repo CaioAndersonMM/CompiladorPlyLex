@@ -427,26 +427,4 @@ parser = yacc.yacc(debug=False, write_tables=False, errorlog=yacc.NullLogger())
 # MAIN
 # ============================
 
-def main():
-    with open('src/entrada_parser.txt', 'r') as file:
-        entrada = file.read()
 
-    resultado = parser.parse(entrada, lexer=lexer)
-    resultado = [item for item in resultado if item is not None]
-
-    if resultado is not None:
-        print("Árvore Sintática:")
-        for i in resultado:
-            print(i)
-        print("\n" + "="*30)
-
-        if len(errors) == 0:
-            print(" " * 10 + "OK!")
-        else:
-            for i in errors:
-                print(i)
-
-        print("="*30 + "\n")
-
-if __name__ == "__main__":
-    main()
