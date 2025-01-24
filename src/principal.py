@@ -178,11 +178,11 @@ def p_declaracao_classe(p):
 
 def p_declaracao_classe_definida(p):
     """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional"""
-    p[0] = [p[2], ["DEFINIDA", types], p[4]]
+    p[0] = [p[2], p.lineno(1), ["DEFINIDA", types], p[4]]
 
 def p_declaracao_classe_primitiva(p):
     """declaracao_classe_primitiva : CLASS IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva disjoint_opcional individuals_opcional"""
-    p[0] = [p[2], ["PRIMITIVA", types], p[4]]
+    p[0] = [p[2], p.lineno(1), ["PRIMITIVA", types], p[4]]
 
     if p[5] != None:
         p[0] += [p[5]]
