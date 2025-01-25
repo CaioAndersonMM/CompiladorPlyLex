@@ -36,7 +36,7 @@ def main():
             class_name = classe[0]
             class_line = classe[1]
             if class_name in declared_classes:
-                errors.append(f"Erro semântico: A classe '{class_name}' já foi declarada.", destaque=True)
+               tratamento_personalizado_erros(f"A classe '{class_name}' já foi declarada.", class_line, destaque=True)
             else:
                 declared_classes.add(class_name)
                 print(class_name)
@@ -121,24 +121,28 @@ def verificar_intervalo(classe, class_line):
         _, _, _, class_data = classe[:4]
 
         def verificar_item(item):
-            if isinstance(item, str):
-                if item.lower() in NUMERIC_TYPES:
-                    errors.append(f"Erro semântico, linha {class_line}: Tipo numérico '{item}' precisa ser seguido por um intervalo.")
-                elif any(item.startswith(f"{num_type}[") and item.endswith("]") for num_type in NUMERIC_TYPES):
-                    interval = item[item.index('[')+1:-1]
-                    if not (interval.startswith(">") or interval.startswith("<")):
-                        errors.append(f"Erro semântico, linha {class_line}: Intervalo inválido '{item}' para tipo numérico.")
+            stack = [item]
+            while stack:
+                current_item = stack.pop()
+                # print('verificando', current_item)
+                if isinstance(current_item, list):
+                    for sub_item in reversed(current_item):
+                        stack.append(sub_item)
+                elif isinstance(current_item, str):
+                    if current_item.lower() in NUMERIC_TYPES:
+                        # Verificar se o próximo item na pilha é um intervalo válido
+                        if stack:
+                            next_item = stack.pop()
+                            if isinstance(next_item, list) and any(isinstance(sub_item, list) and len(sub_item) == 2 and isinstance(sub_item[0], str) and sub_item[0] in [">", "<", ">=", "<=", "=="] for sub_item in next_item):
+                                continue
+                            else:
+                                tratamento_personalizado_erros(f"Erro semântico, linha {class_line}: Tipo numérico '{current_item}' precisa ser seguido por um intervalo.", class_line, destaque=True)
+                                stack.append(next_item)  # Recolocar o item na pilha
+                        else:
+                            tratamento_personalizado_erros(f"Erro semântico, linha {class_line}: Tipo numérico '{current_item}' precisa ser seguido por um intervalo.", class_line, destaque=True)
 
         for item in class_data:
-            if isinstance(item, list):
-                for sub_item in item:
-                    if isinstance(sub_item, list):
-                        for sub_sub_item in sub_item:
-                            verificar_item(sub_sub_item)
-                    else:
-                        verificar_item(sub_item)
-            else:
-                verificar_item(item)
+            verificar_item(item)
 
 def verificar_fechamento(classe, class_line):
     if isinstance(classe, (list, tuple)) and len(classe) >= 4:
