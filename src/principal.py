@@ -413,10 +413,12 @@ def p_aninhamento_ou_conteudo_aninhamento(p):
 
 def p_error(p):
     if p:
-        print(f"Erro sintático no token: {p.type}, valor: '{p.value}', linha: {p.lineno}")
+        print(f"\033[91mErro sintático no token: {p.type}, valor: '{p.value}', linha: {p.lineno}\033[0m")
         print(p)
+        raise SystemExit
     else:
         print("Erro sintático: fim inesperado da entrada.")
+        raise SystemExit
 
 def tratamento_personalizado_erros(message, p):
     errors.append(f"Erro sintático, linha {p.lineno(1)}. {message}")
