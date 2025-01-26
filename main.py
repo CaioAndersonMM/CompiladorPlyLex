@@ -1,38 +1,56 @@
-from src.principal import lexer, parser, errors
+from src.principal import lexer, parser, errors, type_dado
 
 RESERVED_WORDS = {"some", "all", "only", "and", "or", "not", "min", "max", "exactly", 'DISJOINT_WITH', 'EQUIVALENT_TO', 'INVERSE_OF', 'SUBCLASS_OF', 'DOMAIN', 'RANGE', 'PRIMITIVA', 'DEFINIDA', 'FECHADA', 'SUBCLASSE', 'INDIVIDUALS', 'DISJOINT_CLASSES'}
 
-NUMERIC_TYPES = {"integer", "short", "float", "real", "long"}
+NUMERIC_TYPES = {tipo for tipo in type_dado if tipo not in {'string', 'boolean', 'date', 'time', 'language', 'token', 'byte', 'Name', 'NCName'}}
 
-DATA_TYPES = {"xsd:string", "xsd:integer", "xsd:float", "xsd:boolean", "xsd:dateTime", "integer", "short", "float", "real", "long"}
+DATA_TYPES = {"xsd:string", "xsd:real", "xsd:integer", "xsd:float", "xsd:boolean", "xsd:dateTime"}.union(type_dado)
 
 
 def classificar_propriedade(propriedade, sucessor, linha):
-    if sucessor in DATA_TYPES:
+    def extrair_tipos(sucessor):
+        if isinstance(sucessor, list):
+            tipos = []
+            for item in sucessor:
+                if isinstance(item, list):
+                    tipos.extend(extrair_tipos(item))
+                elif isinstance(item, str):
+                    tipos.append(item)
+            return tipos
+        elif isinstance(sucessor, str):
+            return [sucessor]
+        return []
+
+    tipos_extraidos = extrair_tipos(sucessor)
+
+    if any(tipo in DATA_TYPES for tipo in tipos_extraidos):
         tipo = "data property"
     else:
         tipo = "object property"
-
-    print(f"Propriedade '{propriedade}' na linha {linha} classificada como '{tipo}'.")
     return tipo
 
 def analisar_propriedades(classe, class_line):
     if isinstance(classe, (list, tuple)) and len(classe) >= 4:
         _, _, _, class_data = classe[:4]
-        
-        print('CLASSE DATA', class_data)
 
-        for item in class_data:
-            if isinstance(item, list) and len(item) >= 2:
-                propriedade = item[0]
-                quantificador = item[1]
+        def processar_propriedades(data):
+            if isinstance(data, list):
+                for item in data:
+                    # Se for uma lista contendo propriedade, quantificador e sucessor
+                    if isinstance(item, list) and len(item) >= 3:
+                        propriedade = item[0]
+                        quantificador = item[1]
 
-                # Certifique-se de que quantificador é uma string antes de verificar
-                if isinstance(quantificador, str) and quantificador in {"some", "only", "min", "max", "exactly"}:
-                    sucessor = item[2] if len(item) > 2 else None
-                    if sucessor:
-                        classificar_propriedade(propriedade, sucessor, class_line)
-                        # Aqui você pode armazenar o tipo da propriedade em uma estrutura de dados, se necessário.
+                        if isinstance(quantificador, str) and quantificador in {"some", "only", "min", "max", "exactly"}:
+                            sucessor = item[2]
+                            # Classifica a propriedade com base no sucessor
+                            tipo = classificar_propriedade(propriedade, sucessor, class_line)
+                            print(f"Propriedade '{propriedade}' classificada como '{tipo}'.")
+
+                    # Processa itens aninhados
+                    processar_propriedades(item)
+
+        processar_propriedades(class_data)
 
 
 def main():
@@ -102,7 +120,7 @@ def main():
                                         errors.append(f"Erro semântico, linha {class_line}: A classe '{item}' foi mencionada mas não foi declarada.")
                     print("-"*90)
             
-                print("Propriedades:")
+                print("Classificação de Propriedades:")
                 analisar_propriedades(classe, class_line)
                 print('\n')
         
