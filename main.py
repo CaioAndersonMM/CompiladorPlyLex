@@ -1,7 +1,39 @@
 from src.principal import lexer, parser, errors
 
 RESERVED_WORDS = {"some", "all", "only", "and", "or", "not", "min", "max", "exactly", 'DISJOINT_WITH', 'EQUIVALENT_TO', 'INVERSE_OF', 'SUBCLASS_OF', 'DOMAIN', 'RANGE', 'PRIMITIVA', 'DEFINIDA', 'FECHADA', 'SUBCLASSE', 'INDIVIDUALS', 'DISJOINT_CLASSES'}
-NUMERIC_TYPES = {"integer", "double", "real", "long"}
+
+NUMERIC_TYPES = {"integer", "short", "float", "real", "long"}
+
+DATA_TYPES = {"xsd:string", "xsd:integer", "xsd:float", "xsd:boolean", "xsd:dateTime", "integer", "short", "float", "real", "long"}
+
+
+def classificar_propriedade(propriedade, sucessor, linha):
+    if sucessor in DATA_TYPES:
+        tipo = "data property"
+    else:
+        tipo = "object property"
+
+    print(f"Propriedade '{propriedade}' na linha {linha} classificada como '{tipo}'.")
+    return tipo
+
+def analisar_propriedades(classe, class_line):
+    if isinstance(classe, (list, tuple)) and len(classe) >= 4:
+        _, _, _, class_data = classe[:4]
+        
+        print('CLASSE DATA', class_data)
+
+        for item in class_data:
+            if isinstance(item, list) and len(item) >= 2:
+                propriedade = item[0]
+                quantificador = item[1]
+
+                # Certifique-se de que quantificador é uma string antes de verificar
+                if isinstance(quantificador, str) and quantificador in {"some", "only", "min", "max", "exactly"}:
+                    sucessor = item[2] if len(item) > 2 else None
+                    if sucessor:
+                        classificar_propriedade(propriedade, sucessor, class_line)
+                        # Aqui você pode armazenar o tipo da propriedade em uma estrutura de dados, se necessário.
+
 
 def main():
     print("Escolha o arquivo a ser processado:")
@@ -32,6 +64,7 @@ def main():
 
     if resultado is not None:
         print("Árvore Sintática:")
+        print("")
         for classe in resultado:
             class_name = classe[0]
             class_line = classe[1]
@@ -39,8 +72,7 @@ def main():
                tratamento_personalizado_erros(f"A classe '{class_name}' já foi declarada.", class_line, destaque=True)
             else:
                 declared_classes.add(class_name)
-                print(class_name)
-                print(classe[1])
+                print(f"Classe: {class_name} (linha {class_line})")
 
                 # Capturando classes mencionadas no restante do conteúdo
                 for i in range(2, len(classe)):
@@ -68,16 +100,19 @@ def main():
                                         continue
                                     else:
                                         errors.append(f"Erro semântico, linha {class_line}: A classe '{item}' foi mencionada mas não foi declarada.")
-                    print("---")
-
-        print("***---***")
+                    print("-"*90)
+            
+                print("Propriedades:")
+                analisar_propriedades(classe, class_line)
+                print('\n')
+        
         for classe in resultado:
             class_name = classe[0]
             class_line = classe[1]
             class_type = classe[2]
             class_data = classe[3]
 
-            print(f"{class_name} {class_line}")
+            # print(f"{class_name} {class_line}")
 
             if "FECHADA" in class_type[1]:
                 parent_class = class_data[0]
@@ -88,7 +123,6 @@ def main():
                     if propriedade[0][1] == "some":
                         prop_types.append(propriedade[0][2])
                     elif propriedade[0][1] == "only":
-                        print(prop_types)
                         prop_fechamento = propriedade[0][2]
 
                         index = 0
@@ -100,10 +134,7 @@ def main():
 
                             index += 2
 
-            # Verificação de intervalos para tipos numéricos
             verificar_intervalo(classe, class_line)
-
-            # Verificação de fechamento para propriedades com 'some'
             verificar_fechamento(classe, class_line)
 
         print("\n" + "="*30)
