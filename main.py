@@ -57,12 +57,11 @@ def main():
     print("Escolha o arquivo a ser processado:")
     print("1 - data/entrada")
     print("2 - data/entrada2")
-    #escolha = input("Digite o número correspondente à sua escolha: ")
-    escolha = "3"
+    escolha = input("Digite o número correspondente à sua escolha: ")
 
     if escolha == '1':
         caminho_arquivo = 'data/entrada'
-    elif escolha == '2' or escolha == '3':
+    elif escolha == '2':
         caminho_arquivo = f'data/entrada{escolha}'
     else:
         print("Opção inválida. Saindo do programa.")
