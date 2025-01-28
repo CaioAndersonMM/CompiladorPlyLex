@@ -28,7 +28,7 @@ reservadas = {
 
 # Tipos de dados
 type_dado = [
-    'integer', 'real', 'string', 'boolean', 'date', 'time',
+    'integer', 'float', 'real', 'string', 'boolean', 'date', 'time',
     'long', 'language', 'short', 'token', 'byte', 'Name', 'NCName',
 ]
 
@@ -113,7 +113,7 @@ def t_NAMESPACE(t):
     return t
 
 def t_TIPO_DADO(t):
-    r'\b(integer|real|string|boolean|date|time|long|language|short|token|byte|Name|NCName)\b'
+    r'\b(integer|float|real|string|boolean|date|time|long|language|short|token|byte|Name|NCName)\b'
     if t.value in type_dado:
         return t
 
@@ -130,7 +130,7 @@ def t_IDENTIFICADOR_PROPRIEDADE(t):
     return t
 
 def t_CARDINALIDADE(t):
-    r'\d+'
+    r'\d+(\.\d+)?'
     return t
 
 def t_SIMBOLO_ESPECIAL(t):

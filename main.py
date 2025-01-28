@@ -4,7 +4,7 @@ RESERVED_WORDS = {"some", "all", "only", "and", "or", "not", "min", "max", "exac
 
 NUMERIC_TYPES = {tipo for tipo in type_dado if tipo not in {'string', 'boolean', 'date', 'time', 'language', 'token', 'byte', 'Name', 'NCName'}}
 
-DATA_TYPES = {"xsd:string", "xsd:real", "xsd:integer", "xsd:float", "xsd:boolean", "xsd:dateTime"}.union(type_dado)
+DATA_TYPES = {"xsd:string", "xsd:real", "xsd:integer", "xsd:float"}.union(type_dado)
 
 
 def classificar_propriedade(propriedade, sucessor, linha):
@@ -25,6 +25,8 @@ def classificar_propriedade(propriedade, sucessor, linha):
 
     if any(tipo in DATA_TYPES for tipo in tipos_extraidos):
         tipo = "data property"
+
+        print(sucessor)
     else:
         tipo = "object property"
     return tipo
@@ -136,8 +138,15 @@ def main():
                 parent_class = class_data[0]
                 closure_axiom = class_data[1]
 
+                if isinstance(closure_axiom, list) == False:
+                    closure_axiom = class_data[2]
+
                 prop_types = []
                 for propriedade in closure_axiom:
+                    print(closure_axiom)
+                    print(propriedade)
+                    print(classe)
+                    print(class_type)
                     if propriedade[0][1] == "some":
                         prop_types.append(propriedade[0][2])
                     elif propriedade[0][1] == "only":
