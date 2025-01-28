@@ -10,12 +10,19 @@ Individuals:
 MargheritaPizza1,
 MargheritaPizza2
 
+Class: CaioPizza
+SubClassOf:
+NamedPizza,
+participatedIn some DataExchange
+
 Class: TaylorSwift
 SubClassOf:
 NamedPizza,
 hasTopping some MozzarellaTopping,
-hasTopping some TomatoTopping
-
+hasTopping some TomatoTopping,
+hasTopping only (MozzarellaTopping or TomatoTopping),
+hasCaloricContent some MozzarellaTopping,
+hasCaloricContent some TomatoTopping
 
 Class: HighCaloriePizza
 EquivalentTo:
@@ -25,4 +32,10 @@ and (hasCaloricContent some xsd:integer[>= 400])
 Class: LowCaloriePizza
 EquivalentTo:
 Pizza
-and (hasCaloricContent some xsd:integer)
+and (hasCaloricContent some xsd:real)
+
+Class: Customer
+EquivalentTo:
+Person
+and (purchasedPizza some Pizza)
+and (hasPhone some xsd:string)

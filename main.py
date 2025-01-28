@@ -4,7 +4,7 @@ RESERVED_WORDS = {"some", "all", "only", "and", "or", "not", "min", "max", "exac
 
 NUMERIC_TYPES = {tipo for tipo in type_dado if tipo not in {'string', 'boolean', 'date', 'time', 'language', 'token', 'byte', 'Name', 'NCName'}}
 
-DATA_TYPES = {"xsd:string", "xsd:real", "xsd:integer", "xsd:float"}.union(type_dado)
+DATA_TYPES = {"xsd:string", "xsd:real", "xsd:integer", "xsd:float", "xsd:boolean", "xsd:dateTime"}.union(type_dado)
 
 
 def classificar_propriedade(propriedade, sucessor, linha):
@@ -25,8 +25,6 @@ def classificar_propriedade(propriedade, sucessor, linha):
 
     if any(tipo in DATA_TYPES for tipo in tipos_extraidos):
         tipo = "data property"
-
-        print(sucessor)
     else:
         tipo = "object property"
     return tipo
@@ -140,7 +138,6 @@ def main():
 
                 if isinstance(closure_axiom, list) == False:
                     closure_axiom = class_data[2]
-
                 prop_types = []
                 for propriedade in closure_axiom:
                     print(closure_axiom)
@@ -204,32 +201,34 @@ def verificar_intervalo(classe, class_line):
 
 def verificar_fechamento(classe, class_line):
     if isinstance(classe, (list, tuple)) and len(classe) >= 4:
-        _, _, _, class_data = classe[:4]
+        _, _, class_type, class_data = classe[:4]
 
-        propriedades_some = set()
-        propriedades_only = set()
+        # Verifica se a classe é fechada
+        if "FECHADA" in class_type[1]:
+            propriedades_some = set()
+            propriedades_only = set()
 
-        def capturar_propriedades(item):
-            if isinstance(item, list) and len(item) > 1:
-                if item[1] == "some":
-                    propriedades_some.add(item[0])
-                elif item[1] == "only":
-                    propriedades_only.add(item[0])
+            def capturar_propriedades(item):
+                if isinstance(item, list) and len(item) > 1:
+                    if item[1] == "some":
+                        propriedades_some.add(item[0])
+                    elif item[1] == "only":
+                        propriedades_only.add(item[0])
 
-        for item in class_data:
-            if isinstance(item, list):
-                for sub_item in item:
-                    if isinstance(sub_item, list):
-                        for sub_sub_item in sub_item:
-                            capturar_propriedades(sub_sub_item)
-                    else:
-                        capturar_propriedades(sub_item)
-            else:
-                capturar_propriedades(item)
+            for item in class_data:
+                if isinstance(item, list):
+                    for sub_item in item:
+                        if isinstance(sub_item, list):
+                            for sub_sub_item in sub_item:
+                                capturar_propriedades(sub_sub_item)
+                        else:
+                            capturar_propriedades(sub_item)
+                else:
+                    capturar_propriedades(item)
 
-        for prop in propriedades_some:
-            if prop not in propriedades_only:
-                tratamento_personalizado_erros(f"Erro semântico, linha {class_line}: Propriedade '{prop}' com 'some' deve ser acompanhada de 'only'.", class_line, destaque=True)
+            for prop in propriedades_some:
+                if prop not in propriedades_only:
+                    tratamento_personalizado_erros(f"Erro semântico, linha {class_line}: Propriedade '{prop}' com 'some' deve ser acompanhada de 'only'.", class_line, destaque=True)
 
 def tratamento_personalizado_erros(message, linha, destaque=False):
     if destaque:
