@@ -140,10 +140,6 @@ def main():
                     closure_axiom = class_data[2]
                 prop_types = []
                 for propriedade in closure_axiom:
-                    print(closure_axiom)
-                    print(propriedade)
-                    print(classe)
-                    print(class_type)
                     if propriedade[0][1] == "some":
                         prop_types.append(propriedade[0][2])
                     elif propriedade[0][1] == "only":
