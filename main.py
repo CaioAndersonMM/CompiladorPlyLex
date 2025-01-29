@@ -1,6 +1,6 @@
 from src.principal import lexer, parser, errors, type_dado
 
-RESERVED_WORDS = {"some", "all", "only", "and", "or", "not", "min", "max", "exactly", 'DISJOINT_WITH', 'EQUIVALENT_TO', 'INVERSE_OF', 'SUBCLASS_OF', 'DOMAIN', 'RANGE', 'PRIMITIVA', 'DEFINIDA', 'FECHADA', 'SUBCLASSE', 'INDIVIDUALS', 'DISJOINT_CLASSES'}
+RESERVED_WORDS = {"some", "all", "only", "and", "or", "not", "min", "max", "exactly", 'DISJOINT_WITH', 'EQUIVALENT_TO', 'INVERSE_OF', 'SUBCLASS_OF', 'DOMAIN', 'RANGE', 'PRIMITIVA', 'DEFINIDA', 'FECHADA', 'SUBCLASSE', 'INDIVIDUALS', 'DISJOINT_CLASSES', 'ANINHADA', 'ENUMERADA', 'COBERTA', 'coberta'}
 
 NUMERIC_TYPES = {tipo for tipo in type_dado if tipo not in {'string', 'boolean', 'date', 'time', 'language', 'token', 'byte', 'Name', 'NCName'}}
 
