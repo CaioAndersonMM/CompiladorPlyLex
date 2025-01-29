@@ -1,10 +1,11 @@
-# Lexical and Syntax Analyzer - PLY
+# Lexical, Syntax & Semantical Analyzer - PLY
 
-Este repositório contém um analisador léxico e sintático desenvolvido com PLY (Python Lex-Yacc). Ele processa arquivos de entrada com sintaxe específica, identifica e classifica tokens conforme regras predefinidas, gera uma árvore sintática e armazena as informações em uma tabela de símbolos.
+Este repositório contém um analisador léxico, sintático e semântico desenvolvido com PLY (Python Lex-Yacc). Ele processa arquivos de entrada com sintaxe específica, identifica e classifica tokens conforme regras predefinidas, gera uma árvore sintática e faz uma análise semântica do apurado.
 ---
 
 ## **Sumário**
 - [Analise Sintática](#análise-sintática)
+- [Analise Semântica](#análise-semântica)
 - [Funcionalidades](#funcionalidades-léxicas)
 - [Instruções de Execução](#instruções-de-execução)
 - [Estrutura do Repositório](#estrutura-do-repositório)
@@ -26,6 +27,12 @@ Este repositório contém um analisador léxico e sintático desenvolvido com PL
 - Informa erros, o tipo de erro e a linha.
 - Gera uma árvore sintática com base nas produções definidas em YACC.
 
+---
+
+## **Funcionalidades Semânticas**
+- Varre a árvore sintática em busca de erros, aponta-os e os dá significado.
+- Informa de quais tipos são as propriedades, como object property ou data property.
+- Limita uso de dados como tipos númericos em intervalos.
 
 
 ## **Instruções de Execução**
@@ -129,7 +136,7 @@ Token(TIPO_DADO, 'string')
 Token(SIMBOLO_ESPECIAL, ')')
 ````
 
-### Mas agora, será retornado a nossa árvore sintática no terminal do usuário, junto com dois novos arvivos:
+### Mas agora, será retornado a nossa árvore sintática/semântica no terminal do usuário, junto com dois novos arquivos:
 #### parser.out: Gerado automaticamente pelo PLY durante a execução do analisador sintático. Contém informações detalhadas sobre a gramática, incluindo:
 - Produções: Todas as regras sintáticas definidas em YACC.
 - Estados do Autômato LR: Representação detalhada dos estados gerados para a análise sintática.
@@ -140,7 +147,8 @@ Token(SIMBOLO_ESPECIAL, ')')
 - Cache: Permite evitar o cálculo repetitivo das tabelas, acelerando a inicialização do parser.
 
 
-![image](https://github.com/user-attachments/assets/3d1d33ee-8fa3-4ab5-98ba-e29a153ddd18)
+![image](https://github.com/user-attachments/assets/d363c226-3809-449b-8b9f-ebb45d384d5e)
+- A árvore renderizada é passada por uma análise semântica, que aponta todos os erros gerados e os catogoriza com cor ao nível de gravidade. 
 
 
 -------
@@ -224,3 +232,28 @@ EquivalentTo: {Hot1, Medium1, Mild1} // Lista de indivíduos
 Class: Spiciness
 EquivalentTo: Hot or Medium or Mild // Lista de classes (não indivíduos)
 ```
+
+
+-----
+
+## **Análise Semântica**
+### A análise semântica examina a árvore sintática gerada para validar as relações entre os elementos e determinar o significado das construções. Essa etapa assegura que as propriedades, classes e tipos respeitem as regras lógicas e semânticas do sistema.
+- Classificação de Propriedades: Identifica se as propriedades são object properties (relacionam objetos) ou data properties (relacionam tipos de dados, como string ou integer).
+```plaintext
+Class: Customer
+    EquivalentTo:
+        Person
+        and (purchasedPizza some Pizza)
+        and (hasPhone some xsd:string)
+```
+Saída: 
+```plaintext
+    Classificação de Propriedades:
+    Propriedade 'purchasedPizza' classificada como 'object property'.
+    Propriedade 'hasPhone' classificada como 'data property'.
+```
+- Utiliza o sucessor da propriedade para determinar seu tipo, validando se está relacionado a uma classe ou a um tipo de dado definido.
+- Garante que as cardinalidades (como min, max, some) sejam coerentes com os tipos de dados ou classes associadas.
+- Verifica a conformidade de tipos de dados em relação aos valores definidos (ex.: xsd:integer, xsd:string).
+- Detecção de Erros, como: Associação de valores fora do intervalo permitido.
+- Informa a classificação e os erros identificados no terminal, além de classifica-los em gravidade por cor.
