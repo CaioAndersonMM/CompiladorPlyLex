@@ -135,10 +135,15 @@ def main():
                 parent_class = class_data[0]
                 closure_axiom = class_data[1]
 
+
                 if isinstance(closure_axiom, list) == False:
                     closure_axiom = class_data[2]
+
                 prop_types = []
                 for propriedade in closure_axiom:
+                    if (len(propriedade) > 1):
+                        propriedade = [propriedade]
+
                     if propriedade[0][1] == "some":
                         prop_types.append(propriedade[0][2])
                     elif propriedade[0][1] == "only":
