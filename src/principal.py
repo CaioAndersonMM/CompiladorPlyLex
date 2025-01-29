@@ -28,7 +28,7 @@ reservadas = {
 
 # Tipos de dados
 type_dado = [
-    'integer', 'real', 'string', 'boolean', 'date', 'time',
+    'integer', 'float', 'real', 'string', 'boolean', 'date', 'time',
     'long', 'language', 'short', 'token', 'byte', 'Name', 'NCName',
 ]
 
@@ -113,7 +113,7 @@ def t_NAMESPACE(t):
     return t
 
 def t_TIPO_DADO(t):
-    r'\b(integer|real|string|boolean|date|time|long|language|short|token|byte|Name|NCName)\b'
+    r'\b(integer|float|real|string|boolean|date|time|long|language|short|token|byte|Name|NCName)\b'
     if t.value in type_dado:
         return t
 
@@ -130,7 +130,7 @@ def t_IDENTIFICADOR_PROPRIEDADE(t):
     return t
 
 def t_CARDINALIDADE(t):
-    r'\d+'
+    r'\d+(\.\d+)?'
     return t
 
 def t_SIMBOLO_ESPECIAL(t):
@@ -178,11 +178,11 @@ def p_declaracao_classe(p):
 
 def p_declaracao_classe_definida(p):
     """declaracao_classe_definida : CLASS IDENTIFICADOR_CLASSE EQUIVALENTTO tipo_classe_definida subclass_opcional individuals_opcional"""
-    p[0] = [p[2], ["DEFINIDA", types], p[4]]
+    p[0] = [p[2], p.lineno(1), ["DEFINIDA", types], p[4]]
 
 def p_declaracao_classe_primitiva(p):
     """declaracao_classe_primitiva : CLASS IDENTIFICADOR_CLASSE SUBCLASSOF tipo_classe_primitiva disjoint_opcional individuals_opcional"""
-    p[0] = [p[2], ["PRIMITIVA", types], p[4]]
+    p[0] = [p[2], p.lineno(1), ["PRIMITIVA", types], p[4]]
 
     if p[5] != None:
         p[0] += [p[5]]
@@ -413,13 +413,15 @@ def p_aninhamento_ou_conteudo_aninhamento(p):
 
 def p_error(p):
     if p:
-        print(f"Erro sintático no token: {p.type}, valor: '{p.value}', linha: {p.lineno}")
+        print(f"\033[91mErro sintático no token: {p.type}, valor: '{p.value}', linha: {p.lineno}\033[0m")
         print(p)
+        raise SystemExit
     else:
         print("Erro sintático: fim inesperado da entrada.")
+        raise SystemExit
 
 def tratamento_personalizado_erros(message, p):
-    errors.append(f"Erro sintático, linha {p.lineno(1)}. {message}")
+    errors.append(f"\033[91mErro sintático, linha {p.lineno(1)}. {message}\033[0m")
 
 parser = yacc.yacc(debug=False, write_tables=False, errorlog=yacc.NullLogger())
 
