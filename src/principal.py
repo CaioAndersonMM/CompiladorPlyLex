@@ -421,7 +421,7 @@ def p_error(p):
         raise SystemExit
 
 def tratamento_personalizado_erros(message, p):
-    errors.append(f"Erro sintático, linha {p.lineno(1)}. {message}")
+    errors.append(f"\033[91mErro sintático, linha {p.lineno(1)}. {message}\033[0m")
 
 parser = yacc.yacc(debug=False, write_tables=False, errorlog=yacc.NullLogger())
 
