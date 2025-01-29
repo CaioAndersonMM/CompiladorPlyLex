@@ -141,13 +141,18 @@ def main():
 
                 prop_types = []
                 for propriedade in closure_axiom:
-                    if (len(propriedade) > 1):
-                        propriedade = [propriedade]
+                    if (len(propriedade) == 1):
+                        propriedade = propriedade[0]
 
-                    if propriedade[0][1] == "some":
-                        prop_types.append(propriedade[0][2])
-                    elif propriedade[0][1] == "only":
-                        prop_fechamento = propriedade[0][2]
+                    if propriedade[1] == "some":
+                        prop_types.append(propriedade[2])
+                    elif propriedade[1] == "only":
+                        prop_fechamento = propriedade[2]
+                        
+                        if isinstance(prop_fechamento, list) == False:
+                            prop_fechamento = [prop_fechamento]
+
+
 
                         index = 0
                         while index < len(prop_fechamento):
